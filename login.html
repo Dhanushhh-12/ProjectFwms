@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Food Waste Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="split-auth-container">
+        <div class="auth-sidebar animate-fade-in">
+            <a href="index.html" class="logo" style="text-decoration: none;">
+                <img src="images/logo.png" alt="FWMS Logo" style="width: 40px;">
+            </a>
+        </div>
+
+        <!-- Form Panel -->
+        <div class="auth-form-panel">
+
+            <div class="auth-form-header stagger-1">
+                <h2>Login</h2>
+                <div class="line"></div>
+            </div>
+
+            <form id="loginForm" class="stagger-parent">
+                <div class="auth-input-group stagger-1">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" name="email" placeholder="email@example.com" required>
+                </div>
+
+                <div class="auth-input-group stagger-2">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" name="password" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn-next stagger-3">
+                    Sign In <span style="font-size: 1.2rem;">→</span>
+                </button>
+            </form>
+
+            <div class="auth-footer stagger-4">
+                <p>Don't have an account? <a href="register.html">Register here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>

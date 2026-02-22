@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Food Waste Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <nav id="mainNav">
+                <a href="index.html" class="logo">
+                    <img src="images/logo.png" alt="FWMS Logo"> FWMS
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="donor.html">Donor</a></li>
+                </ul>
+                <button class="mobile-menu-btn">☰</button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="profile-section reveal" style="padding: 100px 0;">
+            <div class="container animate-fade-in">
+                <div class="animate-zoom"
+                    style="max-width: 600px; margin: 0 auto; background: var(--white); padding: 50px; border-radius: 15px; box-shadow: var(--shadow); text-align: center;">
+                    <div style="margin-bottom: 30px;">
+                        <h2 style="color: var(--primary-color);">My Profile</h2>
+                        <p style="color: var(--text-muted);">Manage your personal information.</p>
+                    </div>
+
+                    <div style="margin-bottom: 30px;">
+                        <label for="updatePhoto" style="cursor: pointer;">
+                            <div id="profilePhotoDisplay"
+                                style="width: 150px; height: 150px; border-radius: 50%; background: #eee; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 4px solid var(--primary-color); box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                                <span style="font-size: 3rem; color: #ccc;">👤</span>
+                            </div>
+                            <span style="color: var(--primary-color); font-weight: 600;">Change Profile Photo</span>
+                        </label>
+                        <input type="file" id="updatePhoto" accept="image/*" style="display: none;">
+                    </div>
+
+                    <div style="text-align: left; margin-bottom: 30px;">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <p id="profileName"
+                                style="font-size: 1.2rem; font-weight: 600; color: var(--dark-color); padding: 10px; background: #f9f9f9; border-radius: 5px;">
+                            </p>
+                        </div>
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label>Email Address</label>
+                            <p id="profileEmail"
+                                style="font-size: 1.1rem; color: var(--text-muted); padding: 10px; background: #f9f9f9; border-radius: 5px;">
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 15px;">
+                        <button id="saveProfileBtn" class="btn btn-primary" style="flex: 1;">Save & Go to Home</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Food Waste Management System - Telangana Chapter. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Profile specific initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = getCurrentUser();
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const nameEl = document.getElementById('profileName');
+            const emailEl = document.getElementById('profileEmail');
+            const photoDisplay = document.getElementById('profilePhotoDisplay');
+            const updatePhotoInput = document.getElementById('updatePhoto');
+            const saveBtn = document.getElementById('saveProfileBtn');
+
+            nameEl.innerText = user.name;
+            emailEl.innerText = user.email;
+
+            if (user.photo) {
+                photoDisplay.innerHTML = `<img src="${user.photo}" style="width: 100%; height: 100%; object-fit: cover;">`;
+            }
+
+            updatePhotoInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const base64Photo = e.target.result;
+                        photoDisplay.innerHTML = `<img src="${base64Photo}" style="width: 100%; height: 100%; object-fit: cover;">`;
+
+                        // Update in storage immediately for preview consistency
+                        user.photo = base64Photo;
+                        // We'll save it to the users list in script.js logic or here
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            saveBtn.addEventListener('click', () => {
+                // Find and update user in global users list
+                const users = getUsers();
+                const index = users.findIndex(u => u.email === user.email);
+                if (index !== -1) {
+                    users[index] = user;
+                    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+                }
+                localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+
+                alert('Profile updated successfully!');
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+
+</html>

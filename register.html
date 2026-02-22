@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration - Food Waste Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="split-auth-container">
+        <div class="auth-sidebar animate-fade-in">
+            <a href="index.html" class="logo" style="text-decoration: none;">
+                <img src="images/logo.png" alt="FWMS Logo" style="width: 40px;">
+            </a>
+        </div>
+
+        <!-- Form Panel -->
+        <div class="auth-form-panel">
+
+            <div class="auth-form-header stagger-1">
+                <h2>Registration</h2>
+                <div class="line"></div>
+            </div>
+
+            <form id="registerForm" class="stagger-parent">
+                <!-- Profile Photo at Top -->
+                <div class="auth-input-group stagger-1" style="text-align: center; margin-bottom: 15px;">
+                    <label for="profilePhoto" style="cursor: pointer;">
+                        <div id="photoPreview"
+                            style="width: 60px; height: 60px; border-radius: 50%; background: #eee; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px solid var(--primary-color);">
+                            <span style="font-size: 1.2rem; color: #ccc;">👤</span>
+                        </div>
+                        <span style="color: var(--primary-color); font-weight: 600; font-size: 0.75rem;">Upload
+                            Photo</span>
+                    </label>
+                    <input type="file" id="profilePhoto" name="profile_photo" accept="image/*" style="display: none;">
+                </div>
+
+                <div class="auth-input-group stagger-2">
+                    <label for="regName">Full Name</label>
+                    <input type="text" id="regName" name="name" placeholder="John Doe" required>
+                </div>
+
+                <div class="auth-input-group stagger-2">
+                    <label for="regEmail">Email Address</label>
+                    <input type="email" id="regEmail" name="email" placeholder="email@example.com" required>
+                </div>
+
+                <div class="auth-input-group stagger-3">
+                    <label for="regPassword">Password</label>
+                    <input type="password" id="regPassword" name="password" placeholder="••••••••" required>
+                </div>
+
+                <div class="auth-input-group stagger-3">
+                    <label for="regLocation">Location</label>
+                    <select id="regLocation" name="location">
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Warangal">Warangal</option>
+                        <option value="Karimnagar">Karimnagar</option>
+                        <option value="Nizamabad">Nizamabad</option>
+                    </select>
+                </div>
+
+                <div class="auth-input-group stagger-4">
+                    <label>Gender</label>
+                    <div style="display: flex; gap: 20px; align-items: center; margin-top: 10px;">
+                        <label style="font-weight: 400; display: flex; align-items: center; gap: 8px;">
+                            <input type="radio" name="gender" value="Male" style="width: auto;"> Male
+                        </label>
+                        <label style="font-weight: 400; display: flex; align-items: center; gap: 8px;">
+                            <input type="radio" name="gender" value="Female" style="width: auto;" checked> Female
+                        </label>
+                        <label style="font-weight: 400; display: flex; align-items: center; gap: 8px;">
+                            <input type="radio" name="gender" value="Other" style="width: auto;"> Other
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-next stagger-5">
+                    Next Step <span style="font-size: 1.2rem;">→</span>
+                </button>
+            </form>
+
+            <div class="auth-footer stagger-6">
+                <p>Already have an account? <a href="login.html">Sign in</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>
