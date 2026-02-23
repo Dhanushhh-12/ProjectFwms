@@ -4,90 +4,359 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration - Food Waste Management System</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Register - Food Waste Management System</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f0e8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+        }
+
+        /* --- Header --- */
+        .page-header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+
+        .page-header h1 .food {
+            color: #2e7d32;
+        }
+
+        .page-header h1 .waste {
+            color: #e65100;
+        }
+
+        .page-header .sub {
+            font-size: 1rem;
+            color: #555;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .page-header .sub::before,
+        .page-header .sub::after {
+            content: '';
+            height: 1.5px;
+            width: 40px;
+            background: #888;
+        }
+
+        /* --- Green Banner --- */
+        .green-banner {
+            background: #2e7d32;
+            color: white;
+            font-weight: 700;
+            font-size: 1.05rem;
+            text-align: center;
+            padding: 10px 40px;
+            border-radius: 4px;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- Main Card --- */
+        .auth-wrapper {
+            display: flex;
+            gap: 0;
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        /* --- Form Panel --- */
+        .form-panel {
+            flex: 1;
+            padding: 36px 40px;
+            min-width: 0;
+        }
+
+        .form-panel h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #1a1a1a;
+        }
+
+        .form-panel .divider {
+            width: 100%;
+            height: 1.5px;
+            background: #e0e0e0;
+            margin-bottom: 20px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 14px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 14px;
+            flex: 1;
+        }
+
+        .field label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .field label .icon {
+            font-size: 0.85rem;
+        }
+
+        .field input,
+        .field select {
+            padding: 9px 12px;
+            border: 1.5px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            font-family: 'Inter', sans-serif;
+            color: #333;
+            background: #fafafa;
+            transition: border-color 0.2s;
+            width: 100%;
+        }
+
+        .field input:focus,
+        .field select:focus {
+            outline: none;
+            border-color: #2e7d32;
+            background: white;
+        }
+
+        .terms-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 18px;
+            font-size: 0.8rem;
+            color: #555;
+        }
+
+        .terms-row input[type="checkbox"] {
+            margin-top: 2px;
+            accent-color: #2e7d32;
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
+
+        .terms-row a {
+            color: #e65100;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .btn-register {
+            width: 100%;
+            background: #e65100;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 13px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-register:hover {
+            background: #bf360c;
+            transform: translateY(-1px);
+        }
+
+        .auth-link {
+            text-align: center;
+            margin-top: 14px;
+            font-size: 0.82rem;
+            color: #666;
+        }
+
+        .auth-link a {
+            color: #e65100;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .auth-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* --- Illustration Panel --- */
+        .illus-panel {
+            width: 340px;
+            flex-shrink: 0;
+            background: linear-gradient(160deg, #f1f8e9 0%, #fff8e1 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .illus-panel img {
+            width: 100%;
+            max-height: 420px;
+            object-fit: contain;
+        }
+
+        /* Fallback emoji art if image doesn't exist */
+        .illus-art {
+            text-align: center;
+        }
+
+        .illus-art .emoji-scene {
+            font-size: 5rem;
+            line-height: 1.4;
+        }
+
+        .illus-art p {
+            color: #2e7d32;
+            font-weight: 600;
+            margin-top: 16px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .recycle-bubble {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2.5rem;
+            opacity: 0.3;
+        }
+
+        .leaf-bubble {
+            position: absolute;
+            bottom: 20px;
+            left: 15px;
+            font-size: 2rem;
+            opacity: 0.25;
+        }
+
+        @media (max-width: 700px) {
+            .illus-panel {
+                display: none;
+            }
+
+            .form-panel {
+                padding: 28px 22px;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <div class="split-auth-container">
-        <div class="auth-sidebar animate-fade-in">
-            <a href="index.html" class="logo" style="text-decoration: none;">
-                <img src="images/logo.png" alt="FWMS Logo" style="width: 40px;">
-            </a>
-        </div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1><span class="food">Food</span> <span class="waste">Waste</span></h1>
+        <div class="sub">Management System</div>
+    </div>
+
+    <!-- Green Banner -->
+    <div class="green-banner">Register for an Account</div>
+
+    <!-- Main Card -->
+    <div class="auth-wrapper">
 
         <!-- Form Panel -->
-        <div class="auth-form-panel">
+        <div class="form-panel">
+            <h2>Create Your Account</h2>
+            <div class="divider"></div>
 
-            <div class="auth-form-header stagger-1">
-                <h2>Registration</h2>
-                <div class="line"></div>
-            </div>
-
-            <form id="registerForm" class="stagger-parent">
-                <!-- Profile Photo at Top -->
-                <div class="auth-input-group stagger-1" style="text-align: center; margin-bottom: 15px;">
-                    <label for="profilePhoto" style="cursor: pointer;">
-                        <div id="photoPreview"
-                            style="width: 60px; height: 60px; border-radius: 50%; background: #eee; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px solid var(--primary-color);">
-                            <span style="font-size: 1.2rem; color: #ccc;">👤</span>
-                        </div>
-                        <span style="color: var(--primary-color); font-weight: 600; font-size: 0.75rem;">Upload
-                            Photo</span>
-                    </label>
-                    <input type="file" id="profilePhoto" name="profile_photo" accept="image/*" style="display: none;">
+            <form id="registerForm">
+                <div class="field">
+                    <label><span class="icon"></span> Full Name</label>
+                    <input type="text" id="regName" name="name" placeholder="Enter your full name" required>
                 </div>
 
-                <div class="auth-input-group stagger-2">
-                    <label for="regName">Full Name</label>
-                    <input type="text" id="regName" name="name" placeholder="John Doe" required>
+                <div class="field">
+                    <label><span class="icon"></span> Email Address</label>
+                    <input type="email" id="regEmail" name="email" placeholder="Enter your email" required>
                 </div>
 
-                <div class="auth-input-group stagger-2">
-                    <label for="regEmail">Email Address</label>
-                    <input type="email" id="regEmail" name="email" placeholder="email@example.com" required>
+                <div class="field">
+                    <label><span class="icon"></span> Phone Number</label>
+                    <input type="tel" id="regPhone" name="phone" placeholder="+91 9876543210" required>
                 </div>
 
-                <div class="auth-input-group stagger-3">
-                    <label for="regPassword">Password</label>
-                    <input type="password" id="regPassword" name="password" placeholder="••••••••" required>
-                </div>
-
-                <div class="auth-input-group stagger-3">
-                    <label for="regLocation">Location</label>
-                    <select id="regLocation" name="location">
-                        <option value="Hyderabad">Hyderabad</option>
-                        <option value="Warangal">Warangal</option>
-                        <option value="Karimnagar">Karimnagar</option>
-                        <option value="Nizamabad">Nizamabad</option>
-                    </select>
-                </div>
-
-                <div class="auth-input-group stagger-4">
-                    <label>Gender</label>
-                    <div style="display: flex; gap: 20px; align-items: center; margin-top: 10px;">
-                        <label style="font-weight: 400; display: flex; align-items: center; gap: 8px;">
-                            <input type="radio" name="gender" value="Male" style="width: auto;"> Male
-                        </label>
-                        <label style="font-weight: 400; display: flex; align-items: center; gap: 8px;">
-                            <input type="radio" name="gender" value="Female" style="width: auto;" checked> Female
-                        </label>
-                        <label style="font-weight: 400; display: flex; align-items: center; gap: 8px;">
-                            <input type="radio" name="gender" value="Other" style="width: auto;"> Other
-                        </label>
+                <div class="input-row">
+                    <div class="field">
+                        <label><span class="icon"></span> Create Password</label>
+                        <input type="password" id="regPassword" name="password" placeholder="••••••••" required>
+                    </div>
+                    <div class="field">
+                        <label><span class="icon"></span> Confirm Password</label>
+                        <input type="password" id="regConfirm" name="confirm_password" placeholder="••••••••" required>
                     </div>
                 </div>
 
-                <button type="submit" class="btn-next stagger-5">
-                    Next Step <span style="font-size: 1.2rem;">→</span>
-                </button>
+
+
+                <div class="terms-row">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms">I agree to the <a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy
+                            Policy.</a></label>
+                </div>
+
+                <button type="submit" class="btn-register">Register Now</button>
             </form>
 
-            <div class="auth-footer stagger-6">
-                <p>Already have an account? <a href="login.html">Sign in</a></p>
+            <div class="auth-link">
+                Already have an account? <a href="login.html">Login Here</a>
             </div>
         </div>
+
+        <!-- Illustration Panel -->
+        <div class="illus-panel">
+            <span class="recycle-bubble">♻️</span>
+            <span class="leaf-bubble">🌿</span>
+            <div class="illus-art">
+                <div class="emoji-scene">
+                    🧑‍🌾<br>🥕🍎🥦<br>🗑️♻️
+                </div>
+                <p>Reduce. Redistribute.<br>Make a difference.</p>
+            </div>
+        </div>
+
     </div>
 
     <script src="js/script.js"></script>

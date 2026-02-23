@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Become a Donor - Food Waste Management System</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="images/logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -23,7 +24,7 @@
         <div class="container">
             <nav class="glass-nav">
                 <a href="index.html" class="logo">
-                    <img src="images/logo.png" alt="FWMS Logo"> FWMS
+                    <img src="images/logo.png.png" alt="FWMS Logo"> FWMS
                 </a>
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
@@ -59,20 +60,26 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                             <div class="form-group">
                                 <label for="donorName">Donor/Restaurant Name</label>
-                                <input type="text" id="donorName" name="donor_name" placeholder="e.g., Paradise Biryani"
-                                    required>
+                                <input type="text" id="donorName" name="donor_name" placeholder=" Enter Name" required>
                             </div>
                             <div class="form-group">
-                                <label for="location">Pickup Location (Telangana)</label>
-                                <input type="text" id="location" name="location"
-                                    placeholder="e.g., Uppal Kalan, Hyderabad" required>
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" placeholder="+91 9876543210" required>
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label for="location">Pickup Location </label>
+                            <input type="text" id="location" name="location" placeholder="Location" required>
+                        </div>
+
                         <div class="form-group" style="margin-top: 10px;">
-                            <label for="foodImage">Food Picture (Photo Evidence)</label>
-                            <input type="file" id="foodImage" name="food_image" accept="image/*" required
+                            <label for="foodImage">Food Picture for Evidence</label>
+                            <!-- Removed name from original to prevent sending heavy file -->
+                            <input type="file" id="foodImage" accept="image/*" required
                                 style="border: 2px dashed #ddd; padding: 20px; background: #fafafa; cursor: pointer;">
+                            <!-- Hidden input for compressed image -->
+                            <input type="hidden" name="food_image" id="compressedImage">
                             <div id="imagePreview" style="margin-top: 15px; text-align: center;">
                                 <!-- Live Image Preview appears here -->
                             </div>
@@ -80,18 +87,11 @@
 
                         <div class="form-group">
                             <label for="description">Food Description & Quantity</label>
-                            <textarea id="description" name="description"
-                                placeholder="e.g., 5KG Vegetable Biryani, cooked today at 2 PM, suitable for about 15 people."
+                            <textarea id="description" name="description" placeholder="Food Quantity"
                                 required></textarea>
                         </div>
 
-                        <div
-                            style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-bottom: 25px; border-left: 5px solid var(--primary-color);">
-                            <p style="font-size: 0.9rem; color: #2e7d32; font-weight: 500;">
-                                <strong>Note:</strong> By clicking submit, an automated notification will be sent to our
-                                regional founder for immediate review.
-                            </p>
-                        </div>
+
 
                         <button type="submit" class="btn btn-secondary"
                             style="width: 100%; font-size: 1.1rem; padding: 15px;">Submit Donation Request</button>
@@ -103,7 +103,7 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2026 Food Waste Management System - Telangana Chapter. All rights reserved.</p>
+            <p>&copy; 2026 Food Waste Management System - All rights reserved.</p>
         </div>
     </footer>
 

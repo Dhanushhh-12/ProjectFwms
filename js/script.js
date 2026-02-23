@@ -1,9 +1,9 @@
 // EmailJS Initialization Placeholder
 // Replace these with your actual keys from EmailJS Dashboard
-const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";
-const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
-const EMAILJS_TEMPLATE_ID_CONTACT = "YOUR_CONTACT_TEMPLATE_ID";
-const EMAILJS_TEMPLATE_ID_DONOR = "YOUR_DONOR_TEMPLATE_ID";
+const EMAILJS_PUBLIC_KEY = "buSCnAcqcxD13_E_g";
+const EMAILJS_SERVICE_ID = "service_iyh2kcs";
+const EMAILJS_TEMPLATE_ID_CONTACT = "template_5bz428h";
+const EMAILJS_TEMPLATE_ID_DONOR = "template_1j27g9j";
 
 (function () {
     // Initialize EmailJS
@@ -237,20 +237,48 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Image Preview for Donor Page
+    // --- Image Compression Utility ---
+    const compressImage = (file, maxWidth = 800) => {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const scale = maxWidth / img.width;
+                    if (scale < 1) {
+                        canvas.width = maxWidth;
+                        canvas.height = img.height * scale;
+                    } else {
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                    }
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    // Compress as JPEG with 0.7 quality
+                    resolve(canvas.toDataURL('image/jpeg', 0.7));
+                };
+            };
+        });
+    };
+
+    // Image Preview & Compression for Donor Page
     const foodImageInput = document.getElementById('foodImage');
     const imagePreview = document.getElementById('imagePreview');
+    const compressedInput = document.getElementById('compressedImage');
 
     if (foodImageInput && imagePreview) {
-        foodImageInput.addEventListener('change', function () {
+        foodImageInput.addEventListener('change', async function () {
             const file = this.files[0];
             if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    window.lastDonationPhoto = e.target.result;
-                    imagePreview.innerHTML = `<img src="${e.target.result}" alt="Food Preview" style="max-width: 100%; border-radius: 8px; margin-top: 10px;">`;
-                };
-                reader.readAsDataURL(file);
+                imagePreview.innerHTML = '<p style="color: var(--primary-color);">Compressing image...</p>';
+                const compressedData = await compressImage(file);
+                window.lastDonationPhoto = compressedData;
+                if (compressedInput) compressedInput.value = compressedData;
+                imagePreview.innerHTML = `<img src="${compressedData}" alt="Food Preview" style="max-width: 100%; border-radius: 8px; margin-top: 10px;">`;
+                console.log("Image compressed successfully.");
             }
         });
     }
@@ -296,6 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 userId: user.email,
                 userName: user.name,
                 donorName: formData.get('donor_name'),
+                phone: formData.get('phone'),
                 location: formData.get('location'),
                 description: formData.get('description'),
                 foodPhoto: window.lastDonationPhoto,
@@ -307,6 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
             donations.push(donation);
             localStorage.setItem(DONATIONS_KEY, JSON.stringify(donations));
 
+            // Send Email via EmailJS
             handleFormSubmit(donorForm, EMAILJS_TEMPLATE_ID_DONOR);
         });
     }
