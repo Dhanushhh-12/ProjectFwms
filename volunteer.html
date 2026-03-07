@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Dashboard - FWMS</title>
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/volunteer.css">
+
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<script>
+    // Immediate auth check
+    const volunteerUser = localStorage.getItem('fwms_current_volunteer');
+    const donorUser = localStorage.getItem('fwms_current_user');
+
+    // Proactive strict access control
+    if (donorUser && !volunteerUser) {
+        alert('Donors cannot act as volunteers. Redirecting to Add Donation.');
+        window.location.href = 'donor.html';
+    } else if (!volunteerUser) {
+        alert('Access denied. Please login as a volunteer first.');
+        window.location.href = 'login.html';
+    }
+</script>
+
+<body>
+    <header>
+        <div class="container">
+            <nav class="glass-nav">
+                <a href="index.html" class="logo">
+                    <img src="images/logo.png.png" alt="FWMS Logo"> FWMS
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="donor.html">Donor</a></li>
+                    <li><a href="volunteer.html" class="active">Volunteer</a></li>
+                </ul>
+                <button class="mobile-menu-btn">☰</button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="volunteer-hero">
+            <div class="container animate-fade-in">
+                <h1 id="volunteerGreeting">Volunteer Dashboard</h1>
+                <p>View available food donations and coordinate pickups to help those in need.</p>
+            </div>
+        </section>
+
+        <section class="dashboard-container animate-fade-in">
+            <div class="dashboard-grid">
+
+                <!-- Volunteer Stats Profile Card -->
+                <div class="glass-panel" id="volunteerStatsCard" style="margin-bottom: 20px;">
+                    <div class="panel-header">
+                        <h2>My Profile & Stats</h2>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; padding: 10px 0;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <p style="margin-bottom: 8px; color: var(--text-color);"><strong
+                                    style="color: var(--primary-color);">Name:</strong> <span
+                                    id="volDashName">Loading...</span></p>
+                            <p style="margin-bottom: 8px; color: var(--text-color);"><strong
+                                    style="color: var(--primary-color);">Phone:</strong> <span
+                                    id="volDashPhone">Loading...</span></p>
+                        </div>
+                        <div
+                            style="flex: 1; min-width: 150px; text-align: center; background: rgba(230, 81, 0, 0.1); border-radius: 12px; padding: 20px;">
+                            <h3 style="font-size: 2.5rem; color: #e65100; margin: 0; line-height: 1;"
+                                id="volDashDeliveries">0</h3>
+                            <p
+                                style="margin: 5px 0 0; font-size: 0.9rem; font-weight: 600; color: #666; text-transform: uppercase;">
+                                Total Deliveries</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel">
+                    <div class="panel-header">
+                        <h2>Available Donations</h2>
+                    </div>
+
+                    <!-- We will dynamically populate this with JS based on actual donations -->
+                    <div id="donationsList" class="donation-list">
+                        <!-- Example Empty State if no JS populates -->
+                        <div class="empty-state">
+                            <span>🍽️</span>
+                            <h3>No pending donations</h3>
+                            <p>Check back later for new requests.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Food Waste Management System - All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js?v=2.0"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const updateVolunteerStats = () => {
+                const volDataStr = localStorage.getItem('fwms_current_volunteer');
+                if (volDataStr) {
+                    const volData = JSON.parse(volDataStr);
+                    const greeting = document.getElementById('volunteerGreeting');
+
+                    const volDashName = document.getElementById('volDashName');
+                    const volDashPhone = document.getElementById('volDashPhone');
+                    const volDashDeliveries = document.getElementById('volDashDeliveries');
+
+                    if (greeting) {
+                        greeting.textContent = `Welcome, ${volData.name.split(' ')[0]}!`;
+                    }
+
+                    if (volDashName) volDashName.textContent = volData.name;
+                    if (volDashPhone) volDashPhone.textContent = volData.phone || 'Not Provided';
+
+                    const deliveries = JSON.parse(localStorage.getItem('fwms_deliveries_completed') || '{}');
+                    const myDeliveries = deliveries[volData.email] || 0;
+
+                    if (volDashDeliveries) volDashDeliveries.textContent = myDeliveries;
+                }
+            };
+
+            // Initial Load
+            updateVolunteerStats();
+            if (typeof renderDonations === 'function') renderDonations();
+
+            // Listen for changes (e.g. from claimDonation function in script.js)
+            document.addEventListener('statsUpdated', updateVolunteerStats);
+        });
+    </script>
+</body>
+
+</html>

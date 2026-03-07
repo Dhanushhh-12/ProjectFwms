@@ -214,7 +214,7 @@
             text-decoration: underline;
         }
 
-        /* --- Illustration Panel --- */
+
         .illus-panel {
             width: 340px;
             flex-shrink: 0;
@@ -233,7 +233,6 @@
             object-fit: contain;
         }
 
-        /* Fallback emoji art if image doesn't exist */
         .illus-art {
             text-align: center;
         }
@@ -304,6 +303,21 @@
 
             <form id="registerForm">
                 <div class="field">
+                    <label><span class="icon"></span> Select Role</label>
+                    <div style="display: flex; gap: 20px; align-items: center; margin-top: 5px; margin-bottom: 10px;">
+                        <label
+                            style="display: flex; flex-direction: row; align-items: center; font-size: 0.9rem; font-weight: 500; cursor: pointer;">
+                            <input type="radio" name="role" value="donor" checked
+                                style="width: auto; margin-right: 8px;"> Donor
+                        </label>
+                        <label
+                            style="display: flex; flex-direction: row; align-items: center; font-size: 0.9rem; font-weight: 500; cursor: pointer;">
+                            <input type="radio" name="role" value="volunteer" style="width: auto; margin-right: 8px;">
+                            Volunteer
+                        </label>
+                    </div>
+                </div>
+                <div class="field">
                     <label><span class="icon"></span> Full Name</label>
                     <input type="text" id="regName" name="name" placeholder="Enter your full name" required>
                 </div>
@@ -342,6 +356,9 @@
 
             <div class="auth-link">
                 Already have an account? <a href="login.html">Login Here</a>
+            </div>
+            <div class="auth-link" style="margin-top: 10px;">
+                <a href="index.html" style="color: #666; font-weight: normal;">← Back to Home</a>
             </div>
         </div>
 

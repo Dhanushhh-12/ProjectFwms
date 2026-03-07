@@ -25,6 +25,7 @@
                     <li><a href="about.html">About</a></li>
                     <li><a href="contact.html">Contact</a></li>
                     <li><a href="donor.html">Donor</a></li>
+                    <li><a href="volunteer.html">Volunteer</a></li>
                 </ul>
                 <button class="mobile-menu-btn">☰</button>
             </nav>
@@ -41,10 +42,53 @@
                     professional initiative to
                     manage surplus food and ensure it reaches those in need across Telangana. Join our mission to create
                     a zero-waste community.</p>
-                <div class="cta-btns">
-                    <a href="donor.html" class="btn btn-secondary pulse btn-magnetic">Become a Donor</a>
-                    <a href="about.html" class="btn btn-primary btn-magnetic" style="margin-left: 15px;">Learn More</a>
+                <div class="cta-btns" id="heroCTABtns"
+                    style="display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap;">
+                    <button id="heroDonorBtn" onclick="handleHeroCTA('donor')"
+                        class="btn btn-secondary pulse btn-magnetic"
+                        style="border-radius: 30px; padding: 15px 35px; border: none; font-size: 1.15rem; font-weight: 700; cursor: pointer; box-shadow: 0 10px 20px rgba(230, 81, 0, 0.3);">Donate
+                        Food</button>
+                    <button id="heroVolunteerBtn" onclick="handleHeroCTA('volunteer')"
+                        class="btn btn-primary btn-magnetic"
+                        style="border-radius: 30px; padding: 14px 35px; border: 2px solid white; background: transparent; color: white; font-size: 1.15rem; font-weight: 600; cursor: pointer;">Become
+                        a Volunteer</button>
                 </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const isDonor = localStorage.getItem('fwms_current_user');
+                        const isVolunteer = localStorage.getItem('fwms_current_volunteer');
+
+                        const donorBtn = document.getElementById('heroDonorBtn');
+                        const volunteerBtn = document.getElementById('heroVolunteerBtn');
+
+                        if (isDonor && donorBtn && volunteerBtn) {
+                            volunteerBtn.style.display = 'none'; // Only show Donor button for donors
+                        } else if (isVolunteer && donorBtn && volunteerBtn) {
+                            donorBtn.style.display = 'none'; // Only show Volunteer button for volunteers
+                        }
+                        // If no one is logged in, leave both as is (entry points)
+                    });
+
+                    function handleHeroCTA(role) {
+                        if (role === 'donor') {
+                            if (localStorage.getItem('fwms_current_user')) {
+                                window.location.href = 'donor.html';
+                            } else {
+                                window.location.href = 'register.html';
+                            }
+                        } else if (role === 'volunteer') {
+                            if (localStorage.getItem('fwms_current_volunteer')) {
+                                window.location.href = 'volunteer.html';
+                            } else {
+                                window.location.href = 'register.html';
+                            }
+                        }
+                    }
+                </script>
+                <style>
+                    /* Removed shake and select focus styles since the dropdown is gone */
+                </style>
             </div>
         </section>
 
@@ -143,7 +187,7 @@
         </div>
     </footer>
 
-    <script src="js/script.js"></script>
+    <script src="js/script.js?v=2.0"></script>
 </body>
 
 </html>

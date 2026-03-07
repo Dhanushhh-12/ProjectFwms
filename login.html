@@ -273,6 +273,21 @@
 
             <form id="loginForm">
                 <div class="field">
+                    <label><span></span> Select Role</label>
+                    <div style="display: flex; gap: 20px; align-items: center; margin-top: 5px; margin-bottom: 10px;">
+                        <label
+                            style="display: flex; flex-direction: row; align-items: center; font-size: 0.9rem; font-weight: 500; cursor: pointer;">
+                            <input type="radio" name="role" value="donor" checked
+                                style="width: auto; margin-right: 8px;"> Donor
+                        </label>
+                        <label
+                            style="display: flex; flex-direction: row; align-items: center; font-size: 0.9rem; font-weight: 500; cursor: pointer;">
+                            <input type="radio" name="role" value="volunteer" style="width: auto; margin-right: 8px;">
+                            Volunteer
+                        </label>
+                    </div>
+                </div>
+                <div class="field">
                     <label><span></span> Email Address</label>
                     <input type="email" id="loginEmail" name="email" placeholder="Enter your email" required>
                 </div>
@@ -291,6 +306,9 @@
 
             <div class="auth-link">
                 Don't have an account? <a href="register.html">Register Here</a>
+            </div>
+            <div class="auth-link" style="margin-top: 10px;">
+                <a href="index.html" style="color: #666; font-weight: normal;">← Back to Home</a>
             </div>
         </div>
 
@@ -343,7 +361,7 @@
             document.getElementById('forgotModal').style.display = 'none';
         }
 
-        function handleForgotPassword() {
+        async function handleForgotPassword() {
             const email = document.getElementById('forgotEmail').value.trim();
             const msgEl = document.getElementById('forgotMsg');
 
@@ -353,19 +371,28 @@
                 return;
             }
 
-            const users = JSON.parse(localStorage.getItem('fwms_users') || '[]');
-            const user = users.find(u => u.email === email);
+            try {
+                const response = await fetch('/api/forgot-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
 
-            if (user) {
-                msgEl.style.color = '#2e7d32';
-                msgEl.textContent = `✅ Account found! Your password hint: "${user.password.substring(0, 2)}${'•'.repeat(user.password.length - 2)}" — Please note it down.`;
-            } else {
+                const result = await response.json();
+
+                if (response.ok) {
+                    msgEl.style.color = '#2e7d32';
+                    msgEl.textContent = `✅ Account found! Your password hint: "${result.hint}" — Please note it down.`;
+                } else {
+                    msgEl.style.color = '#c62828';
+                    msgEl.textContent = '❌ No account found with this email. Please register first.';
+                }
+            } catch (err) {
                 msgEl.style.color = '#c62828';
-                msgEl.textContent = '❌ No account found with this email. Please register first.';
+                msgEl.textContent = 'Server error. Please try again later.';
             }
         }
 
-        // Close modal on backdrop click
         document.getElementById('forgotModal').addEventListener('click', (e) => {
             if (e.target === document.getElementById('forgotModal')) closeForgotModal();
         });

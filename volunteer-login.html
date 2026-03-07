@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Login - Food Waste Management System</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f0e8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+
+        .page-header h1 .food {
+            color: #e65100;
+        }
+
+        .page-header h1 .waste {
+            color: #2e7d32;
+        }
+
+        .page-header .sub {
+            font-size: 1rem;
+            color: #555;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .green-banner {
+            background: #e65100;
+            color: white;
+            font-weight: 700;
+            font-size: 1.05rem;
+            text-align: center;
+            padding: 10px 40px;
+            border-radius: 4px;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+        }
+
+        .auth-wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .form-panel {
+            flex: 1;
+            padding: 48px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-panel h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #1a1a1a;
+        }
+
+        .form-panel .divider {
+            width: 100%;
+            height: 1.5px;
+            background: #e0e0e0;
+            margin-bottom: 28px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 18px;
+        }
+
+        .field label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .field input {
+            padding: 11px 14px;
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            color: #333;
+            background: #fafafa;
+            transition: border-color 0.2s;
+            width: 100%;
+        }
+
+        .field input:focus {
+            outline: none;
+            border-color: #e65100;
+            background: white;
+        }
+
+        .forgot {
+            text-align: right;
+            margin-top: -10px;
+            margin-bottom: 20px;
+            font-size: 0.78rem;
+        }
+
+        .forgot a {
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .btn-login {
+            width: 100%;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 13px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-login:hover {
+            background: #1b5e20;
+            transform: translateY(-1px);
+        }
+
+        .auth-link {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 0.82rem;
+            color: #666;
+        }
+
+        .auth-link a {
+            color: #2e7d32;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .auth-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Illustration Panel */
+        .illus-panel {
+            width: 340px;
+            flex-shrink: 0;
+            background: linear-gradient(160deg, #fff8e1 0%, #f1f8e9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .illus-art {
+            text-align: center;
+        }
+
+        .illus-art .emoji-scene {
+            font-size: 5rem;
+            line-height: 1.5;
+        }
+
+        .illus-art p {
+            color: #e65100;
+            font-weight: 600;
+            margin-top: 16px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 700px) {
+            .illus-panel {
+                display: none;
+            }
+
+            .form-panel {
+                padding: 30px 22px;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page-header">
+        <h1><span class="food">Volunteer</span> <span class="waste">Portal</span></h1>
+        <div class="sub">Food Waste Management System</div>
+    </div>
+
+    <div class="green-banner">Welcome Back! Please Sign In</div>
+
+    <div class="auth-wrapper">
+
+        <div class="form-panel">
+            <h2>Sign In as Volunteer</h2>
+            <div class="divider"></div>
+
+            <form id="volunteerLoginForm">
+                <div class="field">
+                    <label><span></span> Email Address</label>
+                    <input type="email" id="loginEmail" name="email" placeholder="Enter your email" required>
+                </div>
+
+                <div class="field">
+                    <label><span></span> Password</label>
+                    <input type="password" id="loginPassword" name="password" placeholder="••••••••" required>
+                </div>
+
+                <div class="forgot">
+                    <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn-login">Sign In →</button>
+            </form>
+
+            <div class="auth-link">
+                Don't have an account? <a href="volunteer-register.html">Register Here</a>
+            </div>
+            <div class="auth-link" style="margin-top: 10px;">
+                <a href="role.html" style="color: #666; font-weight: normal;">← Back to Role Selection</a>
+            </div>
+        </div>
+
+        <div class="illus-panel">
+            <div class="illus-art">
+                <div class="emoji-scene">
+                    🤝<br>📦🚚<br>❤️🌍
+                </div>
+                <p>Your time makes<br>a world of difference.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotModal"
+        style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+        <div
+            style="background:white; border-radius:14px; padding:36px 32px; max-width:400px; width:90%; box-shadow:0 10px 40px rgba(0,0,0,0.2);">
+            <h3 style="margin-bottom:8px; font-size:1.15rem; color:#1a1a1a;">Reset Password</h3>
+            <p style="font-size:0.82rem; color:#666; margin-bottom:20px;">Enter your registered email and we'll show
+                your account details.</p>
+            <input type="email" id="forgotEmail" placeholder="Enter your email address"
+                style="width:100%; padding:10px 14px; border:1.5px solid #ddd; border-radius:8px; font-family:inherit; font-size:0.9rem; margin-bottom:14px;">
+            <div id="forgotMsg" style="font-size:0.82rem; min-height:20px; margin-bottom:14px;"></div>
+            <div style="display:flex; gap:10px;">
+                <button onclick="handleForgotPassword()"
+                    style="flex:1; background:#e65100; color:white; border:none; border-radius:8px; padding:11px; font-weight:700; cursor:pointer; font-family:inherit;">Find
+                    Account</button>
+                <button onclick="closeForgotModal()"
+                    style="flex:1; background:#f5f0e8; color:#333; border:none; border-radius:8px; padding:11px; font-weight:600; cursor:pointer; font-family:inherit;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Forgot Password Logic
+        document.getElementById('forgotPasswordLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('forgotModal').style.display = 'flex';
+            document.getElementById('forgotMsg').textContent = '';
+            document.getElementById('forgotEmail').value = '';
+        });
+
+        function closeForgotModal() {
+            document.getElementById('forgotModal').style.display = 'none';
+        }
+
+        async function handleForgotPassword() {
+            const email = document.getElementById('forgotEmail').value.trim();
+            const msgEl = document.getElementById('forgotMsg');
+
+            if (!email) {
+                msgEl.style.color = '#c62828';
+                msgEl.textContent = 'Please enter your email address.';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/volunteer/forgot-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    msgEl.style.color = '#e65100';
+                    msgEl.textContent = `✅ Account found! Your password hint: "${result.hint}"`;
+                } else {
+                    msgEl.style.color = '#c62828';
+                    msgEl.textContent = '❌ No account found with this email. Please register first.';
+                }
+            } catch (err) {
+                msgEl.style.color = '#c62828';
+                msgEl.textContent = 'Server error. Please try again later.';
+            }
+        }
+
+        document.getElementById('forgotModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('forgotModal')) closeForgotModal();
+        });
+    </script>
+</body>
+
+</html>

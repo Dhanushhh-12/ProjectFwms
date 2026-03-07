@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Role - Food Waste Management System</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f0e8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+
+        .page-header h1 .food {
+            color: #2e7d32;
+        }
+
+        .page-header h1 .waste {
+            color: #e65100;
+        }
+
+        .page-header .sub {
+            font-size: 1rem;
+            color: #555;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .role-container {
+            display: flex;
+            gap: 30px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .role-card {
+            flex: 1;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .role-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .role-donor:hover {
+            border-color: #2e7d32;
+        }
+
+        .role-volunteer:hover {
+            border-color: #e65100;
+        }
+
+        .role-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .role-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .role-donor .role-title {
+            color: #2e7d32;
+        }
+
+        .role-volunteer .role-title {
+            color: #e65100;
+        }
+
+        .role-desc {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            .role-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-header">
+        <h1><span class="food">Select</span> <span class="waste">Role</span></h1>
+        <div class="sub">How would you like to participate?</div>
+    </div>
+
+    <div class="role-container">
+        <!-- Donor Role -->
+        <a href="login.html" class="role-card role-donor" id="donorLink">
+            <div class="role-icon">🍱</div>
+            <div class="role-title">I am a Donor</div>
+            <div class="role-desc">Donate surplus food from restaurants, events, or homes to those in need.</div>
+        </a>
+
+        <!-- Volunteer Role -->
+        <a href="volunteer-login.html" class="role-card role-volunteer" id="volunteerLink">
+            <div class="role-icon">🤝</div>
+            <div class="role-title">I am a Volunteer</div>
+            <div class="role-desc">Help deliver food, manage inventory, or support operations on the ground.</div>
+        </a>
+    </div>
+
+    <script>
+        // Check URL params to see if user intends to register instead of login
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const action = urlParams.get('action');
+
+            if (action === 'register') {
+                document.getElementById('donorLink').href = 'register.html';
+                document.getElementById('volunteerLink').href = 'volunteer-register.html';
+                document.querySelector('.page-header .sub').innerText = 'Choose your role to register';
+            }
+        });
+    </script>
+</body>
+
+</html>

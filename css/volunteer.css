@@ -1,0 +1,190 @@
+/* css/volunteer.css - Professional Styling for Volunteer Dashboard */
+
+/* Base & Typography */
+body {
+    font-family: 'Inter', sans-serif;
+    color: #333;
+    background-color: #f4f7f6;
+    margin: 0;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+/* Volunteer Header/Hero */
+.volunteer-hero {
+    background: linear-gradient(135deg, #e65100 0%, #ff9800 100%);
+    color: white;
+    padding: 80px 0 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.volunteer-hero h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.volunteer-hero p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Dashboard Layout */
+.dashboard-container {
+    max-width: 1200px;
+    margin: -40px auto 50px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 10;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+/* Glass Cards */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.panel-header {
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+.panel-header h2 {
+    color: #e65100;
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+/* Donation Cards Elements (Will apply to dynamically generated cards) */
+.donation-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.donation-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eaeaea;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.donation-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(230, 81, 0, 0.15);
+    border-color: #ffcc80;
+}
+
+.donation-badge {
+    align-self: flex-start;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.badge-pending {
+    background: #fff3e0;
+    color: #e65100;
+}
+
+.badge-claimed {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.donation-title {
+    font-size: 1.3rem;
+    color: #333;
+    margin: 0 0 10px 0;
+}
+
+.donation-meta {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.donation-meta p {
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-claim {
+    background: #e65100;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    width: 100%;
+}
+
+.btn-claim:hover {
+    background: #bf360c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(191, 54, 12, 0.3);
+}
+
+.btn-claim:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #888;
+}
+
+.empty-state span {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 15px;
+}

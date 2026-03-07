@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Profile - Food Waste Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Pro Profile Styling */
+        body {
+            background: url('images/auth-food-bg.png') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(230, 81, 0, 0.85);
+            /* Deep Orange Overlay */
+            z-index: -1;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .profile-photo-wrapper {
+            position: relative;
+            display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .profile-photo-wrapper:hover {
+            transform: scale(1.05);
+        }
+
+        .photo-overlay {
+            position: absolute;
+            bottom: 15px;
+            right: 0;
+            background: #e65100;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border: 3px solid white;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .photo-overlay:hover {
+            background: #bf360c;
+        }
+
+        .profile-field {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px 20px;
+            border: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .profile-field:hover {
+            background: #ffffff;
+            border-color: #e65100;
+            box-shadow: 0 4px 15px rgba(230, 81, 0, 0.08);
+            transform: translateX(5px);
+        }
+
+        .field-icon {
+            background: rgba(230, 81, 0, 0.1);
+            color: #e65100;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .field-content {
+            flex-grow: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <nav id="mainNav">
+                <a href="index.html" class="logo">
+                    <img src="images/logo.png.png" alt="FWMS Logo"> FWMS
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="donor.html">Donor</a></li>
+                    <li><a href="volunteer.html">Volunteer</a></li>
+                </ul>
+                <button class="mobile-menu-btn">☰</button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="profile-section reveal"
+            style="padding: 120px 0 80px; min-height: calc(100vh - 80px); display: flex; align-items: center;">
+            <div class="container animate-fade-in" style="width: 100%;">
+                <div class="animate-zoom profile-card"
+                    style="max-width: 650px; margin: 0 auto; padding: 50px; border-radius: 24px; text-align: center;">
+                    <div style="margin-bottom: 40px;">
+                        <span style="font-size: 3rem; margin-bottom: 10px; display: block;">🤝</span>
+                        <h2 style="color: var(--dark-color); font-size: 2.5rem; font-weight: 800;">Volunteer Profile
+                        </h2>
+                        <p style="color: var(--text-muted); font-size: 1.1rem;">Manage your volunteer information and
+                            settings.</p>
+                    </div>
+
+                    <div style="margin-bottom: 40px;">
+                        <input type="file" id="updatePhoto" accept="image/*" style="display: none;">
+                        <div class="profile-photo-wrapper">
+                            <div id="profilePhotoDisplay"
+                                style="width: 160px; height: 160px; border-radius: 50%; background: #f0f2f5; margin: 0 auto; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 5px solid white; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+                                <span style="font-size: 4rem; color: #ccc;">👤</span>
+                            </div>
+                            <label for="updatePhoto" class="photo-overlay" title="Update Photo">
+                                📷
+                            </label>
+                        </div>
+                    </div>
+
+                    <div
+                        style="text-align: left; margin-bottom: 40px; display: flex; flex-direction: column; gap: 20px;">
+                        <div class="profile-field">
+                            <div class="field-icon">👤</div>
+                            <div class="field-content">
+                                <label
+                                    style="display: block; font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Full
+                                    Name</label>
+                                <p id="profileName"
+                                    style="font-size: 1.25rem; font-weight: 700; color: var(--dark-color); margin: 0;">
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="profile-field">
+                            <div class="field-icon">✉️</div>
+                            <div class="field-content">
+                                <label
+                                    style="display: block; font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Email
+                                    Address</label>
+                                <p id="profileEmail"
+                                    style="font-size: 1.15rem; font-weight: 500; color: var(--text-color); margin: 0;">
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 20px; justify-content: center; margin-top: 10px;">
+                        <button id="saveProfileBtn" class="btn btn-primary"
+                            style="padding: 16px 30px; font-size: 1.1rem; font-weight: 700; border-radius: 12px; background: #e65100; box-shadow: 0 8px 20px rgba(230, 81, 0, 0.3); border: none;">Save
+                            Changes & Home</button>
+                        <button id="logoutBtnProfile" class="btn"
+                            style="padding: 16px 30px; font-size: 1.1rem; font-weight: 600; border-radius: 12px; background: rgba(211, 47, 47, 0.1); color: var(--error-color); transition: all 0.3s ease;"
+                            onmouseover="this.style.background='var(--error-color)'; this.style.color='white'"
+                            onmouseout="this.style.background='rgba(211, 47, 47, 0.1)'; this.style.color='var(--error-color)'">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Food Waste Management System - Telangana Chapter. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Profile specific initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = getVolunteerSession();
+            if (!user) {
+                window.location.href = 'volunteer-login.html';
+                return;
+            }
+
+            const nameEl = document.getElementById('profileName');
+            const emailEl = document.getElementById('profileEmail');
+            const photoDisplay = document.getElementById('profilePhotoDisplay');
+            const updatePhotoInput = document.getElementById('updatePhoto');
+            const saveBtn = document.getElementById('saveProfileBtn');
+
+            nameEl.innerText = user.name;
+            emailEl.innerText = user.email;
+
+            if (user.photo) {
+                photoDisplay.innerHTML = `<img src="${user.photo}" style="width: 100%; height: 100%; object-fit: cover;">`;
+            }
+
+            updatePhotoInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const base64Photo = e.target.result;
+                        photoDisplay.innerHTML = `<img src="${base64Photo}" style="width: 100%; height: 100%; object-fit: cover;">`;
+
+                        user.photo = base64Photo;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            saveBtn.addEventListener('click', () => {
+                localStorage.setItem(VOLUNTEER_SESSION_KEY, JSON.stringify(user));
+
+                alert('Volunteer Profile updated successfully!');
+                window.location.href = 'index.html';
+            });
+
+            const logoutBtn = document.getElementById('logoutBtnProfile');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    localStorage.removeItem(VOLUNTEER_SESSION_KEY);
+                    alert('Logged out successfully.');
+                    window.location.href = 'index.html';
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
