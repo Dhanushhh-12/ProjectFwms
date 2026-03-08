@@ -4,134 +4,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Volunteer Registration - Food Waste Management System</title>
+    <title>Volunteer Register - FWMS</title>
     <link rel="icon" type="image/png" href="images/logo.png.png">
     <link rel="stylesheet" href="css/style.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+    <style>
+        body {
+            background: var(--surface);
+            min-height: 100vh;
+        }
+
+        .auth-sidebar {
+            background: linear-gradient(145deg, #0f2044 0%, #1a3a72 55%, #24569a 100%) !important;
+        }
+
+        .sidebar-overline {
+            color: #90CAF9 !important;
+        }
+
+        .auth-sidebar h2 span {
+            color: #81D4FA !important;
+        }
+
+        .auth-form-panel {
+            max-width: 600px;
+            overflow-y: auto;
+        }
+
+        .form-grid2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .photo-upload-zone {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--neutral-50);
+            border: 1.5px dashed var(--neutral-300);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .photo-upload-zone:hover {
+            border-color: #1565C0;
+            background: #E3F2FD;
+        }
+
+        .photo-preview {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--neutral-200);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neutral-500);
+            flex-shrink: 0;
+        }
+
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .btn-auth-vol {
+            width: 100%;
+            padding: 1rem;
+            font-size: .95rem;
+            font-weight: 700;
+            border: none;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, #1565C0, #1976D2);
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(21, 101, 192, .3);
+            transition: var(--transition);
+        }
+
+        .btn-auth-vol:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(21, 101, 192, .45);
+        }
+
+        @media(max-width:640px) {
+            .form-grid2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <div id="scroll-progress"></div>
     <div class="split-auth-container">
         <!-- Sidebar -->
-        <div class="auth-sidebar reveal"
-            style="background: linear-gradient(rgba(230, 81, 0, 0.85), rgba(230, 81, 0, 0.95)), url('https://images.unsplash.com/photo-1559027615-cd260194c0af?auto=format&fit=crop&w=1200&q=80'); background-size: cover; background-position: center;">
-            <h1 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 2rem; color: var(--surface);">JOIN THE SQUAD
-            </h1>
-            <h2>Lend a Hand. <br><span style="color: var(--surface); opacity: 0.8;">Save a Life.</span></h2>
-            <p>Your journey as a change-maker begins here. Help us bridge the gap between waste and want.</p>
-
-            <div style="margin-top: 4rem;">
-                <div class="reveal stagger-1"
-                    style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                    <div
-                        style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+        <div class="auth-sidebar">
+            <div class="sidebar-content">
+                <span class="sidebar-overline">Join the Heroes</span>
+                <h2>Deliver Hope.<br><span>Fight Hunger.</span></h2>
+                <p>Become a certified FWMS volunteer and start making food pickups that feed families across Telangana.
+                </p>
+                <div class="sidebar-features">
+                    <div class="sidebar-feat">
+                        <div class="sidebar-feat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                        </div>
+                        <span>Flexible pickup schedule</span>
                     </div>
-                    <span>Global Impact Network</span>
-                </div>
-                <div class="reveal stagger-2"
-                    style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                    <div
-                        style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                    <div class="sidebar-feat">
+                        <div class="sidebar-feat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <rect x="5" y="2" width="14" height="20" rx="2" />
+                                <line x1="12" y1="18" x2="12.01" y2="18" />
+                            </svg>
+                        </div>
+                        <span>Simple mobile-friendly dashboard</span>
                     </div>
-                    <span>Skill Development</span>
-                </div>
-                <div class="reveal stagger-3" style="display: flex; align-items: center; gap: 15px;">
-                    <div
-                        style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                        🌱</div>
-                    <span>Greener Future</span>
+                    <div class="sidebar-feat">
+                        <div class="sidebar-feat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg>
+                        </div>
+                        <span>Earn badges and milestones</span>
+                    </div>
+                    <div class="sidebar-feat">
+                        <div class="sidebar-feat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+                            </svg>
+                        </div>
+                        <span>Real community impact</span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Form Panel -->
         <div class="auth-form-panel">
-            <div class="reveal">
-                <a href="index.html" class="logo" style="margin-bottom: 2.5rem; text-decoration: none;">
-                    <img src="images/logo.png.png" alt="FWMS Logo"> FWMS
-                </a>
-                <h2 style="color: #e65100;">Become a Volunteer</h2>
-                <p>Register to start claiming pickups in your area.</p>
-
-                <form id="volunteerRegisterForm">
-                    <!-- Photo Upload -->
-                    <div class="form-group" style="margin-bottom: 1.5rem;">
-                        <label style="margin-bottom: 0.5rem;">Profile Photo</label>
-                        <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
-                            <div id="volunteerPhotoPreview"
-                                style="width: 60px; height: 60px; background: var(--neutral-100); border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #e65100; border-style: dashed;">
-                                📷</div>
-                            <input type="file" id="volunteerProfilePhoto" accept="image/*"
-                                style="font-size: 0.8rem; color: var(--text-muted);">
-                        </div>
-                    </div>
-
+            <a href="index.html" class="logo"><img src="images/logo.png.png" alt="FWMS"> FWMS</a>
+            <h2>Join as Volunteer</h2>
+            <p>Create your volunteer account and start accepting food pickups today.</p>
+            <form id="volunteerRegisterForm" novalidate>
+                <div class="form-group">
+                    <label for="volRegName">Full Name</label>
+                    <input type="text" id="volRegName" name="name" placeholder="Your full name" required>
+                </div>
+                <div class="form-grid2">
                     <div class="form-group">
-                        <label>Full Name</label>
-                        <input type="text" name="name" placeholder="John Doe" required>
+                        <label for="volRegEmail">Email Address</label>
+                        <input type="email" id="volRegEmail" name="email" placeholder="Enter Email" required>
                     </div>
+                    <div class="form-group">
+                        <label for="volRegPhone">Phone Number</label>
+                        <input type="tel" id="volRegPhone" name="phone" placeholder="Enter Number" required>
+                    </div>
+                </div>
+                <div class="form-grid2">
+                    <div class="form-group">
+                        <label for="volRegPassword">Password</label>
+                        <input type="password" id="volRegPassword" name="password" placeholder="Password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="volRegConfirm">Confirm Password</label>
+                        <input type="password" id="volRegConfirm" name="confirm_password"
+                            placeholder="Re-enter password" required>
+                    </div>
+                </div>
 
-                    <div class="auth-form-grid">
-                        <div class="form-group">
-                            <label>Email Address</label>
-                            <input type="email" name="email" placeholder="john@example.com" required>
+                <div class="form-group">
+                    <label>Profile Photo <span
+                            style="color:var(--text-muted);font-weight:400;">(Optional)</span></label>
+                    <div class="photo-upload-zone" onclick="document.getElementById('volPhoto').click()">
+                        <div class="photo-preview" id="volPhotoPreview">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8" stroke-linecap="round">
+                                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
                         </div>
-                        <div class="form-group">
-                            <label>Phone Number</label>
-                            <input type="tel" name="phone" placeholder="+91 98765 43210" required>
+                        <div>
+                            <div style="font-weight:700;font-size:.88rem;color:var(--neutral-700);">Click to upload
+                                photo</div>
+                            <div style="font-size:.76rem;color:var(--neutral-500);margin-top:2px;">PNG, JPG up to 2MB
+                            </div>
                         </div>
                     </div>
+                    <input type="file" id="volPhoto" accept="image/*" style="display:none;">
+                </div>
 
-                    <div class="auth-form-grid">
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" name="password" id="regPassword" placeholder="Min. 8 chars" required
-                                minlength="8">
-                        </div>
-                        <div class="form-group">
-                            <label>Confirm Password</label>
-                            <input type="password" id="regConfirm" placeholder="Repeat password" required>
-                            <div id="pwdError"
-                                style="color: #c62828; font-size: 0.75rem; margin-top: 5px; display: none;">Passwords do
-                                not match</div>
-                        </div>
-                    </div>
+                <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:20px;">
+                    <input type="checkbox" id="volTerms" required
+                        style="width:18px;height:18px;accent-color:#1565C0;margin-top:3px;flex-shrink:0;">
+                    <label for="volTerms" style="font-size:.82rem;color:var(--text-muted);line-height:1.55;">
+                        I agree to volunteer as a community contributor and abide by the <a href="#"
+                            style="color:#1565C0;font-weight:600;">Volunteer Code of Conduct</a>.
+                    </label>
+                </div>
 
-                    <button type="submit" class="btn btn-primary"
-                        style="width: 100%; padding: 1rem; font-size: 1rem; background: #e65100; border-color: #e65100;">Apply
-                        to Join</button>
-
-                    <p style="text-align: center; margin-top: 1.5rem; font-size: 0.95rem; color: var(--text-muted);">
-                        Already a volunteer? <a href="volunteer-login.html"
-                            style="color: #e65100; font-weight: 700; text-decoration: none;">Sign in here</a>
-                    </p>
-                </form>
-            </div>
+                <button type="submit" class="btn-auth-vol">Create Volunteer Account &rarr;</button>
+                <p style="text-align:center;margin-top:18px;font-size:.88rem;color:var(--text-muted);">
+                    Already registered? <a href="volunteer-login.html" style="color:#1565C0;font-weight:700;">Sign in
+                        here</a>
+                </p>
+            </form>
         </div>
     </div>
 
-    <script src="js/script.js"></script>
+    <script src="js/script.js?v=3.0"></script>
     <script>
-        // Local Validation
-        const form = document.getElementById('volunteerRegisterForm');
-        const pwd = document.getElementById('regPassword');
-        const conf = document.getElementById('regConfirm');
-        const err = document.getElementById('pwdError');
-
-        form.addEventListener('submit', (e) => {
-            if (pwd.value !== conf.value) {
-                e.preventDefault();
-                err.style.display = 'block';
-                conf.style.borderColor = '#c62828';
-            }
-        });
-
-        conf.addEventListener('input', () => {
-            err.style.display = 'none';
-            conf.style.borderColor = 'var(--neutral-200)';
+        document.getElementById('volPhoto').addEventListener('change', function () {
+            const file = this.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => { document.getElementById('volPhotoPreview').innerHTML = `<img src="${e.target.result}" alt="Profile">`; };
+            reader.readAsDataURL(file);
         });
     </script>
 </body>

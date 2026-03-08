@@ -4,120 +4,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Role - Food Waste Management System</title>
+    <title>Select Role - FWMS</title>
     <link rel="icon" type="image/png" href="images/logo.png.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Inter', sans-serif;
-            background: #f5f0e8;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 30px 20px;
+            padding: 32px 20px;
+            background: var(--neutral-50);
         }
 
-        .page-header {
+        .role-page-header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 48px;
+            animation: fadeInUp .7s both;
         }
 
-        .page-header h1 {
-            font-size: 2.8rem;
-            font-weight: 800;
-            line-height: 1.1;
+        .role-page-header .eyebrow {
+            margin-bottom: 16px;
         }
 
-        .page-header h1 .food {
-            color: #2e7d32;
+        .role-page-header h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            margin-bottom: 10px;
         }
 
-        .page-header h1 .waste {
-            color: #e65100;
+        .role-page-header h1 .g {
+            color: var(--primary);
         }
 
-        .page-header .sub {
+        .role-page-header p {
+            color: var(--text-muted);
             font-size: 1rem;
-            color: #555;
-            letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 4px;
         }
 
         .role-container {
             display: flex;
-            gap: 30px;
-            max-width: 800px;
+            gap: 24px;
+            max-width: 760px;
             width: 100%;
+            animation: fadeInUp .8s .1s both;
         }
 
         .role-card {
             flex: 1;
-            background: white;
-            border-radius: 16px;
-            padding: 40px;
+            background: var(--surface);
+            border: 2px solid var(--neutral-200);
+            border-radius: var(--radius-xl);
+            padding: 44px 36px;
             text-align: center;
             text-decoration: none;
-            color: #333;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s, box-shadow 0.3s;
-            border: 2px solid transparent;
+            color: var(--text);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            gap: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .role-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform .4s var(--ease-out);
         }
 
         .role-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .role-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .role-donor::before {
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+        }
+
+        .role-volunteer::before {
+            background: linear-gradient(90deg, var(--amber), hsl(33, 95%, 65%));
         }
 
         .role-donor:hover {
-            border-color: #2e7d32;
+            border-color: var(--primary-light);
         }
 
         .role-volunteer:hover {
-            border-color: #e65100;
+            border-color: var(--amber);
         }
 
-        .role-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
+        .role-icon-wrap {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+        .role-donor .role-icon-wrap {
+            background: var(--primary-soft);
+            color: var(--primary);
+        }
+
+        .role-volunteer .role-icon-wrap {
+            background: var(--amber-soft);
+            color: var(--amber);
         }
 
         .role-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 15px;
+            font-size: 1.6rem;
+            font-weight: 900;
+            margin-bottom: 12px;
+            font-family: 'Outfit', sans-serif;
         }
 
         .role-donor .role-title {
-            color: #2e7d32;
+            color: var(--primary);
         }
 
         .role-volunteer .role-title {
-            color: #e65100;
+            color: var(--amber);
         }
 
         .role-desc {
-            font-size: 0.95rem;
-            color: #666;
-            line-height: 1.5;
+            font-size: .9rem;
+            color: var(--text-muted);
+            line-height: 1.65;
+            margin-bottom: 28px;
         }
 
-        @media (max-width: 600px) {
+        .role-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border-radius: var(--radius-full);
+            font-weight: 700;
+            font-size: .88rem;
+            transition: var(--transition-fast);
+        }
+
+        .role-donor .role-cta {
+            background: var(--primary-soft);
+            color: var(--primary);
+        }
+
+        .role-donor:hover .role-cta {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .role-volunteer .role-cta {
+            background: var(--amber-soft);
+            color: var(--amber);
+        }
+
+        .role-volunteer:hover .role-cta {
+            background: var(--amber);
+            color: #fff;
+        }
+
+        @media(max-width:600px) {
             .role-container {
                 flex-direction: column;
             }
@@ -126,37 +190,67 @@
 </head>
 
 <body>
-    <div class="page-header">
-        <h1><span class="food">Select</span> <span class="waste">Role</span></h1>
-        <div class="sub">How would you like to participate?</div>
+    <div class="role-page-header">
+        <div class="eyebrow"
+            style="display:inline-flex;align-items:center;gap:8px;background:var(--primary-soft);color:var(--primary);border-radius:9999px;padding:5px 16px;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;">
+            Food Waste Management System</div>
+        <h1>How would you like to <span class="g">participate?</span></h1>
+        <p>Select your role to get started.</p>
     </div>
 
     <div class="role-container">
-        <!-- Donor Role -->
+        <!-- Donor -->
         <a href="login.html" class="role-card role-donor" id="donorLink">
-            <div class="role-icon">🍱</div>
+            <div class="role-icon-wrap">
+                <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-6" />
+                    <path d="M9 12l3 3L22 4" />
+                </svg>
+            </div>
             <div class="role-title">I am a Donor</div>
-            <div class="role-desc">Donate surplus food from restaurants, events, or homes to those in need.</div>
+            <p class="role-desc">Donate surplus food from restaurants, events, or homes to those in need — in under 30
+                minutes.</p>
+            <div class="role-cta">
+                Get Started
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+            </div>
         </a>
 
-        <!-- Volunteer Role -->
+        <!-- Volunteer -->
         <a href="volunteer-login.html" class="role-card role-volunteer" id="volunteerLink">
-            <div class="role-icon">🤝</div>
+            <div class="role-icon-wrap">
+                <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+                </svg>
+            </div>
             <div class="role-title">I am a Volunteer</div>
-            <div class="role-desc">Help deliver food, manage inventory, or support operations on the ground.</div>
+            <p class="role-desc">Help deliver food, support operations, and make a real difference in your community on
+                the ground.</p>
+            <div class="role-cta">
+                Get Started
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+            </div>
         </a>
     </div>
 
     <script>
-        // Check URL params to see if user intends to register instead of login
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const action = urlParams.get('action');
-
             if (action === 'register') {
                 document.getElementById('donorLink').href = 'register.html';
                 document.getElementById('volunteerLink').href = 'volunteer-register.html';
-                document.querySelector('.page-header .sub').innerText = 'Choose your role to register';
+                document.querySelector('.role-page-header p').textContent = 'Choose your role to create an account.';
             }
         });
     </script>

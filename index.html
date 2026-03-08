@@ -4,16 +4,486 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Food Waste Management System</title>
+    <title>FWMS — Zero Hunger, Zero Waste</title>
+    <meta name="description"
+        content="Food Waste Management System — connecting surplus food with those who need it most across Telangana.">
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/png" href="images/logo.png.png">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ── INDEX PAGE STYLES ── */
+        body {
+            background: #fff;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 130px 0 80px;
+            position: relative;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .hero-mesh {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse 70% 55% at 60% -10%, hsla(148, 64%, 26%, 0.09) 0%, transparent 65%),
+                radial-gradient(ellipse 50% 40% at 90% 80%, hsla(33, 95%, 53%, 0.06) 0%, transparent 60%);
+        }
+
+        .hero-dots {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle at 1px 1px, var(--neutral-200) 1px, transparent 0);
+            background-size: 36px 36px;
+            mask-image: radial-gradient(ellipse 80% 70% at 80% 40%, black 0%, transparent 70%);
+            -webkit-mask-image: radial-gradient(ellipse 80% 70% at 80% 40%, black 0%, transparent 70%);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary-soft);
+            color: var(--primary);
+            border-radius: var(--radius-full);
+            padding: 5px 18px;
+            font-weight: 700;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            margin-bottom: 22px;
+            animation: fadeInUp 0.7s both;
+        }
+
+        .hero-eyebrow-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--primary);
+            animation: pulse-ring 1.8s ease-out infinite;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 5.5vw, 4.4rem);
+            font-weight: 900;
+            line-height: 1.02;
+            letter-spacing: -0.04em;
+            margin-bottom: 22px;
+            animation: fadeInUp 0.8s 0.08s both;
+        }
+
+        .hero-title .accent {
+            color: var(--primary);
+        }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.82;
+            margin-bottom: 36px;
+            max-width: 490px;
+            animation: fadeInUp 0.9s 0.16s both;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s 0.24s both;
+        }
+
+        .hero-trust-row {
+            display: flex;
+            gap: 24px;
+            margin-top: 44px;
+            animation: fadeInUp 1.1s 0.32s both;
+        }
+
+        .hero-trust-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .hero-trust-item svg {
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .hero-trust-item strong {
+            color: var(--neutral-900);
+        }
+
+        /* Hero image side */
+        .hero-visual {
+            position: relative;
+            animation: fadeInUp 0.9s 0.12s both;
+        }
+
+        .hero-visual-img {
+            width: 100%;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-2xl);
+            aspect-ratio: 4/3;
+            object-fit: cover;
+        }
+
+        .hero-float-card {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--neutral-150);
+            border-radius: var(--radius-md);
+            padding: 14px 18px;
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 190px;
+        }
+
+        .hfc-1 {
+            left: -28px;
+            bottom: 36px;
+            animation: float 5s ease-in-out infinite;
+        }
+
+        .hfc-2 {
+            right: -20px;
+            top: 28px;
+            animation: float 5s ease-in-out infinite 2.5s;
+        }
+
+        .hfc-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: #fff;
+        }
+
+        .hfc-icon-green {
+            background: var(--primary);
+        }
+
+        .hfc-icon-amber {
+            background: var(--amber);
+        }
+
+        .hfc-label {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: .05em;
+        }
+
+        .hfc-val {
+            font-weight: 800;
+            color: var(--neutral-900);
+            font-size: 1rem;
+        }
+
+        /* Stats Ticker */
+        .stats-ticker {
+            background: linear-gradient(90deg, var(--dark) 0%, var(--dark-2) 60%, var(--dark-3) 100%);
+            color: #fff;
+            padding: 22px 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .ticker-track {
+            display: flex;
+            gap: 0;
+            animation: tickerScroll 28s linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes tickerScroll {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 40px;
+            border-right: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .ticker-num {
+            font-size: 1.35rem;
+            font-weight: 900;
+            font-family: 'Outfit', sans-serif;
+            color: var(--primary-light);
+        }
+
+        .ticker-label {
+            font-size: 0.82rem;
+            opacity: .75;
+        }
+
+        .ticker-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--amber);
+            flex-shrink: 0;
+        }
+
+        /* ── MISSION ── */
+        .mission {
+            background: var(--neutral-50);
+        }
+
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .mission-card {
+            background: var(--surface);
+            border: 1px solid var(--neutral-150);
+            border-radius: var(--radius-lg);
+            padding: 36px 28px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .mission-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s var(--ease-out);
+        }
+
+        .mission-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-light);
+        }
+
+        .mission-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .mission-icon-wrap {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-md);
+            background: var(--primary-soft);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 22px;
+        }
+
+        .mission-card h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .mission-card p {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            line-height: 1.75;
+        }
+
+        /* ── HOW IT WORKS ── */
+        .how-works {
+            background: var(--surface);
+        }
+
+        .steps-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            position: relative;
+        }
+
+        .steps-row::before {
+            content: '';
+            position: absolute;
+            top: 34px;
+            left: 12.5%;
+            right: 12.5%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light), var(--amber));
+            z-index: 0;
+        }
+
+        .step-box {
+            text-align: center;
+            padding: 20px 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-circle {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: 900;
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border: 4px solid var(--surface);
+            box-shadow: 0 0 0 2px var(--primary), var(--shadow-green);
+            transition: transform 0.3s var(--ease-spring), box-shadow 0.3s;
+        }
+
+        .step-box:hover .step-circle {
+            transform: scale(1.14);
+            box-shadow: 0 0 0 3px var(--primary), 0 12px 28px var(--primary-glow);
+        }
+
+        .step-box h4 {
+            font-weight: 800;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .step-box p {
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            line-height: 1.65;
+        }
+
+        /* ── CTA BAND ── */
+        .cta-band {
+            background: linear-gradient(130deg, var(--dark) 0%, var(--dark-2) 55%, var(--dark-3) 100%);
+            border-radius: var(--radius-xl);
+            padding: 72px 64px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 48px;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-band::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: hsla(148, 64%, 26%, 0.25);
+            filter: blur(60px);
+            pointer-events: none;
+        }
+
+        .cta-band h2 {
+            font-size: clamp(2rem, 3.5vw, 2.8rem);
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 14px;
+        }
+
+        .cta-band p {
+            opacity: .8;
+            color: #fff;
+            font-size: 1.05rem;
+            max-width: 520px;
+            line-height: 1.75;
+        }
+
+        .cta-btns-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: stretch;
+            min-width: 220px;
+        }
+
+        /* Responsive */
+        @media(max-width:1100px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .mission-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media(max-width:768px) {
+            .steps-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .steps-row::before {
+                display: none;
+            }
+
+            .cta-band {
+                grid-template-columns: 1fr;
+                padding: 48px 28px;
+            }
+        }
+
+        @media(max-width:540px) {
+            .hero-title {
+                font-size: 2.6rem;
+            }
+
+            .mission-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <div id="scroll-progress"></div>
-    <header>
+
+    <header id="mainHeader">
         <div class="container">
             <nav class="glass-nav">
                 <a href="index.html" class="logo">
@@ -27,47 +497,115 @@
                     <li><a href="donor.html">Donor</a></li>
                     <li><a href="volunteer.html">Volunteer</a></li>
                 </ul>
-                <button class="mobile-menu-btn">☰</button>
+                <!-- <div class="nav-auth">
+                    <a href="login.html" class="nav-login">Sign In</a>
+                    <a href="register.html" class="nav-register btn" style="padding:.45rem 1.1rem;font-size:.88rem;">Get
+                        Started</a>
+                </div> -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                        <rect y="4" width="22" height="2.5" rx="1.25" fill="currentColor" />
+                        <rect y="10" width="22" height="2.5" rx="1.25" fill="currentColor" />
+                        <rect y="16" width="22" height="2.5" rx="1.25" fill="currentColor" />
+                    </svg>
+                </button>
             </nav>
         </div>
     </header>
 
     <main>
-        <!-- Polished Hero Section -->
-        <section class="hero" style="position: relative; overflow: hidden; background: #fff; padding: 140px 0 100px;">
-            <div class="container" style="display: flex; align-items: center; gap: 60px; flex-wrap: wrap;">
-                <div class="hero-content" style="flex: 1; min-width: 320px;">
-                    <div
-                        style="display: inline-block; padding: 6px 16px; background: var(--primary-soft); color: var(--primary); border-radius: var(--radius-full); font-weight: 700; font-size: 0.85rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.05em;">
-                        Zero Waste Initiative
+        <!-- ═══ HERO ═══ -->
+        <section class="hero">
+            <div class="hero-mesh"></div>
+            <div class="hero-dots"></div>
+            <div class="container">
+                <div class="hero-grid">
+                    <div class="hero-content">
+                        <div class="hero-eyebrow">
+                            <span class="hero-eyebrow-dot"></span>
+                            Zero Waste Initiative &bull; Telangana
+                        </div>
+                        <h1 class="hero-title">
+                            Transforming <span class="accent">Surplus</span><br>Into Sustenance.
+                        </h1>
+                        <p class="hero-desc">
+                            We connect restaurants, households and events with surplus food to volunteers
+                            who deliver it to those who need it most — in under 30 minutes.
+                        </p>
+                        <div class="hero-ctas">
+                            <button onclick="handleHeroCTA('donor')" class="btn btn-primary"
+                                style="padding:0.9rem 2.2rem; font-size:1rem;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-6" />
+                                    <path d="M9 12l3 3L22 4" />
+                                </svg>
+                                Donate Food
+                            </button>
+                            <button onclick="handleHeroCTA('volunteer')" class="btn btn-ghost"
+                                style="padding:0.9rem 2rem; font-size:1rem;">
+                                Become a Volunteer
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="hero-trust-row">
+                            <div class="hero-trust-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.5" stroke-linecap="round">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                </svg>
+                                <strong>AI-Verified</strong> donations
+                            </div>
+                            <div class="hero-trust-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.5" stroke-linecap="round">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                                <strong>15-min</strong> avg pickup
+                            </div>
+                            <div class="hero-trust-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.5" stroke-linecap="round">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+                                </svg>
+                                <strong>100%</strong> community-driven
+                            </div>
+                        </div>
                     </div>
-                    <h1 style="font-size: 4rem; line-height: 1.1; margin-bottom: 24px;">Transforming <span
-                            style="color: var(--primary);">Surplus</span> into Solutions.</h1>
-                    <p style="font-size: 1.2rem; color: var(--text-muted); margin-bottom: 40px; line-height: 1.7;">
-                        Join our mission to eliminate food waste in Telangana. We connect surplus food from donors to
-                        those who need it most, creating a sustainable and zero-hunger community.
-                    </p>
-                    <div class="cta-btns" style="display: flex; gap: 20px; flex-wrap: wrap;">
-                        <button onclick="handleHeroCTA('donor')" class="btn btn-primary">Donate Food</button>
-                        <button onclick="handleHeroCTA('volunteer')" class="btn"
-                            style="border: 1px solid var(--neutral-200); color: var(--neutral-900);">Become a
-                            Volunteer</button>
-                    </div>
-                </div>
-                <div class="hero-visual" style="flex: 1; min-width: 320px; transition: transform 0.2s ease-out;">
-                    <div
-                        style="position: relative; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-xl);">
-                        <img src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80"
-                            alt="Sustainable Food" style="width: 100%; display: block;">
-                        <div
-                            style="position: absolute; bottom: 20px; left: 20px; right: 20px; background: rgba(255,255,255,0.9); backdrop-filter: blur(8px); padding: 15px; border-radius: var(--radius-md); display: flex; align-items: center; gap: 15px;">
-                            <div class="float-anim"
-                                style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.2rem;">
-                                🌍</div>
+
+                    <div class="hero-visual">
+                        <img class="hero-visual-img"
+                            src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?auto=format&fit=crop&w=900&q=80"
+                            alt="Food donation">
+                        <div class="hero-float-card hfc-1">
+                            <div class="hfc-icon hfc-icon-green">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.2" stroke-linecap="round">
+                                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" />
+                                    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+                                </svg>
+                            </div>
                             <div>
-                                <h4 style="font-size: 0.95rem; margin-bottom: 2px;">Over 50,000 Lives Impacted</h4>
-                                <p style="font-size: 0.75rem; color: var(--text-muted);">Join our growing community
-                                    today.</p>
+                                <div class="hfc-label">Lives Impacted</div>
+                                <div class="hfc-val">50,000+</div>
+                            </div>
+                        </div>
+                        <div class="hero-float-card hfc-2">
+                            <div class="hfc-icon hfc-icon-amber">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.2" stroke-linecap="round">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="hfc-label">Active Today</div>
+                                <div class="hfc-val" id="heroActiveNum">Loading...</div>
                             </div>
                         </div>
                     </div>
@@ -75,96 +613,213 @@
             </div>
         </section>
 
-        <!-- Mission Statement -->
-        <section class="mission reveal" style="background: var(--surface);">
+        <!-- ═══ STATS TICKER ═══ -->
+        <div class="stats-ticker">
+            <div class="ticker-track" id="tickerTrack">
+                <div class="ticker-item"><span class="ticker-num">50+</span><span class="ticker-dot"></span><span
+                        class="ticker-label">Verified Donors</span></div>
+                <div class="ticker-item"><span class="ticker-num">10 Tonnes</span><span class="ticker-dot"></span><span
+                        class="ticker-label">Food Saved Monthly</span></div>
+                <div class="ticker-item"><span class="ticker-num"></span><span class="ticker-dot"></span><span
+                        class="ticker-label"></span></div>
+                <div class="ticker-item"><span class="ticker-num">150+</span><span class="ticker-dot"></span><span
+                        class="ticker-label">Lives Impacted</span></div>
+                <div class="ticker-item"><span class="ticker-num">~min's</span><span class="ticker-dot"></span><span
+                        class="ticker-label">Average Pickup Time</span></div>
+                <div class="ticker-item"><span class="ticker-num">100%</span><span class="ticker-dot"></span><span
+                        class="ticker-label">AI-Verified Photos</span></div>
+                <!-- duplicate for seamless loop -->
+                <div class="ticker-item"><span class="ticker-num">50+</span><span class="ticker-dot"></span><span
+                        class="ticker-label">Verified Donors</span></div>
+                <div class="ticker-item"><span class="ticker-num">10 Tonnes</span><span class="ticker-dot"></span><span
+                        class="ticker-label">Food Saved Monthly</span></div>
+                <div class="ticker-item"><span class="ticker-num">50</span><span class="ticker-dot"></span><span
+                        class="ticker-label">Partner Shelters</span></div>
+                <div class="ticker-item"><span class="ticker-num">150+</span><span class="ticker-dot"></span><span
+                        class="ticker-label">Lives Impacted</span></div>
+                <div class="ticker-item"><span class="ticker-num">~min's</span><span class="ticker-dot"></span><span
+                        class="ticker-label">Average Pickup Time</span></div>
+                <div class="ticker-item"><span class="ticker-num">100%</span><span class="ticker-dot"></span><span
+                        class="ticker-label">AI-Verified Photos</span></div>
+            </div>
+        </div>
+
+        <!-- ═══ MISSION ═══ -->
+        <section class="mission reveal">
             <div class="container">
                 <div class="section-title">
+                    <div class="eyebrow">Our Approach</div>
                     <h2>Driven by Purpose</h2>
-                    <p>We build bridges between surplus and necessity.</p>
+                    <p>Three pillars of our approach to eliminating food waste across Telangana.</p>
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;">
-                    <div class="glass-card stagger-1">
-                        <div class="float-anim" style="font-size: 2.5rem; margin-bottom: 20px;">📉</div>
-                        <h3 style="margin-bottom: 15px;">Source Reduction</h3>
-                        <p>We help businesses track and minimize waste before it happens using smart data analytics.</p>
-                    </div>
-                    <div class="glass-card stagger-2">
-                        <div class="float-anim" style="font-size: 2.5rem; margin-bottom: 20px; animation-delay: -1s;">🥗
+                <div class="mission-grid">
+                    <div class="mission-card reveal stagger-1">
+                        <div class="mission-icon-wrap">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+                                <polyline points="16 7 22 7 22 13" />
+                            </svg>
                         </div>
-                        <h3 style="margin-bottom: 15px;">Redistribution</h3>
-                        <p>Fast, efficient connection between restaurants, households, and local shelters.</p>
+                        <h3>Source Reduction</h3>
+                        <p>We help businesses track and minimize waste using smart analytics before it even happens.</p>
                     </div>
-                    <div class="glass-card stagger-3">
-                        <div class="float-anim" style="font-size: 2.5rem; margin-bottom: 20px; animation-delay: -2s;">♻️
+                    <div class="mission-card reveal stagger-2">
+                        <div class="mission-icon-wrap" style="background:var(--amber-soft);color:var(--amber);">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                                <polyline points="9 22 9 12 15 12 15 22" />
+                            </svg>
                         </div>
-                        <h3 style="margin-bottom: 15px;">Sustainable Valorisation</h3>
-                        <p>Ensuring unavoidable waste is converted into compost or renewable energy.</p>
+                        <h3>Redistribution</h3>
+                        <p>Fast, efficient connection between restaurants, households, and local shelters — under 30
+                            mins.</p>
+                    </div>
+                    <div class="mission-card reveal stagger-3">
+                        <div class="mission-icon-wrap" style="background:#f0fdf4;color:#16a34a;">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="1 4 1 10 7 10" />
+                                <path d="M3.51 15a9 9 0 102.13-9.36L1 10" />
+                            </svg>
+                        </div>
+                        <h3>Sustainable Valorisation</h3>
+                        <p>Unavoidable waste is converted into compost or renewable energy through our partner network.
+                        </p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Benefits Summary -->
-        <section class="benefits reveal" style="padding-top: 50px;">
+        <!-- ═══ HOW IT WORKS ═══ -->
+        <section class="how-works reveal">
             <div class="container">
-                <div
-                    style="background: var(--primary); border-radius: var(--radius-lg); padding: 60px; color: var(--surface); display: flex; align-items: center; gap: 40px; flex-wrap: wrap; box-shadow: var(--shadow-xl);">
-                    <div style="flex: 1; min-width: 280px;">
-                        <h2 style="color: var(--surface); font-size: 2.5rem; margin-bottom: 20px;">Make an Impact in 30
-                            Seconds.</h2>
-                        <p style="color: hsla(142, 72%, 96%, 0.8); font-size: 1.1rem; margin-bottom: 30px;">Whether
-                            you're a restaurant with surplus food or a volunteer with a vehicle, your contribution
-                            matters.</p>
-                        <div style="display: flex; gap: 15px;">
-                            <button onclick="handleHeroCTA('donor')" class="btn btn-secondary">Start Donating</button>
-                        </div>
+                <div class="section-title">
+                    <div class="eyebrow">The Process</div>
+                    <h2>How FWMS Works</h2>
+                    <p>Connecting surplus food to empty plates in four simple steps.</p>
+                </div>
+                <div class="steps-row">
+                    <div class="step-box reveal stagger-1">
+                        <div class="step-circle">1</div>
+                        <h4>Donor Submits</h4>
+                        <p>Restaurant or household posts surplus food with photo and location via our AI-powered form.
+                        </p>
                     </div>
-                    <div style="flex: 1; min-width: 280px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: var(--radius-md);">
-                            <h3 style="font-size: 2rem; margin-bottom: 5px;"></h3>
-                            <p style="font-size: 0.85rem; opacity: 0.8;">Tons wasted annually</p>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: var(--radius-md);">
-                            <h3 style="font-size: 2rem; margin-bottom: 5px;"></h3>
-                            <p style="font-size: 0.85rem; opacity: 0.8;">Lower emissions</p>
-                        </div>
+                    <div class="step-box reveal stagger-2">
+                        <div class="step-circle">2</div>
+                        <h4>AI Verifies</h4>
+                        <p>Our computer vision model confirms the food photo is genuine before alerting volunteers.</p>
+                    </div>
+                    <div class="step-box reveal stagger-3">
+                        <div class="step-circle">3</div>
+                        <h4>Volunteer Claims</h4>
+                        <p>A nearby volunteer claims the pickup and navigates directly to the donor's location.</p>
+                    </div>
+                    <div class="step-box reveal stagger-4">
+                        <div class="step-circle">4</div>
+                        <h4>Food Delivered</h4>
+                        <p>Surplus food is safely delivered to shelters, ensuring zero waste and zero hunger.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ CTA BAND ═══ -->
+        <section class="reveal" style="padding:80px 0;">
+            <div class="container">
+                <div class="cta-band">
+                    <div>
+                        <h2>Make an Impact in<br>30 Seconds.</h2>
+                        <p>Whether you're a restaurant with surplus food or a volunteer with a vehicle, your
+                            contribution could feed a family tonight.</p>
+                    </div>
+                    <div class="cta-btns-wrap">
+                        <button onclick="handleHeroCTA('donor')" class="btn btn-secondary"
+                            style="justify-content:center;">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.2" stroke-linecap="round">
+                                <path d="M11 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-6" />
+                                <path d="M9 12l3 3L22 4" />
+                            </svg>
+                            Start Donating
+                        </button>
+                        <button onclick="handleHeroCTA('volunteer')" class="btn btn-outline-white"
+                            style="justify-content:center;">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.2" stroke-linecap="round">
+                                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+                            </svg>
+                            Volunteer Now
+                        </button>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <script>
-        function handleHeroCTA(role) {
-            if (role === 'donor') {
-                if (localStorage.getItem('fwms_current_user')) {
-                    window.location.href = 'donor.html';
-                } else {
-                    window.location.href = 'register.html';
-                }
-            } else if (role === 'volunteer') {
-                if (localStorage.getItem('fwms_current_volunteer')) {
-                    window.location.href = 'volunteer.html';
-                } else {
-                    window.location.href = 'register.html';
-                }
-            }
-        }
-    </script>
-
     <footer>
         <div class="container">
-            <p>&copy; 2026 Food Waste Management System - All rights reserved.</p>
-            <div style="margin-top: 10px;">
-                <a href="#" style="color: var(--primary-light); text-decoration: none; margin: 0 10px;">Privacy
-                    Policy</a> |
-                <a href="#" style="color: var(--primary-light); text-decoration: none; margin: 0 10px;">Terms of
-                    Service</a>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo" style="color:#fff;">
+                        <img src="images/logo.png.png" alt="FWMS" style="filter:brightness(0) invert(1); opacity:.85;">
+                        FWMS
+                    </a>
+                    <p>Food Waste Management System — turning surplus into sustenance across the Telangana region since
+                        2024.</p>
+                    <div class="footer-badge">
+                        <span class="footer-dot"></span>
+                        Live Network Active
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h5>Platform</h5>
+                    <ul>
+                        <li><a href="donor.html">Donate Food</a></li>
+                        <li><a href="volunteer.html">Volunteer Dashboard</a></li>
+                        <li><a href="register.html">Create Account</a></li>
+                        <li><a href="login.html">Sign In</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h5>Company</h5>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 Food Waste Management System. All rights reserved.</span>
+                <span>Built for Telangana, with care.</span>
             </div>
         </div>
     </footer>
 
-    <script src="js/script.js?v=2.0"></script>
+    <script src="js/script.js?v=3.0"></script>
+    <script>
+        function handleHeroCTA(role) {
+            if (role === 'donor') {
+                window.location.href = localStorage.getItem('fwms_current_user') ? 'donor.html' : 'register.html';
+            } else {
+                window.location.href = localStorage.getItem('fwms_current_volunteer') ? 'volunteer.html' : 'register.html';
+            }
+        }
+        // Live stats
+        (async function () {
+            try {
+                const donations = await fetch('/api/donations').then(r => r.json()).catch(() => []);
+                const active = donations.filter(d => d.status === 'pending').length;
+                document.getElementById('heroActiveNum').textContent = active + ' donations';
+            } catch (e) { document.getElementById('heroActiveNum').textContent = 'Active now'; }
+        })();
+    </script>
 </body>
 
 </html>

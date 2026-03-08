@@ -4,19 +4,511 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - Food Waste Management System</title>
+    <title>About Us - FWMS</title>
+    <meta name="description" content="Learn about FWMS — our mission, team, and impact on food waste in Telangana.">
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/png" href="images/logo.png.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: var(--neutral-50);
+        }
+
+        /* Hero */
+        .about-hero {
+            padding: 150px 0 100px;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-2) 55%, var(--dark-3) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-hero-orb {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(70px);
+        }
+
+        .about-hero-orb-1 {
+            width: 400px;
+            height: 400px;
+            background: hsla(148, 64%, 26%, 0.3);
+            right: -80px;
+            top: -80px;
+        }
+
+        .about-hero-orb-2 {
+            width: 260px;
+            height: 260px;
+            background: hsla(33, 95%, 53%, 0.15);
+            left: 30%;
+            bottom: -40px;
+        }
+
+        .about-hero-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.10);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: var(--radius-full);
+            padding: 5px 18px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--primary-light);
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            margin-bottom: 20px;
+        }
+
+        .about-hero h1 {
+            font-size: clamp(2.8rem, 5vw, 3.8rem);
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+            margin-bottom: 20px;
+        }
+
+        .about-hero h1 span {
+            color: var(--primary-light);
+        }
+
+        .about-hero p {
+            color: rgba(255, 255, 255, .78);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 32px;
+        }
+
+        .about-hero-stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .ahstat {
+            background: rgba(255, 255, 255, .08);
+            border: 1px solid rgba(255, 255, 255, .14);
+            border-radius: var(--radius-md);
+            padding: 16px 22px;
+            backdrop-filter: blur(8px);
+            text-align: center;
+            transition: background 0.25s;
+        }
+
+        .ahstat:hover {
+            background: rgba(255, 255, 255, .14);
+        }
+
+        .ahstat-num {
+            display: block;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--primary-light);
+            font-family: 'Outfit', sans-serif;
+            line-height: 1.1;
+        }
+
+        .ahstat-label {
+            font-size: .72rem;
+            color: rgba(255, 255, 255, .6);
+            margin-top: 4px;
+            display: block;
+        }
+
+        .about-hero-img {
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-2xl);
+            animation: fadeInUp 0.9s 0.12s both;
+        }
+
+        .about-hero-img img {
+            width: 100%;
+            display: block;
+            height: 420px;
+            object-fit: cover;
+        }
+
+        /* Stats Row */
+        .stats-row {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-mid) 100%);
+            padding: 52px 0;
+        }
+
+        .stats-grid4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+        }
+
+        .stat4-item {
+            text-align: center;
+            padding: 20px;
+            border-right: 1px solid rgba(255, 255, 255, .15);
+        }
+
+        .stat4-item:last-child {
+            border-right: none;
+        }
+
+        .stat4-num {
+            display: block;
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            line-height: 1;
+        }
+
+        .stat4-label {
+            font-size: .82rem;
+            color: rgba(255, 255, 255, .72);
+            margin-top: 6px;
+            display: block;
+        }
+
+        /* Vision / Mission */
+        .vision-section {
+            padding: 96px 0;
+            background: var(--surface);
+        }
+
+        .vision-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+        }
+
+        .vision-card {
+            border-radius: var(--radius-xl);
+            padding: 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vc-vision {
+            background: linear-gradient(140deg, var(--dark) 0%, var(--dark-3) 100%);
+            color: #fff;
+        }
+
+        .vc-mission {
+            background: var(--neutral-50);
+            border: 1px solid var(--neutral-150);
+        }
+
+        .vc-icon-box {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            flex-shrink: 0;
+        }
+
+        .vc-vision .vc-icon-box {
+            background: rgba(255, 255, 255, .12);
+            color: var(--primary-light);
+        }
+
+        .vc-mission .vc-icon-box {
+            background: var(--primary-soft);
+            color: var(--primary);
+        }
+
+        .vision-card h3 {
+            font-size: 1.7rem;
+            font-weight: 900;
+            margin-bottom: 14px;
+        }
+
+        .vc-vision p {
+            opacity: .82;
+            line-height: 1.8;
+            font-size: .95rem;
+        }
+
+        .vc-mission p {
+            color: var(--text-muted);
+            line-height: 1.8;
+            font-size: .95rem;
+        }
+
+        .vc-mission h3 {
+            color: var(--primary);
+        }
+
+        .vc-vision-orb {
+            position: absolute;
+            right: -40px;
+            bottom: -40px;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: hsla(148, 64%, 26%, 0.25);
+            filter: blur(40px);
+            pointer-events: none;
+        }
+
+        /* Timeline */
+        .hiw-section {
+            background: var(--neutral-50);
+            padding: 96px 0;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 780px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 34px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary), var(--primary-light), rgba(255, 255, 255, 0));
+        }
+
+        .tl-item {
+            display: flex;
+            gap: 28px;
+            align-items: flex-start;
+            padding: 0 0 44px;
+            position: relative;
+        }
+
+        .tl-num {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: 900;
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 4px solid var(--neutral-50);
+            box-shadow: 0 0 0 2px var(--primary), 0 8px 20px var(--primary-glow);
+            z-index: 1;
+        }
+
+        .tl-content {
+            background: var(--surface);
+            border: 1px solid var(--neutral-150);
+            border-radius: var(--radius-md);
+            padding: 22px 28px;
+            flex: 1;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+        }
+
+        .tl-content:hover {
+            box-shadow: var(--shadow-xl);
+            transform: translateX(6px);
+        }
+
+        .tl-content h4 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+            color: var(--primary);
+        }
+
+        .tl-content p {
+            font-size: .88rem;
+            color: var(--text-muted);
+            line-height: 1.65;
+        }
+
+        /* Team */
+        .team-section {
+            padding: 96px 0;
+            background: var(--surface);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .team-card {
+            background: var(--neutral-50);
+            border: 1px solid var(--neutral-150);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .team-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-light);
+        }
+
+        .team-photo {
+            height: 170px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            font-weight: 900;
+            font-family: 'Outfit', sans-serif;
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .team-body {
+            padding: 24px 28px 28px;
+        }
+
+        .team-body h4 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .team-role {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: .82rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .team-body p {
+            font-size: .82rem;
+            color: var(--text-muted);
+            line-height: 1.65;
+        }
+
+        /* CTA */
+        .about-cta {
+            padding: 80px 0 100px;
+        }
+
+        .about-cta-box {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-2) 55%, var(--dark-3) 100%);
+            border-radius: var(--radius-xl);
+            padding: 80px 64px;
+            text-align: center;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-cta-box::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
+            background-size: 28px 28px;
+        }
+
+        .about-cta-box>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-cta-box h2 {
+            font-size: clamp(2rem, 3.5vw, 2.9rem);
+            font-weight: 900;
+            margin-bottom: 14px;
+        }
+
+        .about-cta-box p {
+            font-size: 1.05rem;
+            opacity: .82;
+            margin-bottom: 40px;
+            max-width: 540px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.75;
+        }
+
+        .about-cta-btns {
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        @media(max-width:900px) {
+            .about-hero-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .about-hero-img {
+                display: none;
+            }
+
+            .stats-grid4 {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .vision-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media(max-width:600px) {
+            .about-hero h1 {
+                font-size: 2.4rem;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-cta-box {
+                padding: 48px 24px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <header>
+    <div id="scroll-progress"></div>
+    <header id="mainHeader">
         <div class="container">
             <nav class="glass-nav">
-                <a href="index.html" class="logo">
-                    <img src="images/logo.png.png" alt="FWMS Logo"> FWMS
-                </a>
+                <a href="index.html" class="logo"><img src="images/logo.png.png" alt="FWMS"> FWMS</a>
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="about.html" class="active">About</a></li>
@@ -24,59 +516,101 @@
                     <li><a href="donor.html">Donor</a></li>
                     <li><a href="volunteer.html">Volunteer</a></li>
                 </ul>
-                <button class="mobile-menu-btn">☰</button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                        <rect y="4" width="22" height="2.5" rx="1.25" fill="currentColor" />
+                        <rect y="10" width="22" height="2.5" rx="1.25" fill="currentColor" />
+                        <rect y="16" width="22" height="2.5" rx="1.25" fill="currentColor" />
+                    </svg>
+                </button>
             </nav>
         </div>
     </header>
 
     <main>
-        <section class="page-header hero-text-entrance"
-            style="background-color: var(--dark-color); color: rgb(4, 4, 4); padding: 60px 0; text-align: center;">
+        <!-- HERO -->
+        <section class="about-hero">
+            <div class="about-hero-orb about-hero-orb-1"></div>
+            <div class="about-hero-orb about-hero-orb-2"></div>
             <div class="container">
-                <h1 style="margin-top:20px;">About the Initiative</h1>
-                <p>Learn about our plan, our team, and the impact we're making.</p>
-            </div>
-        </section>
-
-        <section class="stats reveal">
-            <div class="container">
-                <div class="stagger-parent"
-                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; text-align: center;">
-                    <div class="animate-zoom glass-card" style="padding: 30px; border-radius: 10px;">
-                        <h2 style="color: var(--primary-color); font-size: 2.5rem;" class="text-reveal">50</h2>
-                        <p>Verified Donors</p>
+                <div class="about-hero-inner">
+                    <div style="animation:fadeInUp 0.8s both;">
+                        <div class="about-hero-badge">
+                            <svg width="10" height="10" viewBox="0 0 10 10" fill="var(--primary-light)">
+                                <circle cx="5" cy="5" r="5" />
+                            </svg>
+                            Our Story
+                        </div>
+                        <h1>Fighting Hunger,<br><span>One Meal</span> at a Time.</h1>
+                        <p>FWMS was born from a simple observation — tons of food go to waste every day while thousands
+                            go hungry. We built the technology to bridge that gap.</p>
+                        <div class="about-hero-stats">
+                            <div class="ahstat"><span class="ahstat-num">50+</span><span
+                                    class="ahstat-label">Donors</span></div>
+                            <div class="ahstat"><span class="ahstat-num">10T</span><span class="ahstat-label">Food
+                                    Saved</span></div>
+                            <!-- <div class="ahstat"><span class="ahstat-num">150+</span><span
+                                    class="ahstat-label">Lives</span></div> -->
+                        </div>
                     </div>
-                    <div class="animate-zoom glass-card" style="padding: 30px; border-radius: 10px;"
-                        style="background: var(--white); padding: 30px; border-radius: 10px; box-shadow: var(--shadow);">
-                        <h2 style="color: var(--primary-color); font-size: 2.5rem;" class="text-reveal">10T</h2>
-                        <p>Food Saved Monthly</p>
-                    </div>
-                    <div class="animate-zoom glass-card" style="padding: 30px; border-radius: 10px;"
-                        style="background: var(--white); padding: 30px; border-radius: 10px; box-shadow: var(--shadow);">
-                        <h2 style="color: var(--primary-color); font-size: 2.5rem;" class="text-reveal">50</h2>
-                        <p>Partner Shelters</p>
-                    </div>
-                    <div class="animate-zoom glass-card" style="padding: 30px; border-radius: 10px;"
-                        style="background: var(--white); padding: 30px; border-radius: 10px; box-shadow: var(--shadow);">
-                        <h2 style="color: var(--primary-color); font-size: 2.5rem;" class="text-reveal">150</h2>
-                        <p>Lives Impacted</p>
+                    <div class="about-hero-img">
+                        <img src="https://images.unsplash.com/photo-1509315703578-a3d65ee5ae52?auto=format&fit=crop&w=800&q=80"
+                            alt="Food volunteers">
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="vision-mission reveal" style="padding: 80px 0;">
+        <!-- STATS ROW -->
+        <div class="stats-row reveal">
             <div class="container">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;">
-                    <div class="glass-card animate-zoom" style="text-align: center;">
-                        <div style="font-size: 3rem; margin-bottom: 20px;"></div>
-                        <h3 style="color: var(--primary-color); margin-bottom: 15px;">Our Vision</h3>
-                        <p>To create a world where no edible food is wasted, ensuring every person has access to
+                <div class="stats-grid4">
+                    <div class="stat4-item"><span class="stat4-num">50</span><span class="stat4-label">Verified
+                            Donors</span></div>
+                    <div class="stat4-item"><span class="stat4-num">10T</span><span class="stat4-label">Food Saved
+                            Monthly</span></div>
+                    <div class="stat4-item"><span class="stat4-num">50</span><span class="stat4-label">Partner
+                            Shelters</span></div>
+                    <div class="stat4-item"><span class="stat4-num">150</span><span class="stat4-label">Lives
+                            Impacted</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VISION & MISSION -->
+        <section class="vision-section reveal">
+            <div class="container">
+                <div class="section-title">
+                    <div class="eyebrow">What We Stand For</div>
+                    <h2>Our North Star</h2>
+                    <p>The values and vision that drive every decision we make.</p>
+                </div>
+                <div class="vision-grid">
+                    <div class="vision-card vc-vision">
+                        <div class="vc-icon-box">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="2" y1="12" x2="22" y2="12" />
+                                <path
+                                    d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+                            </svg>
+                        </div>
+                        <h3>Our Vision</h3>
+                        <p>To create a world where no edible food is wasted — ensuring every person has access to
                             nutritious meals through a seamless, technology-driven redistribution network.</p>
+                        <div class="vc-vision-orb"></div>
                     </div>
-                    <div class="glass-card animate-zoom" style="text-align: center;">
-                        <div style="font-size: 3rem; margin-bottom: 20px;"></div>
-                        <h3 style="color: var(--primary-color); margin-bottom: 15px;">Our Mission</h3>
+                    <div class="vision-card vc-mission">
+                        <div class="vc-icon-box">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="6" />
+                                <circle cx="12" cy="12" r="2" />
+                            </svg>
+                        </div>
+                        <h3>Our Mission</h3>
                         <p>To empower businesses and individuals to minimize food waste by providing an efficient
                             platform that connects surplus food with those in need, fostering a sustainable and
                             compassionate community.</p>
@@ -85,145 +619,166 @@
             </div>
         </section>
 
-        <section class="how-it-works reveal" style="background-color: var(--neutral-100); padding: 100px 0;">
+        <!-- TIMELINE -->
+        <section class="hiw-section reveal">
             <div class="container">
                 <div class="section-title">
+                    <div class="eyebrow">The Process</div>
                     <h2>How FWMS Works</h2>
-                    <p>Connecting surplus food to empty plates in four simple steps.</p>
+                    <p>Four simple steps connecting surplus food to empty plates.</p>
                 </div>
-                <div
-                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; position: relative;">
-                    <div class="step-card" style="text-align: center;">
-                        <div
-                            style="width: 60px; height: 60px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; margin: 0 auto 20px;">
-                            1</div>
-                        <h4>Business Donates</h4>
-                        <p style="font-size: 0.9rem; color: var(--text-muted);">Restaurants or events post surplus food
-                            on our platform.</p>
-                    </div>
-                    <div class="step-card" style="text-align: center;">
-                        <div
-                            style="width: 60px; height: 60px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; margin: 0 auto 20px;">
-                            2</div>
-                        <h4>AI Matching</h4>
-                        <p style="font-size: 0.9rem; color: var(--text-muted);">Our system instantly alerts nearby
-                            volunteers.</p>
-                    </div>
-                    <div class="step-card" style="text-align: center;">
-                        <div
-                            style="width: 60px; height: 60px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; margin: 0 auto 20px;">
-                            3</div>
-                        <h4>Safe Pickup</h4>
-                        <p style="font-size: 0.9rem; color: var(--text-muted);">Verified volunteers collect food
-                            following strict safety protocols.</p>
-                    </div>
-                    <div class="step-card" style="text-align: center;">
-                        <div
-                            style="width: 60px; height: 60px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; margin: 0 auto 20px;">
-                            4</div>
-                        <h4>Meal Delivered</h4>
-                        <p style="font-size: 0.9rem; color: var(--text-muted);">Food is delivered to shelters, ensuring
-                            it reaches those in need.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="fwms-framework reveal" style="background-color: var(--white); padding: 100px 0;">
-            <div class="container">
-                <div class="section-title">
-                    <h2>The FWMS Core Framework</h2>
-                    <p>A systematic, technology-driven approach to reaching zero-waste.</p>
-                </div>
-
-                <div class="glass-card animate-zoom"
-                    style="padding: 40px; border-radius: 20px; border-left: 8px solid var(--primary);">
-                    <h3 style="color: var(--primary-color); margin-bottom: 25px;">Food Recovery Hierarchy</h3>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
-                        <div style="background: rgba(46, 125, 50, 0.03); padding: 30px; border-radius: 12px;">
-                            <h4 style="margin-bottom: 12px; color: var(--primary);">01. Source Reduction</h4>
-                            <p style="font-size: 0.95rem; color: var(--text-muted);">We help donors track inventory and
-                                predict demand to prevent waste before it even happens.</p>
+                <div class="timeline">
+                    <div class="tl-item reveal stagger-1">
+                        <div class="tl-num">1</div>
+                        <div class="tl-content">
+                            <h4>Donor Submits Food</h4>
+                            <p>Restaurants or events log surplus food on our platform with an AI-verified photo,
+                                location pin, and expiry time.</p>
                         </div>
-                        <div style="background: rgba(251, 146, 60, 0.03); padding: 30px; border-radius: 12px;">
-                            <h4 style="margin-bottom: 12px; color: var(--secondary);">02. Direct Redistribution</h4>
-                            <p style="font-size: 0.95rem; color: var(--text-muted);">The primary focus: routing edible
-                                surplus from point A to point B in under 60 minutes.</p>
+                    </div>
+                    <div class="tl-item reveal stagger-2">
+                        <div class="tl-num">2</div>
+                        <div class="tl-content">
+                            <h4>AI Validates and Alerts</h4>
+                            <p>Our COCO-SSD vision model confirms the food image is genuine, then instantly notifies
+                                available volunteers in the area.</p>
                         </div>
-                        <div style="background: rgba(15, 23, 42, 0.03); padding: 30px; border-radius: 12px;">
-                            <h4 style="margin-bottom: 12px; color: var(--neutral-900);">03. Industrial Value</h4>
-                            <p style="font-size: 0.95rem; color: var(--text-muted);">Non-edible waste is converted into
-                                high-grade compost or biogas through our partners.</p>
+                    </div>
+                    <div class="tl-item reveal stagger-3">
+                        <div class="tl-num">3</div>
+                        <div class="tl-content">
+                            <h4>Volunteer Picks Up</h4>
+                            <p>A certified volunteer claims the pickup and navigates directly to the donor's GPS-pinned
+                                location via Google Maps.</p>
+                        </div>
+                    </div>
+                    <div class="tl-item reveal stagger-4">
+                        <div class="tl-num">4</div>
+                        <div class="tl-content">
+                            <h4>Delivered to Shelter</h4>
+                            <p>Food is safely transported and delivered to partner shelters, ensuring zero waste and
+                                zero hunger in Telangana.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="team-section reveal" style="padding: 100px 0; background-color: var(--neutral-50);">
+        <!-- TEAM -->
+        <!-- <section class="team-section reveal">
             <div class="container">
                 <div class="section-title">
+                    <div class="eyebrow">The Team</div>
                     <h2>The Minds Behind FWMS</h2>
                     <p>A passionate team dedicated to redefining food logistics.</p>
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
-                    <div class="glass-card" style="text-align: center; padding: 30px;">
-                        <div
-                            style="width: 120px; height: 120px; border-radius: 50%; background: var(--neutral-200); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 3rem;">
-                            👩‍💻</div>
-                        <h4>Arya Sharma</h4>
-                        <p style="color: var(--primary); font-weight: 600; margin-bottom: 10px;">Founder & CEO</p>
-                        <p style="font-size: 0.85rem; color: var(--text-muted);">Logistics expert with 10+ years in
-                            supply chain management.</p>
+                <div class="team-grid">
+                    <div class="team-card reveal stagger-1">
+                        <div class="team-photo" style="background:linear-gradient(135deg, #0c1f13, #1a4d2e);">
+                            <div class="team-avatar" style="background: var(--primary);">A</div>
+                        </div>
+                        <div class="team-body">
+                            <h4>Arya Sharma</h4>
+                            <span class="team-role">Founder &amp; CEO</span>
+                            <p>Logistics expert with 10+ years in supply chain management and a passion for social
+                                impact.</p>
+                        </div>
                     </div>
-                    <div class="glass-card" style="text-align: center; padding: 30px;">
-                        <div
-                            style="width: 120px; height: 120px; border-radius: 50%; background: var(--neutral-200); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 3rem;">
-                            👨‍💻</div>
-                        <h4>Rahul Verma</h4>
-                        <p style="color: var(--primary); font-weight: 600; margin-bottom: 10px;">CTO</p>
-                        <p style="font-size: 0.85rem; color: var(--text-muted);">Tech visionary specializing in
-                            AI-driven matching algorithms.</p>
+                    <div class="team-card reveal stagger-2">
+                        <div class="team-photo" style="background:linear-gradient(135deg, #1a1a2e, #16213e);">
+                            <div class="team-avatar" style="background: #3b82f6;">R</div>
+                        </div>
+                        <div class="team-body">
+                            <h4>Rahul Verma</h4>
+                            <span class="team-role">Chief Technology Officer</span>
+                            <p>Tech visionary specializing in AI-driven matching algorithms and real-time logistics
+                                systems.</p>
+                        </div>
                     </div>
-                    <div class="glass-card" style="text-align: center; padding: 30px;">
-                        <div
-                            style="width: 120px; height: 120px; border-radius: 50%; background: var(--neutral-200); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 3rem;">
-                            🤝</div>
-                        <h4>Sneha Reddy</h4>
-                        <p style="color: var(--primary); font-weight: 600; margin-bottom: 10px;">Community Lead</p>
-                        <p style="font-size: 0.85rem; color: var(--text-muted);">Expert in social impact and NGO network
-                            building.</p>
+                    <div class="team-card reveal stagger-3">
+                        <div class="team-photo" style="background:linear-gradient(135deg, #2d1b00, #5c3600);">
+                            <div class="team-avatar" style="background: var(--amber);">S</div>
+                        </div>
+                        <div class="team-body">
+                            <h4>Sneha Reddy</h4>
+                            <span class="team-role">Community Lead</span>
+                            <p>Expert in social impact, NGO network building, and volunteer coordination across
+                                Telangana.</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
 
-        <section class="cta-section reveal"
-            style="padding: 100px 0; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; text-align: center;">
+        <!-- CTA -->
+        <section class="about-cta reveal">
             <div class="container">
-                <h2 style="color: white; font-size: 3rem; margin-bottom: 20px;">Ready to Make an Impact?</h2>
-                <p
-                    style="font-size: 1.25rem; opacity: 0.9; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto;">
-                    Join our network of donors and volunteers today and help us build a zero-waste future.</p>
-                <div style="display: flex; gap: 20px; justify-content: center;">
-                    <a href="register.html" class="btn"
-                        style="background: white; color: var(--primary); font-weight: 700;">Become a Donor</a>
-                    <a href="volunteer-register.html" class="btn"
-                        style="background: rgba(255,255,255,0.1); border: 2px solid white; color: white; font-weight: 700;">Join
-                        as Volunteer</a>
+                <div class="about-cta-box">
+                    <h2>Ready to Make an Impact?</h2>
+                    <p>Join our growing network of donors and volunteers and help us build a zero-waste future — one
+                        meal at a time.</p>
+                    <div class="about-cta-btns">
+                        <a href="register.html" class="btn"
+                            style="background:#fff;color:var(--primary);font-weight:700;padding:0.9rem 2.2rem;">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.2" stroke-linecap="round">
+                                <path d="M11 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-6" />
+                                <path d="M9 12l3 3L22 4" />
+                            </svg>
+                            Become a Donor
+                        </a>
+                        <a href="volunteer-register.html" class="btn btn-outline-white" style="padding:0.9rem 2.2rem;">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.2" stroke-linecap="round">
+                                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+                            </svg>
+                            Join as Volunteer
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
-
     </main>
 
     <footer>
         <div class="container">
-            <p>&copy; 2026 Food Waste Management System - All rights reserved.</p>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo" style="color:#fff;">
+                        <img src="images/logo.png.png" alt="FWMS" style="filter:brightness(0) invert(1); opacity:.85;">
+                        FWMS
+                    </a>
+                    <p>Food Waste Management System — turning surplus into sustenance across Telangana since 2024.</p>
+                    <div class="footer-badge"><span class="footer-dot"></span>Live Network Active</div>
+                </div>
+                <div class="footer-links">
+                    <h5>Platform</h5>
+                    <ul>
+                        <li><a href="donor.html">Donate Food</a></li>
+                        <li><a href="volunteer.html">Volunteer Dashboard</a></li>
+                        <li><a href="register.html">Create Account</a></li>
+                        <li><a href="login.html">Sign In</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h5>Company</h5>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 Food Waste Management System. All rights reserved.</span>
+                <span>Built for Telangana, with care.</span>
+            </div>
         </div>
     </footer>
-
-    <script src="js/script.js"></script>
+    <script src="js/script.js?v=3.0"></script>
 </body>
 
 </html>

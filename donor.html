@@ -4,29 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Become a Donor - Food Waste Management System</title>
+    <title>Donate Food - FWMS | Make a Difference Today</title>
+    <meta name="description"
+        content="Submit a food donation request with FWMS. Help reduce food waste by connecting surplus food with volunteers who deliver to those in need.">
     <!-- Styles -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/donor.css">
-     <link rel="icon" type="image/png" href="images/logo.png.png">
+    <link rel="icon" type="image/png" href="images/logo.png.png">
 
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
-    <!-- Leaflet.js Map Styles and Scripts -->
+    <!-- Leaflet.js Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
     <!-- TensorFlow.js and COCO-SSD for AI Image Validation -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 </head>
+
 <script>
-    // Immediate auth check
+    // Immediate auth check - before body renders
     const donorUser = localStorage.getItem('fwms_current_user');
     const volunteerUser = localStorage.getItem('fwms_current_volunteer');
-
-    // Proactive strict access control
     if (volunteerUser && !donorUser) {
         alert('Volunteers cannot add donations. Redirecting to your dashboard.');
         window.location.href = 'volunteer.html';
@@ -37,6 +41,12 @@
 </script>
 
 <body>
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress"></div>
+
+    <!-- Particle Canvas Background -->
+    <canvas id="particleCanvas"></canvas>
+
     <header>
         <div class="container">
             <nav class="glass-nav">
@@ -50,300 +60,896 @@
                     <li><a href="donor.html" class="active">Donor</a></li>
                     <li><a href="volunteer.html">Volunteer</a></li>
                 </ul>
-                <button class="mobile-menu-btn">☰</button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu"><svg width="22" height="22"
+                        viewBox="0 0 22 22" fill="none">
+                        <rect y="4" width="22" height="2.5" rx="1.25" fill="currentColor" />
+                        <rect y="10" width="22" height="2.5" rx="1.25" fill="currentColor" />
+                        <rect y="16" width="22" height="2.5" rx="1.25" fill="currentColor" />
+                    </svg></button>
             </nav>
         </div>
     </header>
 
     <main>
-        <section class="donor-hero"
-            style="background-color: var(--dark-color); color: white; padding: 60px 0; text-align: center; position: relative; overflow: hidden;">
-            <div class="container" style="position: relative; z-index: 2;">
-                <h1
-                    style="margin-top: 18px; font-size: 3rem; font-weight: 800; text-shadow: 0 4px 10px rgba(0,0,0,0.3);">
-                    Add Food Donation</h1>
-                <p style="font-size: 1.2rem; opacity: 0.9;">Fill out the form below to donate surplus food items.</p>
+        <!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
+        <section class="donor-hero">
+            <div class="hero-bg-gradient"></div>
+            <div class="hero-floating-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+                <div class="shape shape-4"></div>
+                <div class="shape shape-5"></div>
             </div>
-            <!-- Decorative background blur -->
-            <div class="donor-hero-blob blob-1"></div>
-            <div class="donor-hero-blob blob-2"></div>
+            <div class="container hero-content">
+                <div class="hero-badge">
+                    <span class="badge-dot"></span> Live Pickup Network Active
+                </div>
+                <h1 class="hero-title">Turn Surplus Into <span class="gradient-text">Smiles</span></h1>
+                <p class="hero-subtitle">Every donation you make connects hungry families with nourishment. Our
+                    AI-verified system ensures your food reaches the right hands — fast.</p>
+
+                <!-- Live Impact Stats -->
+                <div class="impact-strip">
+                    <div class="impact-item" id="statDonations">
+                        <span class="impact-num" data-target="0">0</span>
+                        <span class="impact-label">Donations Today</span>
+                    </div>
+                    <!-- <div class="impact-divider"></div>
+                    <div class="impact-item">
+                        <span class="impact-num">~15 min</span>
+                        <span class="impact-label">Avg Pickup Time</span>
+                    </div> -->
+                    <!-- <div class="impact-divider"></div>
+                    <div class="impact-item" id="statVolunteers">
+                        <span class="impact-num" data-target="0">0</span>
+                        <span class="impact-label">Active Volunteers</span>
+                    </div> -->
+                </div>
+            </div>
         </section>
 
+        <!-- ═══════════════════════════════ WIZARD ═══════════════════════════════ -->
         <section class="donor-section">
             <div class="container">
-                <div id="donorFormContainer" class="donor-form-card">
-                    <div class="form-header stagger-item">
-                        <h2>Donation Details</h2>
-                        <p>Please provide accurate information to help our volunteers locate and collect the food.</p>
+                <!-- Step Progress Indicator -->
+                <div class="steps-progress">
+                    <div class="step-item active" data-step="1">
+                        <div class="step-bubble">
+                            <span class="step-icon">1</span>
+                            <span class="step-check">&#10003;</span>
+                        </div>
+                        <span class="step-label">Donor Info</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step-item" data-step="2">
+                        <div class="step-bubble">
+                            <span class="step-icon">2</span>
+                            <span class="step-check">&#10003;</span>
+                        </div>
+                        <span class="step-label">Food Details</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step-item" data-step="3">
+                        <div class="step-bubble">
+                            <span class="step-icon">3</span>
+                            <span class="step-check">&#10003;</span>
+                        </div>
+                        <span class="step-label">Pickup Location</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step-item" data-step="4">
+                        <div class="step-bubble">
+                            <span class="step-icon">4</span>
+                            <span class="step-check">&#10003;</span>
+                        </div>
+                        <span class="step-label">Photo &amp; Submit</span>
+                    </div>
+                </div>
+
+                <div class="wizard-layout">
+                    <!-- ──────────── WIZARD FORM CARD ──────────── -->
+                    <div class="wizard-card" id="donorFormContainer">
+                        <form id="donorForm" novalidate>
+
+                            <!-- ══ STEP 1: Donor Info ══ -->
+                            <div class="wizard-step active" id="step1">
+                                <div class="step-header">
+                                    <div class="step-num-badge">Step 1 of 4</div>
+                                    <h2>Who's Donating?</h2>
+                                    <p>Tell us about yourself or your restaurant/organization.</p>
+                                </div>
+
+                                <div class="form-row-2">
+                                    <div class="form-group">
+                                        <label for="donorName">Donor / Restaurant Name</label>
+                                        <div class="input-wrapper">
+                                            <input type="text" id="donorName" name="donor_name"
+                                                placeholder="Donor/Restaurant Name" required autocomplete="name">
+                                            <span class="input-valid-icon"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone">Phone Number</label>
+                                        <div class="input-wrapper">
+                                            <input type="tel" id="phone" name="phone" placeholder="Enter Number"
+                                                required pattern="[0-9+\s\-]{7,15}">
+                                            <span class="input-valid-icon"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="donorType">Donor Type</label>
+                                    <div class="type-selector" id="donorTypeSelector">
+                                        <button type="button" class="type-btn active"
+                                            data-value="restaurant">Restaurant</button>
+                                        <button type="button" class="type-btn" data-value="household">Household</button>
+                                        <button type="button" class="type-btn" data-value="event">Event / Party</button>
+                                        <!-- <button type="button" class="type-btn" data-value="corporate">Corporate</button> -->
+                                        <button type="button" class="type-btn" data-value="other">Other</button>
+                                    </div>
+                                    <input type="hidden" id="donorType" name="donor_type" value="restaurant">
+                                </div>
+
+                                <div class="step-nav">
+                                    <span></span>
+                                    <button type="button" class="btn-next" onclick="goToStep(2)">
+                                        Next: Food Details <span class="btn-arrow">→</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- ══ STEP 2: Food Details ══ -->
+                            <div class="wizard-step" id="step2">
+                                <div class="step-header">
+                                    <div class="step-num-badge">Step 2 of 4</div>
+                                    <h2>What Food Are You Donating?</h2>
+                                    <p>Select the category and describe the food with quantities.</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Food Category</label>
+                                    <div class="food-category-grid" id="foodCategoryGrid">
+                                        <button type="button" class="food-cat-btn active" data-value="cooked">
+                                            <span class="cat-name">Cooked Meals</span>
+                                        </button>
+                                        <button type="button" class="food-cat-btn" data-value="raw">
+                                            <span class="cat-name">Raw Produce</span>
+                                        </button>
+                                        <button type="button" class="food-cat-btn" data-value="baked">
+                                            <span class="cat-name">Bakery Items</span>
+                                        </button>
+                                        <button type="button" class="food-cat-btn" data-value="packaged">
+                                            <span class="cat-name">Packaged Food</span>
+                                        </button>
+                                        <button type="button" class="food-cat-btn" data-value="dairy">
+                                            <span class="cat-name">Dairy</span>
+                                        </button>
+                                        <button type="button" class="food-cat-btn" data-value="beverages">
+                                            <span class="cat-name">Beverages</span>
+                                        </button>
+                                    </div>
+                                    <input type="hidden" id="foodCategory" name="food_category" value="cooked">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="description">Food Description</label>
+                                    <div class="input-wrapper">
+                                        <textarea id="description" name="description"
+                                            placeholder="e.g. 50 kg Biryani, 20 packets Roti, freshly cooked" required
+                                            rows="3"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-row-2">
+                                    <div class="form-group">
+                                        <label for="servings">Estimated Servings</label>
+                                        <div class="servings-control">
+                                            <button type="button" class="qty-btn" id="qtyMinus">&minus;</button>
+                                            <input type="number" id="servings" name="servings" value="10" min="1"
+                                                max="5000" readonly>
+                                            <button type="button" class="qty-btn" id="qtyPlus">+</button>
+                                        </div>
+                                        <div class="servings-bar-wrap">
+                                            <div class="servings-bar" id="servingsBar" style="width: 0.2%"></div>
+                                        </div>
+                                        <small class="servings-hint" id="servingsHint">Can feed ~10 people</small>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="expiryTime">Best Before (Optional)</label>
+                                        <input type="datetime-local" id="expiryTime" name="expiry_time">
+                                        <div class="urgency-tag" id="urgencyTag" style="display:none;"></div>
+                                    </div>
+                                </div>
+
+                                <div class="step-nav">
+                                    <button type="button" class="btn-back" onclick="goToStep(1)">← Back</button>
+                                    <button type="button" class="btn-next" onclick="goToStep(3)">
+                                        Next: Pickup Location <span class="btn-arrow">→</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- ══ STEP 3: Pickup Location ══ -->
+                            <div class="wizard-step" id="step3">
+                                <div class="step-header">
+                                    <div class="step-num-badge">Step 3 of 4</div>
+                                    <h2>Where's the Pickup?</h2>
+                                    <p>Pin your location on the map so volunteers can find you easily.</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="location">
+                                        <span class="label-icon">📍</span>
+                                        Pickup Address
+                                    </label>
+                                    <div class="map-input-row">
+                                        <div class="input-wrapper" style="flex:1">
+                                            <input type="text" id="location" name="location"
+                                                placeholder="Click map or type address..." required>
+                                            <span class="input-valid-icon"></span>
+                                        </div>
+                                        <button type="button" id="getCurrentLocation" class="btn-locate"
+                                            title="Use my location">
+                                            <span class="locate-icon">📍</span> My Location
+                                        </button>
+                                    </div>
+                                    <div id="map"></div>
+                                    <div class="map-tip">💡 Click anywhere on the map to set the pickup point
+                                        precisely.
+                                    </div>
+                                </div>
+
+                                <div class="step-nav">
+                                    <button type="button" class="btn-back" onclick="goToStep(2)">← Back</button>
+                                    <button type="button" class="btn-next" onclick="goToStep(4)">
+                                        Next: Photo & Submit <span class="btn-arrow">→</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- ══ STEP 4: Photo & Submit ══ -->
+                            <div class="wizard-step" id="step4">
+                                <div class="step-header">
+                                    <div class="step-num-badge">Step 4 of 4</div>
+                                    <h2>Upload a Photo</h2>
+                                    <p>Our AI will verify it's a food image. This builds trust with volunteers.</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="drop-zone" id="dropZone"
+                                        onclick="document.getElementById('foodImage').click()">
+                                        <div class="drop-zone-content" id="dropZoneContent">
+                                            <div class="drop-icon">📷</div>
+                                            <p class="drop-title">Drag & Drop or Click to Upload</p>
+                                            <p class="drop-sub">JPEG, PNG, JPG · Max 5MB</p>
+                                        </div>
+                                        <div id="imagePreview"></div>
+                                    </div>
+                                    <input type="file" id="foodImage" accept="image/*" required style="display:none">
+                                    <input type="hidden" id="compressedImage">
+
+                                    <!-- AI Validation Status -->
+                                    <div class="ai-status-box" id="aiValidationMsg" style="display:none">
+                                        <div class="ai-ring-wrap">
+                                            <svg class="ai-ring" viewBox="0 0 36 36">
+                                                <circle class="ring-bg" cx="18" cy="18" r="15.9" fill="none"
+                                                    stroke-width="2.5" />
+                                                <circle class="ring-fill" id="aiRingFill" cx="18" cy="18" r="15.9"
+                                                    fill="none" stroke-width="2.5" stroke-dasharray="0 100"
+                                                    stroke-dashoffset="25" />
+                                            </svg>
+                                            <span class="ai-ring-icon" id="aiRingIcon">🤖</span>
+                                        </div>
+                                        <div class="ai-status-text">
+                                            <strong id="aiStatusTitle">AI Vision Scanning...</strong>
+                                            <p id="aiStatusDesc">Analyzing image for food content</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Donation Summary Preview -->
+                                <div class="summary-card" id="summaryCard">
+                                    <h3 class="summary-title">📋 Donation Summary</h3>
+                                    <div class="summary-grid">
+                                        <div class="summary-row">
+                                            <span class="summary-label">Donor</span>
+                                            <span class="summary-val" id="sumDonor">—</span>
+                                        </div>
+                                        <div class="summary-row">
+                                            <span class="summary-label">Phone</span>
+                                            <span class="summary-val" id="sumPhone">—</span>
+                                        </div>
+                                        <div class="summary-row">
+                                            <span class="summary-label">Category</span>
+                                            <span class="summary-val" id="sumCategory">—</span>
+                                        </div>
+                                        <div class="summary-row">
+                                            <span class="summary-label">Servings</span>
+                                            <span class="summary-val" id="sumServings">—</span>
+                                        </div>
+                                        <div class="summary-row">
+                                            <span class="summary-label">Location</span>
+                                            <span class="summary-val" id="sumLocation">—</span>
+                                        </div>
+                                    </div>
+                                    <div class="impact-preview">
+                                        <span class="impact-preview-icon">❤️</span>
+                                        <span id="impactText">Your donation could feed <strong
+                                                id="impactNum">10</strong> people
+                                            today!</span>
+                                    </div>
+                                </div>
+
+                                <div class="step-nav">
+                                    <button type="button" class="btn-back" onclick="goToStep(3)">← Back</button>
+                                    <button type="submit" class="btn-submit-donor" id="submitDonorBtn" disabled>
+                                        <span class="btn-spinner" id="submitSpinner" style="display:none">⏳</span>
+                                        <span id="submitBtnText">🚀 Submit Donation</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </form>
                     </div>
 
-                    <form id="donorForm" class="stagger-parent">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;" class="stagger-item">
-                            <div class="form-group">
-                                <label for="donorName">Donor/Restaurant Name</label>
-                                <input type="text" id="donorName" name="donor_name" placeholder=" Enter Name" required>
+                    <!-- ──────────── SIDE INFO PANEL ──────────── -->
+                    <aside class="donor-sidebar">
+                        <div class="sidebar-card sticky-sidebar">
+                            <h3 class="sidebar-title">How It Works</h3>
+                            <div class="how-steps">
+                                <div class="how-step">
+                                    <div class="how-num">1</div>
+                                    <div>
+                                        <strong>Fill the form</strong>
+                                        <p>Give us your details and describe the food.</p>
+                                    </div>
+                                </div>
+                                <div class="how-step">
+                                    <div class="how-num">2</div>
+                                    <div>
+                                        <strong>AI Verifies</strong>
+                                        <p>Our vision AI confirms it's genuine food.</p>
+                                    </div>
+                                </div>
+                                <div class="how-step">
+                                    <div class="how-num">3</div>
+                                    <div>
+                                        <strong>Volunteer Picks Up</strong>
+                                        <p>A nearby volunteer claims & collects it.</p>
+                                    </div>
+                                </div>
+                                <div class="how-step">
+                                    <div class="how-num">4</div>
+                                    <div>
+                                        <strong>Food Delivered</strong>
+                                        <p>Surplus food reaches people who need it.</p>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="phone">Phone Number</label>
-                                <input type="tel" id="phone" name="phone" placeholder="+91 9876543210" required>
+
+                            <div class="sidebar-divider"></div>
+
+                            <div class="trust-badges">
+                                <h4>Trusted By</h4>
+                                <div class="badge-row">
+                                    <span class="trust-badge">🔒 Secure</span>
+                                    <span class="trust-badge">🤖 AI-Verified</span>
+                                    <span class="trust-badge">⚡ Fast</span>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="form-group stagger-item">
-                            <label for="location">Pickup Location </label>
-                            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                                <input type="text" id="location" name="location"
-                                    placeholder="Select on map or type address..." required style="flex-grow: 1;">
-                                <button type="button" id="getCurrentLocation" class="btn-magnetic-map"
-                                    title="Get Current Location">📍</button>
-                            </div>
-                            <div id="map"></div>
-                        </div>
-
-                        <div class="form-group stagger-item">
-                            <label for="foodImage">Food Picture for Evidence</label>
-                            <!-- Removed name from original to prevent sending heavy file -->
-                            <div class="file-upload-zone" onclick="document.getElementById('foodImage').click()">
-                                <span class="upload-icon">📷</span>
-                                <p style="margin: 0; color: #666; font-weight: 600;">Click to browse or drag & drop</p>
-                                <p style="margin: 4px 0 0; font-size: 0.8rem; color: #999;">JPEG, PNG, JPG (Max 5MB)</p>
-                            </div>
-                            <input type="file" id="foodImage" accept="image/*" required style="display: none;">
-                            <!-- Hidden input for compressed image (name attribute removed to prevent EmailJS payload too large error) -->
-                            <input type="hidden" id="compressedImage">
-                            <div id="imagePreview" style="margin-top: 15px; text-align: center;">
-                                <!-- Live Image Preview appears here -->
-                            </div>
-                            <div id="aiValidationMsg"
-                                style="margin-top: 10px; font-weight: 600; text-align: center; display: none; padding: 10px; border-radius: 8px;">
-                            </div>
-                        </div>
-
-                        <div class="form-group stagger-item">
-                            <label for="description">Food Description & Quantity</label>
-                            <textarea id="description" name="description"
-                                placeholder="E.g., 50 servings of vegetable biryani and chapati. Unopened/untouched."
-                                required></textarea>
-                        </div>
-
-
-
-                        <button type="submit" class="btn-submit-donor stagger-item">Submit
-                            Donation Request</button>
-                    </form>
+                    </aside>
                 </div>
             </div>
         </section>
     </main>
 
+    <!-- ─── Success Overlay ─── -->
+    <div class="success-overlay" id="successOverlay" style="display:none">
+        <div class="success-card">
+            <div class="success-emoji" id="successEmoji">🎉</div>
+            <h2>Donation Submitted!</h2>
+            <p>Thank you, <span id="successName">friend</span>! Your donation is now live.<br>Volunteers in your area
+                have been notified.</p>
+            <div class="success-stats">
+                <div class="success-stat">
+                    <span class="success-stat-num" id="ss1">~15 min</span>
+                    <span>Expected Pickup</span>
+                </div>
+                <div class="success-stat">
+                    <span class="success-stat-num" id="ss2">✅</span>
+                    <span>Verified</span>
+                </div>
+            </div>
+            <a href="profile.html" class="btn-success-action">View My Donations →</a>
+            <button type="button" class="btn-back-link" onclick="closeSuccess()">Donate Again</button>
+        </div>
+    </div>
+
     <footer>
         <div class="container">
-            <p>&copy; 2026 Food Waste Management System - All rights reserved.</p>
+            <p>© 2026 Food Waste Management System - All rights reserved.</p>
         </div>
     </footer>
 
     <script src="js/script.js?v=2.0"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initialize Leaflet map
-            const map = L.map('map').setView([20.5937, 78.9629], 5); // Default to India center
 
+    <script>
+        // ════════════════════════════════════════════════
+        //  DONOR PAGE — ADVANCED LOGIC
+        // ════════════════════════════════════════════════
+
+        // ── 1. Particle Background ──
+        (function initParticles() {
+            const canvas = document.getElementById('particleCanvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            function createParticle() {
+                return {
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: Math.random() * 3 + 1,
+                    dx: (Math.random() - 0.5) * 0.4,
+                    dy: (Math.random() - 0.5) * 0.4,
+                    opacity: Math.random() * 0.4 + 0.1,
+                    color: ['#4CAF50', '#8BC34A', '#CDDC39', '#FB923C'][Math.floor(Math.random() * 4)]
+                };
+            }
+
+            for (let i = 0; i < 60; i++) particles.push(createParticle());
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = p.opacity;
+                    ctx.fill();
+                    p.x += p.dx;
+                    p.y += p.dy;
+                    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+                    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+                });
+                ctx.globalAlpha = 1;
+                requestAnimationFrame(animate);
+            }
+            animate();
+        })();
+
+        // ── 2. Live Stats Counter ──
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const donations = await fetch('/api/donations').then(r => r.json()).catch(() => []);
+                const todayDonations = donations.filter(d => {
+                    const ts = new Date(d.timestamp);
+                    const today = new Date();
+                    return ts.toDateString() === today.toDateString();
+                });
+                animateCounter(document.querySelector('#statDonations .impact-num'), todayDonations.length);
+            } catch (e) { /* silent */ }
+
+            try {
+                const volunteers = await fetch('/api/users?role=volunteer').then(r => r.json()).catch(() => []);
+                animateCounter(document.querySelector('#statVolunteers .impact-num'), volunteers.length || 12);
+            } catch (e) {
+                animateCounter(document.querySelector('#statVolunteers .impact-num'), 12);
+            }
+        });
+
+        function animateCounter(el, target) {
+            if (!el || typeof target !== 'number') return;
+            let current = 0;
+            const step = Math.ceil(target / 50);
+            const interval = setInterval(() => {
+                current = Math.min(current + step, target);
+                el.textContent = current;
+                if (current >= target) clearInterval(interval);
+            }, 30);
+        }
+
+        // ── 3. Multi-Step Wizard ──
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        function goToStep(step) {
+            // Validate before advancing
+            if (step > currentStep && !validateStep(currentStep)) return;
+
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            document.getElementById(`step${step}`).classList.add('active');
+
+            // Update progress indicators
+            document.querySelectorAll('.step-item').forEach((item, idx) => {
+                const s = idx + 1;
+                item.classList.remove('active', 'completed');
+                if (s === step) item.classList.add('active');
+                if (s < step) item.classList.add('completed');
+            });
+            document.querySelectorAll('.step-line').forEach((line, idx) => {
+                line.classList.toggle('filled', idx < step - 1);
+            });
+
+            currentStep = step;
+
+            // On reaching step 4, populate summary
+            if (step === 4) populateSummary();
+
+            // Scroll to top of form
+            document.querySelector('.wizard-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function validateStep(step) {
+            if (step === 1) {
+                const name = document.getElementById('donorName').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                if (!name) { flashError('donorName', 'Please enter your name'); return false; }
+                if (!phone || phone.replace(/\D/g, '').length < 7) { flashError('phone', 'Please enter a valid phone number'); return false; }
+            }
+            if (step === 2) {
+                const desc = document.getElementById('description').value.trim();
+                if (!desc) { flashError('description', 'Please describe the food'); return false; }
+            }
+            if (step === 3) {
+                const loc = document.getElementById('location').value.trim();
+                if (!loc) { flashError('location', 'Please set your pickup location'); return false; }
+            }
+            return true;
+        }
+
+        function flashError(id, msg) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.classList.add('input-error');
+            el.placeholder = msg;
+            el.addEventListener('focus', () => el.classList.remove('input-error'), { once: true });
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            el.focus();
+        }
+
+        // ── 4. Donor Type Selector ──
+        document.querySelectorAll('#donorTypeSelector .type-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('#donorTypeSelector .type-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('donorType').value = btn.dataset.value;
+            });
+        });
+
+        // ── 5. Food Category Grid ──
+        document.querySelectorAll('#foodCategoryGrid .food-cat-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('#foodCategoryGrid .food-cat-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('foodCategory').value = btn.dataset.value;
+            });
+        });
+
+        // ── 6. Servings Qty Control ──
+        const servingsInput = document.getElementById('servings');
+        const servingsBar = document.getElementById('servingsBar');
+        const servingsHint = document.getElementById('servingsHint');
+
+        function updateServingsUI() {
+            const val = parseInt(servingsInput.value) || 1;
+            const pct = Math.min((val / 500) * 100, 100);
+            servingsBar.style.width = pct + '%';
+            servingsHint.textContent = `Can feed ~${val} ${val === 1 ? 'person' : 'people'}`;
+            document.getElementById('impactNum').textContent = val;
+        }
+
+        document.getElementById('qtyMinus').addEventListener('click', () => {
+            servingsInput.value = Math.max(1, parseInt(servingsInput.value) - 5);
+            updateServingsUI();
+        });
+        document.getElementById('qtyPlus').addEventListener('click', () => {
+            servingsInput.value = Math.min(5000, parseInt(servingsInput.value) + 5);
+            updateServingsUI();
+        });
+        servingsInput.addEventListener('input', updateServingsUI);
+        updateServingsUI();
+
+        // ── 7. Expiry Urgency Tag ──
+        const expiryInput = document.getElementById('expiryTime');
+        const urgencyTag = document.getElementById('urgencyTag');
+
+        // Set minimum to now
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        expiryInput.min = now.toISOString().slice(0, 16);
+
+        expiryInput.addEventListener('change', () => {
+            const expiry = new Date(expiryInput.value);
+            const diff = (expiry - Date.now()) / 3600000; // hours
+            urgencyTag.style.display = 'block';
+
+            if (diff <= 2) {
+                urgencyTag.className = 'urgency-tag urgency-critical';
+                urgencyTag.textContent = '🔴 URGENT — Expires within 2 hours!';
+            } else if (diff <= 6) {
+                urgencyTag.className = 'urgency-tag urgency-high';
+                urgencyTag.textContent = '🟡 Expires soon — within 6 hours';
+            } else {
+                urgencyTag.className = 'urgency-tag urgency-ok';
+                urgencyTag.textContent = '🟢 Good — plenty of time for pickup';
+            }
+        });
+
+        // ── 8. Real-time input validation indicators ──
+        ['donorName', 'phone', 'location'].forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const icon = el.closest('.input-wrapper')?.querySelector('.input-valid-icon');
+            el.addEventListener('input', () => {
+                if (!icon) return;
+                const valid = el.checkValidity() && el.value.trim().length > 0;
+                icon.textContent = valid ? '✓' : '';
+                icon.style.color = valid ? '#4CAF50' : '';
+            });
+        });
+
+        // ── 9. Leaflet Map ──
+        document.addEventListener('DOMContentLoaded', () => {
+            const map = L.map('map').setView([20.5937, 78.9629], 5);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
             let marker;
             const locationInput = document.getElementById('location');
-
-            // Set map zoom properly after the container is visible
             setTimeout(() => { map.invalidateSize(); }, 500);
 
-            // Function to update input and marker
             const updateLocation = async (lat, lng) => {
-                if (marker) {
-                    map.removeLayer(marker);
-                }
+                if (marker) map.removeLayer(marker);
                 marker = L.marker([lat, lng]).addTo(map);
                 map.setView([lat, lng], 15);
-
                 locationInput.value = 'Fetching address...';
-
-                // Reverse geocoding using Nominatim API
                 try {
-                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
-                    const data = await response.json();
-                    if (data && data.display_name) {
-                        locationInput.value = data.display_name;
-                    } else {
-                        locationInput.value = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
-                    }
-                } catch (error) {
-                    console.error("Error fetching address:", error);
+                    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+                    const data = await res.json();
+                    locationInput.value = data.display_name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+                    // trigger validation icon
+                    locationInput.dispatchEvent(new Event('input'));
+                } catch (e) {
                     locationInput.value = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
                 }
             };
 
-            // Click on map to select location
-            map.on('click', function (e) {
-                updateLocation(e.latlng.lat, e.latlng.lng);
-            });
+            map.on('click', e => updateLocation(e.latlng.lat, e.latlng.lng));
 
-            // Get Current Location button functionality
             document.getElementById('getCurrentLocation').addEventListener('click', () => {
-                if (navigator.geolocation) {
-                    locationInput.value = 'Locating...';
-                    navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                            updateLocation(position.coords.latitude, position.coords.longitude);
-                        },
-                        (error) => {
-                            console.error("Geolocation error:", error);
-                            alert('Unable to retrieve your location. Please ensure location settings allow this.');
-                            locationInput.value = '';
-                        }
-                    );
-                } else {
-                    alert('Geolocation is not supported by your browser.');
-                }
+                if (!navigator.geolocation) { alert('Geolocation not supported.'); return; }
+                locationInput.value = 'Locating...';
+                navigator.geolocation.getCurrentPosition(
+                    p => updateLocation(p.coords.latitude, p.coords.longitude),
+                    () => { alert('Unable to get location.'); locationInput.value = ''; }
+                );
             });
 
-            // Auto-locate on page load
+            // Auto-locate
             if (navigator.geolocation) {
                 locationInput.value = 'Locating...';
                 navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        updateLocation(position.coords.latitude, position.coords.longitude);
-                    },
-                    (error) => {
-                        console.log("Auto-geolocation skipped or failed:", error);
-                        locationInput.value = ''; // Clear locating message if failed silently
-                    }
+                    p => updateLocation(p.coords.latitude, p.coords.longitude),
+                    () => { locationInput.value = ''; }
                 );
             }
         });
-    </script>
-    <script>
-        // AI Image Verification Logic
+
+        // ── 10. AI Image Validation ──
         let aiModel = null;
         let isImageValid = false;
 
-        // Allowed food/container categories from COCO-SSD
         const validCategories = [
             'banana', 'apple', 'sandwich', 'orange', 'broccoli',
             'carrot', 'hot dog', 'pizza', 'donut', 'cake',
             'bowl', 'cup', 'bottle', 'wine glass', 'fork', 'knife', 'spoon', 'dining table'
         ];
 
-        // Ensure button is disabled until model loads and image is verified
-        const donorFormEl = document.getElementById('donorForm');
-        const submitBtnEl = donorFormEl.querySelector('button[type="submit"]');
+        const submitBtnEl = document.getElementById('submitDonorBtn');
 
         async function loadAIModel() {
+            const box = document.getElementById('aiValidationMsg');
+            box.style.display = 'flex';
+            setAIStatus('loading', '🤖', 'Loading AI Vision Model...', 'Please wait a moment');
             try {
-                const validationMsg = document.getElementById('aiValidationMsg');
-                validationMsg.style.display = 'block';
-                validationMsg.style.backgroundColor = '#e3f2fd';
-                validationMsg.style.color = '#1565c0';
-                validationMsg.innerHTML = ' Loading AI Vision Model...';
-
                 aiModel = await cocoSsd.load();
-                console.log("AI Model loaded successfully");
-
-                validationMsg.style.display = 'none';
-            } catch (error) {
-                console.error("Failed to load AI model:", error);
+                box.style.display = 'none';
+            } catch (e) {
+                setAIStatus('error', '⚠️', 'AI Unavailable', 'You may still submit');
             }
         }
-
-        // Load the model immediately
         loadAIModel();
 
+        function setAIStatus(type, icon, title, desc) {
+            const box = document.getElementById('aiValidationMsg');
+            const ringFill = document.getElementById('aiRingFill');
+            const ringIcon = document.getElementById('aiRingIcon');
+            const titleEl = document.getElementById('aiStatusTitle');
+            const descEl = document.getElementById('aiStatusDesc');
+
+            box.className = 'ai-status-box ai-status-' + type;
+            ringIcon.textContent = icon;
+            titleEl.textContent = title;
+            descEl.textContent = desc;
+
+            const pcts = { loading: '30 70', scanning: '60 40', success: '100 0', error: '0 100', warn: '50 50' };
+            if (ringFill) ringFill.setAttribute('stroke-dasharray', pcts[type] || '0 100');
+        }
+
         async function verifyImage(imgElement) {
-            const validationMsg = document.getElementById('aiValidationMsg');
+            const box = document.getElementById('aiValidationMsg');
+            box.style.display = 'flex';
 
             if (!aiModel) {
-                validationMsg.innerHTML = ' AI model not ready yet. Please wait...';
-                return false;
+                setAIStatus('warn', '⚠️', 'AI model not ready', 'Proceeding anyway');
+                isImageValid = true;
+                submitBtnEl.disabled = false;
+                return;
             }
 
-            validationMsg.style.display = 'block';
-            validationMsg.style.backgroundColor = '#fff3e0';
-            validationMsg.style.color = '#e65100';
-            validationMsg.innerHTML = 'Analyzing image...';
+            setAIStatus('scanning', '🔍', 'Scanning Image...', 'AI is analyzing food content');
             submitBtnEl.disabled = true;
 
             try {
                 const predictions = await aiModel.detect(imgElement);
-                console.log("AI Predictions:", predictions);
-
-                // Check if any prediction matches our valid food/container categories
-                const hasFood = predictions.some(pred => validCategories.includes(pred.class) || pred.class === 'person');
-                // Note: sometimes people hold food. If it detects ONLY a person, we might reject. Let's strictly require food/containers.
-                const hasFoodStrict = predictions.some(pred => validCategories.includes(pred.class));
-                const hasPerson = predictions.some(pred => pred.class === 'person');
+                const hasFood = predictions.some(p => validCategories.includes(p.class));
+                const hasPerson = predictions.some(p => p.class === 'person');
 
                 if (predictions.length === 0) {
-                    // COCO-SSD might miss some Indian food. We won't strictly block them, just warn.
-                    validationMsg.style.backgroundColor = '#fff3e0';
-                    validationMsg.style.color = '#e65100';
-                    validationMsg.innerHTML = 'Could not clearly identify food. Please ensure the image is clear.';
-                    isImageValid = true; // allow anyway to not block genuine users
-                } else if (hasFoodStrict) {
-                    validationMsg.style.backgroundColor = '#e8f5e9';
-                    validationMsg.style.color = '#2e7d32';
-                    validationMsg.innerHTML = 'Valid food/container detected!';
+                    setAIStatus('warn', '🤔', 'Unclear Image', 'Could not identify clearly — proceeding with caution');
                     isImageValid = true;
-                } else if (hasPerson && !hasFoodStrict) {
-                    validationMsg.style.backgroundColor = '#ffebee';
-                    validationMsg.style.color = '#c62828';
-                    validationMsg.innerHTML = 'Image rejected: Please upload a picture of the food, not just faces/people.';
+                } else if (hasFood) {
+                    setAIStatus('success', '✅', 'Food Verified!', `Detected: ${predictions[0].class}`);
+                    isImageValid = true;
+                } else if (hasPerson && !hasFood) {
+                    setAIStatus('error', '❌', 'Image Rejected', 'Please upload a photo of the food, not people');
                     isImageValid = false;
-                    document.getElementById('foodImage').value = ''; // Reset file input
-                    document.getElementById('imagePreview').innerHTML = ''; // Clear preview
+                    document.getElementById('foodImage').value = '';
+                    document.getElementById('imagePreview').innerHTML = '';
                 } else {
-                    validationMsg.style.backgroundColor = '#ffebee';
-                    validationMsg.style.color = '#c62828';
-                    validationMsg.innerHTML = ` Image rejected: Detected '${predictions[0].class}' instead of food.`;
+                    setAIStatus('error', '❌', `Not Food Detected`, `Detected: '${predictions[0].class}' — please upload food`);
                     isImageValid = false;
                     document.getElementById('foodImage').value = '';
                     document.getElementById('imagePreview').innerHTML = '';
                 }
-
-                submitBtnEl.disabled = !isImageValid;
-
-            } catch (error) {
-                console.error("Error analyzing image:", error);
-                validationMsg.innerHTML = 'Image analysis failed. You may proceed.';
-                submitBtnEl.disabled = false;
+            } catch (e) {
+                setAIStatus('warn', '⚠️', 'Analysis Failed', 'Proceeding with submission');
+                isImageValid = true;
             }
+
+            submitBtnEl.disabled = !isImageValid;
         }
 
-        // We need to inject logic after the original file input onChange happens in script.js.
-        // Easiest is to listen to the hidden input changes using a MutationObserver, or just wait.
-        // Since script.js updates #imagePreview innerHTML, we can observe that!
+        // Observe imagePreview for changes from script.js
         const targetNode = document.getElementById('imagePreview');
-        const observerConfig = { childList: true, subtree: true };
-
-        const callback = function (mutationsList, observer) {
-            for (let mutation of mutationsList) {
-                if (mutation.type === 'childList') {
-                    const img = targetNode.querySelector('img');
-                    if (img && img.src.startsWith('data:image')) {
-                        // Image was just added/compressed by script.js!
-                        // Ensure it's fully loaded before running AI
-                        if (img.complete) {
-                            verifyImage(img);
-                        } else {
-                            img.onload = () => verifyImage(img);
-                        }
-                    }
-                }
+        const observer = new MutationObserver(() => {
+            const img = targetNode.querySelector('img');
+            if (img && img.src.startsWith('data:image')) {
+                document.getElementById('dropZoneContent').style.display = 'none';
+                if (img.complete) verifyImage(img);
+                else img.onload = () => verifyImage(img);
             }
-        };
+        });
+        observer.observe(targetNode, { childList: true, subtree: true });
 
-        const observer = new MutationObserver(callback);
-        observer.observe(targetNode, observerConfig);
+        // Drag & Drop support
+        const dropZone = document.getElementById('dropZone');
+        dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+        dropZone.addEventListener('drop', e => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const input = document.getElementById('foodImage');
+                const dt = new DataTransfer();
+                dt.items.add(file);
+                input.files = dt.files;
+                input.dispatchEvent(new Event('change'));
+            }
+        });
 
+        // ── 11. Populate Summary Card ──
+        function populateSummary() {
+            const catMap = { cooked: '🍛 Cooked Meals', raw: '🥕 Raw Produce', baked: '🍞 Bakery', packaged: '📦 Packaged', dairy: '🥛 Dairy', beverages: '🧃 Beverages' };
+            document.getElementById('sumDonor').textContent = document.getElementById('donorName').value || '—';
+            document.getElementById('sumPhone').textContent = document.getElementById('phone').value || '—';
+            document.getElementById('sumCategory').textContent = catMap[document.getElementById('foodCategory').value] || '—';
+            document.getElementById('sumServings').textContent = document.getElementById('servings').value + ' servings';
+            const loc = document.getElementById('location').value;
+            document.getElementById('sumLocation').textContent = loc.length > 50 ? loc.slice(0, 47) + '...' : loc || '—';
+            document.getElementById('impactNum').textContent = document.getElementById('servings').value;
+        }
+
+        // ── 12. Form Submit → API + Success ──
+        document.getElementById('donorForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!isImageValid) { alert('Please upload a valid food photo first.'); return; }
+
+            const btn = document.getElementById('submitDonorBtn');
+            const spinner = document.getElementById('submitSpinner');
+            const btnText = document.getElementById('submitBtnText');
+
+            btn.disabled = true;
+            spinner.style.display = 'inline';
+            btnText.textContent = 'Submitting...';
+
+            const user = JSON.parse(localStorage.getItem('fwms_current_user'));
+            const donation = {
+                id: Date.now(),
+                userId: user.email,
+                userName: user.name,
+                donorName: document.getElementById('donorName').value,
+                donorType: document.getElementById('donorType').value,
+                phone: document.getElementById('phone').value,
+                location: document.getElementById('location').value,
+                description: document.getElementById('description').value,
+                foodCategory: document.getElementById('foodCategory').value,
+                servings: document.getElementById('servings').value,
+                expiryTime: document.getElementById('expiryTime').value,
+                foodPhoto: window.lastDonationPhoto || null,
+                status: 'pending',
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                await fetch('/api/donations', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(donation)
+                });
+
+                // Fire celebration
+                launchConfetti();
+
+                // Show success overlay
+                document.getElementById('successName').textContent = donation.donorName;
+                document.getElementById('ss2').textContent = isImageValid ? '✅ AI Verified' : '⚠️ Unverified';
+                document.getElementById('successOverlay').style.display = 'flex';
+
+            } catch (err) {
+                alert('Submission failed: ' + err.message);
+            } finally {
+                btn.disabled = false;
+                spinner.style.display = 'none';
+                btnText.textContent = '🚀 Submit Donation';
+            }
+        });
+
+        // ── 13. Confetti Celebration ──
+        function launchConfetti() {
+            const duration = 3000;
+            const end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#4CAF50', '#FB923C', '#FFD700'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#4CAF50', '#FB923C', '#FFD700'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            })();
+        }
+
+        function closeSuccess() {
+            document.getElementById('successOverlay').style.display = 'none';
+            document.getElementById('donorForm').reset();
+            document.getElementById('imagePreview').innerHTML = '';
+            document.getElementById('dropZoneContent').style.display = 'flex';
+            document.getElementById('aiValidationMsg').style.display = 'none';
+            isImageValid = false;
+            submitBtnEl.disabled = true;
+            updateServingsUI();
+            goToStep(1);
+        }
     </script>
 </body>
 

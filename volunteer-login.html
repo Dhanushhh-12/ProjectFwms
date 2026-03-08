@@ -4,168 +4,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Volunteer Login - Food Waste Management System</title>
+    <title>Volunteer Sign In - FWMS</title>
     <link rel="icon" type="image/png" href="images/logo.png.png">
     <link rel="stylesheet" href="css/style.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+    <style>
+        body {
+            background: var(--surface);
+            min-height: 100vh;
+        }
+
+        /* Override sidebar gradient for volunteer theme */
+        .auth-sidebar {
+            background: linear-gradient(145deg, #0f2044 0%, #1a3a72 55%, #24569a 100%) !important;
+        }
+
+        .sidebar-overline {
+            color: #90CAF9 !important;
+        }
+
+        .auth-sidebar h2 span {
+            color: #81D4FA !important;
+        }
+
+        .btn-auth-vol {
+            width: 100%;
+            padding: 1rem;
+            font-size: .95rem;
+            font-weight: 700;
+            border: none;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, #1565C0, #1976D2);
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(21, 101, 192, .3);
+            transition: var(--transition);
+        }
+
+        .btn-auth-vol:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(21, 101, 192, .45);
+        }
+
+        .pwd-wrap {
+            position: relative;
+        }
+
+        .pwd-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--neutral-500);
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            transition: color .2s;
+        }
+
+        .pwd-toggle:hover {
+            color: #1565C0;
+        }
+
+        .pwd-wrap input {
+            padding-right: 44px;
+        }
+    </style>
 </head>
 
 <body>
     <div id="scroll-progress"></div>
     <div class="split-auth-container">
         <!-- Sidebar -->
-        <div class="auth-sidebar reveal"
-            style="background: linear-gradient(rgba(230, 81, 0, 0.85), rgba(230, 81, 0, 0.95)), url('https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=1200&q=80'); background-size: cover; background-position: center;">
-            <h1 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 2rem; color: var(--surface);">VOLUNTEER
-                FORCE</h1>
-            <h2>Be the Hero <br><span style="color: var(--surface); opacity: 0.8;">Our Streets Need.</span></h2>
-            <p>Join the dedicated force ensuring food moves from abundance to need. Your logistics skills save lives.
-            </p>
-
-            <div style="margin-top: 4rem;">
-                <div class="reveal stagger-1"
-                    style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                    <div
-                        style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                        📦</div>
-                    <span>Efficient Pickup Routing</span>
-                </div>
-                <div class="reveal stagger-2"
-                    style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                    <div
-                        style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                        🚚</div>
-                    <span>Last-mile Delivery Impact</span>
-                </div>
-                <div class="reveal stagger-3" style="display: flex; align-items: center; gap: 15px;">
-                    <div
-                        style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                        ❤️</div>
-                    <span>Direct Community Service</span>
+        <div class="auth-sidebar">
+            <div class="sidebar-content">
+                <span class="sidebar-overline">Volunteer Network</span>
+                <h2>Heroes of <span>Zero Hunger.</span></h2>
+                <p>Sign in to your volunteer dashboard and see today's available food pickups. Every delivery you make
+                    changes a life.</p>
+                <div class="sidebar-features">
+                    <div class="sidebar-feat">
+                        <div class="sidebar-feat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <rect x="1" y="3" width="15" height="13" rx="2" />
+                                <path d="M16 8h4l3 3v5h-7V8z" />
+                                <circle cx="5.5" cy="18.5" r="2.5" />
+                                <circle cx="18.5" cy="18.5" r="2.5" />
+                            </svg>
+                        </div>
+                        <span>Real-time pickup notifications</span>
+                    </div>
+                    <div class="sidebar-feat">
+                        <div class="sidebar-feat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                                <circle cx="12" cy="10" r="3" />
+                            </svg>
+                        </div>
+                        <span>GPS-guided navigation to donors</span>
+                    </div>
+                    <div class="sidebar-feat">
+                        <div class="sidebar-feat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                            </svg>
+                        </div>
+                        <span>Track your delivery milestones</span>
+                    </div>
+                    <div class="sidebar-feat">
+                        <div class="sidebar-feat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <rect x="2" y="3" width="20" height="14" rx="2" />
+                                <line x1="8" y1="21" x2="16" y2="21" />
+                                <line x1="12" y1="17" x2="12" y2="21" />
+                            </svg>
+                        </div>
+                        <span>AI-verified food safety checks</span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Form Panel -->
         <div class="auth-form-panel">
-            <div class="reveal">
-                <a href="index.html" class="logo" style="margin-bottom: 3rem; text-decoration: none;">
-                    <img src="images/logo.png.png" alt="FWMS Logo"> FWMS
-                </a>
-                <h2 style="color: #e65100;">Volunteer Sign In</h2>
-                <p>Access your dashboard to claim pending pickups.</p>
-
-                <form id="volunteerLoginForm">
-                    <div class="form-group">
-                        <label for="loginEmail">Email Address</label>
-                        <input type="email" id="loginEmail" name="email" placeholder="volunteer@example.com" required>
+            <a href="index.html" class="logo"><img src="images/logo.png.png" alt="FWMS"> FWMS</a>
+            <h2>Volunteer Sign In</h2>
+            <p>Access your dashboard and start making a difference today.</p>
+            <form id="volunteerLoginForm" novalidate>
+                <div class="form-group">
+                    <label for="volLoginEmail">Email Address</label>
+                    <input type="email" id="volLoginEmail" name="email" placeholder="Enter Email" required>
+                </div>
+                <div class="form-group">
+                    <label for="volLoginPassword">Password</label>
+                    <div class="pwd-wrap">
+                        <input type="password" id="volLoginPassword" name="password" placeholder="Password" required>
+                        <button type="button" class="pwd-toggle" onclick="togglePwd('volLoginPassword', this)"
+                            aria-label="Show/hide password">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </button>
                     </div>
-
-                    <div class="form-group">
-                        <label for="loginPassword">Password</label>
-                        <input type="password" id="loginPassword" name="password" placeholder="••••••••" required>
-                    </div>
-
-                    <div style="text-align: right; margin-bottom: 2rem;">
-                        <a href="#" id="forgotPasswordLink"
-                            style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none; font-weight: 500;">Forgot
-                            Password?</a>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary"
-                        style="width: 100%; padding: 1.25rem; font-size: 1rem; background: #e65100; border-color: #e65100;">Sign
-                        In as Volunteer</button>
-
-                    <p style="text-align: center; margin-top: 2rem; font-size: 0.95rem; color: var(--text-muted);">
-                        New to the force? <a href="volunteer-register.html"
-                            style="color: #e65100; font-weight: 700; text-decoration: none;">Apply to Volunteer</a>
-                    </p>
-
-                    <div
-                        style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--neutral-100); text-align: center;">
-                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Are you a donor?
-                        </p>
-                        <a href="login.html" class="btn"
-                            style="border: 1px solid var(--neutral-200); display: block; width: 100%;">Donor Login</a>
-                    </div>
-                </form>
-            </div>
+                </div>
+                <button type="submit" id="volLoginBtn" class="btn-auth-vol" style="margin-top:10px;">Sign In to
+                    Dashboard &rarr;</button>
+                <p style="text-align:center;margin-top:20px;font-size:.9rem;color:var(--text-muted);">
+                    New volunteer? <a href="volunteer-register.html" style="color:#1565C0;font-weight:700;">Register
+                        here</a>
+                </p>
+                <p style="text-align:center;font-size:.83rem;color:var(--text-muted);">
+                    Not a volunteer? <a href="login.html" style="color:#1565C0;font-weight:700;">Go to Donor login</a>
+                </p>
+            </form>
         </div>
     </div>
 
-    <!-- Forgot Modal -->
-    <div id="forgotModal"
-        style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:2000; align-items:center; justify-content:center; backdrop-filter: blur(4px);">
-        <div class="reveal"
-            style="background:white; border-radius:var(--radius-lg); padding:40px; max-width:450px; width:90%; box-shadow:var(--shadow-xl);">
-            <h3 style="margin-bottom:10px; font-size:1.75rem; color:#e65100; font-family: 'Outfit';">Retrieve Hint</h3>
-            <p style="font-size:0.95rem; color:var(--text-muted); margin-bottom:25px;">Enter your volunteer email to get
-                your security hint.</p>
-            <div class="form-group">
-                <input type="email" id="forgotEmail" placeholder="Enter your email address">
-            </div>
-            <div id="forgotMsg" style="font-size:0.9rem; min-height:24px; margin-bottom:20px;"></div>
-            <div style="display:flex; gap:15px;">
-                <button onclick="handleForgotPassword()" class="btn btn-primary"
-                    style="flex:1; background: #e65100; border-color: #e65100;">Find Account</button>
-                <button onclick="closeForgotModal()" class="btn"
-                    style="flex:1; background:var(--neutral-100);">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="js/script.js"></script>
+    <script src="js/script.js?v=3.0"></script>
     <script>
-        // Forgot Password Logic
-        document.getElementById('forgotPasswordLink').addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('forgotModal').style.display = 'flex';
-            document.getElementById('forgotMsg').textContent = '';
-            document.getElementById('forgotEmail').value = '';
-            document.querySelector('#forgotModal .reveal').classList.add('active');
-        });
-
-        function closeForgotModal() {
-            document.getElementById('forgotModal').style.display = 'none';
+        function togglePwd(id, btn) {
+            const input = document.getElementById(id);
+            input.type = input.type === 'password' ? 'text' : 'password';
+            btn.querySelector('svg').style.opacity = input.type === 'password' ? '1' : '0.4';
         }
-
-        async function handleForgotPassword() {
-            const email = document.getElementById('forgotEmail').value.trim();
-            const msgEl = document.getElementById('forgotMsg');
-
-            if (!email) {
-                msgEl.style.color = '#c62828';
-                msgEl.textContent = 'Please enter your email address.';
-                return;
-            }
-
-            try {
-                const response = await fetch('/api/volunteer/forgot-password', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email })
-                });
-
-                const result = await response.json();
-
-                if (response.ok) {
-                    msgEl.style.color = '#e65100';
-                    msgEl.textContent = `✅ Hint: "${result.hint}"`;
-                } else {
-                    msgEl.style.color = '#c62828';
-                    msgEl.textContent = '❌ Account not found.';
-                }
-            } catch (err) {
-                msgEl.style.color = '#c62828';
-                msgEl.textContent = 'Server error.';
-            }
-        }
-
-        document.getElementById('forgotModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('forgotModal')) closeForgotModal();
-        });
     </script>
 </body>
 

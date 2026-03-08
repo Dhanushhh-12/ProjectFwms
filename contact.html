@@ -4,21 +4,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - Food Waste Management System</title>
+    <title>Contact Us - FWMS</title>
+    <meta name="description" content="Get in touch with the FWMS team. We're here to help you make a difference.">
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/png" href="images/logo.png.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- EmailJS SDK -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        body {
+            background: var(--neutral-50);
+        }
+
+        /* Hero */
+        .contact-hero {
+            padding: 150px 0 90px;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-2) 55%, var(--dark-3) 100%);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            color: #fff;
+        }
+
+        .contact-hero-orb {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(65px);
+        }
+
+        .contact-hero-orb-1 {
+            width: 350px;
+            height: 350px;
+            background: hsla(148, 64%, 26%, 0.28);
+            right: 10%;
+            top: -80px;
+        }
+
+        .contact-hero-orb-2 {
+            width: 220px;
+            height: 220px;
+            background: hsla(33, 95%, 53%, 0.14);
+            left: 5%;
+            bottom: -30px;
+        }
+
+        .contact-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, .10);
+            border: 1px solid rgba(255, 255, 255, .18);
+            border-radius: var(--radius-full);
+            padding: 5px 18px;
+            font-size: .78rem;
+            font-weight: 700;
+            color: var(--primary-light);
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4ade80;
+            box-shadow: 0 0 8px #4ade80;
+            display: inline-block;
+        }
+
+        .contact-hero h1 {
+            font-size: clamp(2.6rem, 5vw, 3.6rem);
+            font-weight: 900;
+            margin-bottom: 14px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-hero p {
+            font-size: 1.1rem;
+            opacity: .82;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Layout */
+        .contact-section {
+            padding: 80px 0 100px;
+        }
+
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* Info Panel */
+        .contact-info {
+            background: var(--surface);
+            border: 1px solid var(--neutral-150);
+            border-radius: var(--radius-xl);
+            padding: 44px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .contact-info h2 {
+            font-size: 1.75rem;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .contact-info>p {
+            color: var(--text-muted);
+            font-size: .92rem;
+            margin-bottom: 32px;
+            line-height: 1.75;
+        }
+
+        .contact-detail {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--neutral-150);
+            margin-bottom: 12px;
+            transition: var(--transition-fast);
+        }
+
+        .contact-detail:hover {
+            border-color: var(--primary-light);
+            background: var(--primary-soft);
+            transform: translateX(4px);
+        }
+
+        .contact-detail-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-sm);
+            background: var(--primary-soft);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .contact-detail-label {
+            font-size: .68rem;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .contact-detail-val {
+            font-weight: 700;
+            color: var(--neutral-900);
+            font-size: .92rem;
+        }
+
+        /* Social */
+        .social-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 28px;
+        }
+
+        .social-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--neutral-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neutral-500);
+            background: var(--surface);
+            transition: var(--transition-fast);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .social-btn:hover {
+            border-color: var(--primary);
+            background: var(--primary-soft);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Form Card */
+        .contact-form-card {
+            background: var(--surface);
+            border: 1px solid var(--neutral-150);
+            border-radius: var(--radius-xl);
+            padding: 44px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .contact-form-card h2 {
+            font-size: 1.75rem;
+            font-weight: 900;
+            margin-bottom: 6px;
+        }
+
+        .contact-form-card>p {
+            color: var(--text-muted);
+            margin-bottom: 28px;
+            font-size: .92rem;
+        }
+
+        .contact-form-card form {
+            background: none;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            max-width: 100%;
+        }
+
+        .contact-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .success-toast {
+            display: none;
+            background: var(--primary-soft);
+            border: 1px solid var(--primary-light);
+            border-radius: var(--radius-sm);
+            padding: 14px 18px;
+            color: var(--primary);
+            font-weight: 600;
+            margin-top: 14px;
+            font-size: .9rem;
+        }
+
+        @media(max-width:900px) {
+            .contact-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width:540px) {
+            .contact-form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <header>
+    <div id="scroll-progress"></div>
+    <header id="mainHeader">
         <div class="container">
             <nav class="glass-nav">
-                <a href="index.html" class="logo">
-                    <img src="images/logo.png.png" alt="FWMS Logo"> FWMS
-                </a>
+                <a href="index.html" class="logo"><img src="images/logo.png.png" alt="FWMS"> FWMS</a>
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="about.html">About</a></li>
@@ -26,73 +270,235 @@
                     <li><a href="donor.html">Donor</a></li>
                     <li><a href="volunteer.html">Volunteer</a></li>
                 </ul>
-                <button class="mobile-menu-btn">☰</button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                        <rect y="4" width="22" height="2.5" rx="1.25" fill="currentColor" />
+                        <rect y="10" width="22" height="2.5" rx="1.25" fill="currentColor" />
+                        <rect y="16" width="22" height="2.5" rx="1.25" fill="currentColor" />
+                    </svg>
+                </button>
             </nav>
         </div>
     </header>
 
     <main>
-        <section class="contact-hero animate-fade-in"
-            style="background-color: var(--dark-color); color: rgb(5, 5, 5); padding: 60px 0; text-align: center;">
-            <div class="container">
-                <h1 style="margin-top:25px;">Contact Us</h1>
-                <p>Have questions? We're here to help you make a difference.</p>
+        <section class="contact-hero">
+            <div class="contact-hero-orb contact-hero-orb-1"></div>
+            <div class="contact-hero-orb contact-hero-orb-2"></div>
+            <div class="container" style="animation:fadeInUp 0.8s both; position:relative; z-index:1;">
+                <div class="contact-hero-badge">
+                    <span class="live-dot"></span>
+                    Response within 24 hours
+                </div>
+                <h1>Get In Touch</h1>
+                <p>Have questions? We are here to help you make a difference.</p>
             </div>
         </section>
 
-        <section class="contact-form-section">
-            <div class="container animate-fade-in" style="animation-delay: 0.2s;">
-                <div style="display: flex; flex-wrap: wrap; gap: 50px; justify-content: center;">
-                    <div style="flex: 1; min-width: 300px; max-width: 500px;">
-                        <h2 style="margin-bottom: 20px; color: var(--primary-color);">Get In Touch</h2>
-                        <p style="margin-bottom: 30px; color: var(--text-muted);">
-                            Whether you're a restaurant owner, a volunteer, or just someone who wants to help, reach out
-                            to us. Our team based in Uppal Kalan, Telangana will get back to you shortly.
-                        </p>
-                        <div style="margin-bottom: 20px;">
-                            <h4 style="margin-bottom: 5px;">📍 Address</h4>
-                            <p>Plot No. 45, Street No. 3, Hyderabad, Telangana 500039</p>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <h4 style="margin-bottom: 5px;">📧 Email</h4>
-                            <p>FWMS@gmail.com</p>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <h4 style="margin-bottom: 5px;">📞 Phone</h4>
-                            <p>+91 75696 75957</p>
-                        </div>
-                    </div>
+        <section class="contact-section">
+            <div class="container">
+                <div class="contact-layout">
 
-                    <div style="flex: 1; min-width: 300px;">
-                        <form id="contactForm">
-                            <div class="form-group">
-                                <label for="name">Full Name</label>
-                                <input type="text" id="name" name="user_name" placeholder="Enter Name" required>
+                    <!-- Info Panel -->
+                    <div class="contact-info reveal">
+                        <h2>Let's Talk</h2>
+                        <p>Whether you're a restaurant owner, a volunteer, or just someone who wants to help — reach out
+                            to us. Our team in Hyderabad will respond swiftly.</p>
+
+                        <div class="contact-detail">
+                            <div class="contact-detail-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                                    <circle cx="12" cy="10" r="3" />
+                                </svg>
                             </div>
-                            <div class="form-group">
-                                <label for="email">Email Address</label>
-                                <input type="email" id="email" name="user_email" placeholder="Email" required>
+                            <div>
+                                <div class="contact-detail-label">Address</div>
+                                <div class="contact-detail-val">Plot No. 45, Street No. 3, Hyderabad, Telangana 500039
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="message">Your Message</label>
-                                <textarea id="message" name="message" placeholder="How can we help you?"
-                                    required></textarea>
+                        </div>
+
+                        <div class="contact-detail">
+                            <div class="contact-detail-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                    <polyline points="22,6 12,13 2,6" />
+                                </svg>
                             </div>
-                            <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
-                        </form>
+                            <div>
+                                <div class="contact-detail-label">Email</div>
+                                <div class="contact-detail-val">FWMS@gmail.com</div>
+                            </div>
+                        </div>
+
+                        <div class="contact-detail">
+                            <div class="contact-detail-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round">
+                                    <path
+                                        d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.69A2 2 0 012 .93h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="contact-detail-label">Phone</div>
+                                <div class="contact-detail-val">+91 75696 75957</div>
+                            </div>
+                        </div>
+
+                        <div class="contact-detail">
+                            <div class="contact-detail-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="contact-detail-label">Working Hours</div>
+                                <div class="contact-detail-val">Mon – Sat &middot; 8:00 AM – 8:00 PM IST</div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="social-row">
+                            <a class="social-btn" href="#" title="Instagram" aria-label="Instagram">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" />
+                                    <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                                </svg>
+                            </a>
+                            <a class="social-btn" href="#" title="X / Twitter" aria-label="Twitter">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                                </svg>
+                            </a>
+                            <a class="social-btn" href="#" title="LinkedIn" aria-label="LinkedIn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round">
+                                    <path
+                                        d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z" />
+                                    <rect x="2" y="9" width="4" height="12" />
+                                    <circle cx="4" cy="4" r="2" />
+                                </svg>
+                            </a>
+                            <a class="social-btn" href="#" title="WhatsApp" aria-label="WhatsApp">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round">
+                                    <path
+                                        d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div> -->
+
+                        <!-- Form -->
+                        <div class="contact-form-card reveal">
+                            <h2>Send a Message</h2>
+                            <p>Fill out the form below and we will get back to you as soon as possible.</p>
+                            <form id="contactForm" novalidate>
+                                <div class="contact-form-row">
+                                    <div class="form-group">
+                                        <label for="name">Full Name</label>
+                                        <input type="text" id="name" name="user_name" placeholder="Your name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contactPhone">Phone</label>
+                                        <input type="tel" id="contactPhone" name="user_phone" placeholder="+91 ...">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" id="email" name="user_email" placeholder="you@example.com"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subject">Subject</label>
+                                    <input type="text" id="subject" name="subject" placeholder="How can we help?">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message">Message</label>
+                                    <textarea id="message" name="message" placeholder="Tell us more..."
+                                        required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary"
+                                    style="width:100%; padding:1rem; font-size:1rem; justify-content:center;">
+                                    <span id="contactBtnText">
+                                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                                            <line x1="22" y1="2" x2="11" y2="13" />
+                                            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                                        </svg>
+                                        Send Message
+                                    </span>
+                                </button>
+                                <div class="success-toast" id="contactSuccess">
+                                    Message sent successfully! We will be in touch shortly.
+                                </div>
+                            </form>
+                        </div>
+
                     </div>
                 </div>
-            </div>
         </section>
     </main>
 
     <footer>
         <div class="container">
-            <p>&copy; 2026 Food Waste Management System - All rights reserved.</p>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo" style="color:#fff;">
+                        <img src="images/logo.png.png" alt="FWMS" style="filter:brightness(0) invert(1); opacity:.85;">
+                        FWMS
+                    </a>
+                    <p>Food Waste Management System — turning surplus into sustenance across Telangana since 2024.</p>
+                    <div class="footer-badge"><span class="footer-dot"></span>Live Network Active</div>
+                </div>
+                <div class="footer-links">
+                    <h5>Platform</h5>
+                    <ul>
+                        <li><a href="donor.html">Donate Food</a></li>
+                        <li><a href="volunteer.html">Volunteer Dashboard</a></li>
+                        <li><a href="register.html">Create Account</a></li>
+                        <li><a href="login.html">Sign In</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h5>Company</h5>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 Food Waste Management System. All rights reserved.</span>
+                <span>Built for Telangana, with care.</span>
+            </div>
         </div>
     </footer>
 
-    <script src="js/script.js"></script>
+    <script src="js/script.js?v=3.0"></script>
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const btn = document.getElementById('contactBtnText');
+            btn.textContent = 'Sending...';
+            setTimeout(() => {
+                btn.innerHTML = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Send Message`;
+                document.getElementById('contactSuccess').style.display = 'block';
+                this.reset();
+                setTimeout(() => document.getElementById('contactSuccess').style.display = 'none', 5000);
+            }, 1400);
+        });
+    </script>
 </body>
 
 </html>

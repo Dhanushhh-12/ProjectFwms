@@ -4,150 +4,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Food Waste Management System</title>
+    <title>Create Account - FWMS</title>
     <link rel="icon" type="image/png" href="images/logo.png.png">
     <link rel="stylesheet" href="css/style.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+    <style>
+        body {
+            background: var(--surface);
+            min-height: 100vh;
+        }
+
+        .auth-form-panel {
+            max-width: 600px;
+            overflow-y: auto;
+        }
+
+        .form-grid2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .photo-upload-zone {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--neutral-50);
+            border: 1.5px dashed var(--neutral-300);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .photo-upload-zone:hover {
+            border-color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .photo-preview {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--neutral-200);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neutral-500);
+            flex-shrink: 0;
+        }
+
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @media(max-width:640px) {
+            .form-grid2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <div id="scroll-progress"></div>
     <div class="split-auth-container">
-        <!-- Sidebar -->
-        <div class="auth-sidebar reveal">
-            <h1 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 2rem; color: var(--secondary);">GROW THE
-                IMPACT</h1>
-            <h2>Be the Change <br><span style="color: var(--secondary);">Our Planet Needs.</span></h2>
-            <p>Join our community of growers, businesses, and individuals dedicated to making Telangana zero-waste.</p>
 
-            <div style="margin-top: 4rem;">
-                <div class="reveal stagger-1"
-                    style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                    <div
-                        style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                        🧑‍🌾</div>
-                    <span>Empower Local Producers</span>
-                </div>
-                <div class="reveal stagger-2"
-                    style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                    <div
-                        style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                        ♻️</div>
-                    <span>Circular Economy Support</span>
-                </div>
-                <div class="reveal stagger-3" style="display: flex; align-items: center; gap: 15px;">
-                    <div
-                        style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                        🍎</div>
-                    <span>Zero Hunger Mission</span>
+        <!-- Sidebar -->
+        <div class="auth-sidebar">
+            <div class="sidebar-content">
+                <span class="sidebar-overline">Grow the Impact</span>
+                <h2>Be the Change<br><span>Our Planet Needs.</span></h2>
+                <p>Join our community of businesses and individuals dedicated to making Telangana zero-waste.</p>
+                <div class="sidebar-features">
+                    <div class="sidebar-feat">
+                        <div class="sidebar-feat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <path d="M12 22V12m0 0C12 7 7 4 2 6m10 6c0-5 5-8 10-6" />
+                            </svg>
+                        </div>
+                        <span>Empower Local Communities</span>
+                    </div>
+                    <div class="sidebar-feat">
+                        <div class="sidebar-feat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <polyline points="1 4 1 10 7 10" />
+                                <path d="M3.51 15a9 9 0 102.13-9.36L1 10" />
+                            </svg>
+                        </div>
+                        <span>Circular Economy Support</span>
+                    </div>
+                    <div class="sidebar-feat">
+                        <div class="sidebar-feat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+                            </svg>
+                        </div>
+                        <span>Zero Hunger Mission</span>
+                    </div>
+                    <div class="sidebar-feat">
+                        <div class="sidebar-feat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <rect x="2" y="3" width="20" height="14" rx="2" />
+                                <line x1="8" y1="21" x2="16" y2="21" />
+                                <line x1="12" y1="17" x2="12" y2="21" />
+                            </svg>
+                        </div>
+                        <span>AI-Verified Donations</span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Form Panel -->
         <div class="auth-form-panel">
-            <div class="reveal">
-                <a href="index.html" class="logo" style="margin-bottom: 2.5rem; text-decoration: none;">
-                    <img src="images/logo.png.png" alt="FWMS Logo"> FWMS
-                </a>
-                <h2>Create Account</h2>
-                <p>Join the movement today. It only takes a minute.</p>
+            <a href="index.html" class="logo"><img src="images/logo.png.png" alt="FWMS"> FWMS</a>
+            <h2>Create Account</h2>
+            <p>Join the movement today. It only takes a minute.</p>
 
-                <form id="registerForm">
-                    <!-- Role Selection -->
-                    <div class="form-group" style="margin-bottom: 2rem;">
-                        <label style="margin-bottom: 0.75rem;">I want to register as a...</label>
-                        <div style="display: flex; gap: 1rem;">
-                            <label style="flex: 1; cursor: pointer;">
-                                <input type="radio" name="role" value="donor" checked style="display: none;">
-                                <div class="role-card"
-                                    style="padding: 0.75rem; border: 2px solid var(--neutral-200); border-radius: var(--radius-md); text-align: center; transition: var(--transition);">
-                                    <span style="font-weight: 700;">Donor</span>
-                                </div>
-                            </label>
-                            <label style="flex: 1; cursor: pointer;">
-                                <input type="radio" name="role" value="volunteer" style="display: none;">
-                                <div class="role-card"
-                                    style="padding: 0.75rem; border: 2px solid var(--neutral-200); border-radius: var(--radius-md); text-align: center; transition: var(--transition);">
-                                    <span style="font-weight: 700;">Volunteer</span>
-                                </div>
-                            </label>
+            <form id="registerForm" novalidate>
+                <div style="margin-bottom:8px;"><label
+                        style="font-weight:600;font-size:.88rem;color:var(--neutral-700);">I want to register as
+                        a...</label></div>
+                <div class="role-picker">
+                    <label>
+                        <input type="radio" name="role" value="donor" checked>
+                        <div class="role-option">
+                            <div class="role-option-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round">
+                                    <path d="M11 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-6" />
+                                    <path d="M9 12l3 3L22 4" />
+                                </svg>
+                            </div>
+                            <span class="role-option-label">Donor</span>
                         </div>
-                    </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="role" value="volunteer">
+                        <div class="role-option">
+                            <div class="role-option-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round">
+                                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" />
+                                    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+                                </svg>
+                            </div>
+                            <span class="role-option-label">Volunteer</span>
+                        </div>
+                    </label>
+                </div>
 
+                <div class="form-group">
+                    <label for="regName">Full Name</label>
+                    <input type="text" id="regName" name="name" placeholder="Your full name" required>
+                </div>
+                <div class="form-grid2">
                     <div class="form-group">
-                        <label for="regName">Full Name</label>
-                        <input type="text" id="regName" name="name" placeholder="Enter Your Name" required>
+                        <label for="regEmail">Email Address</label>
+                        <input type="email" id="regEmail" name="email" placeholder="Enter Email" required>
                     </div>
+                    <div class="form-group">
+                        <label for="regPhone">Phone Number</label>
+                        <input type="tel" id="regPhone" name="phone" placeholder="Enter Number" required>
+                    </div>
+                </div>
+                <div class="form-grid2">
+                    <div class="form-group">
+                        <label for="regPassword">Password</label>
+                        <input type="password" id="regPassword" name="password" placeholder="Enter Password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regConfirm">Confirm Password</label>
+                        <input type="password" id="regConfirm" name="confirm_password" placeholder="Re-enter password"
+                            required>
+                    </div>
+                </div>
 
-                    <div class="auth-form-grid">
-                        <div class="form-group">
-                            <label for="regEmail">Email Address</label>
-                            <input type="email" id="regEmail" name="email" placeholder="Enter Your Email" required>
+                <div class="form-group">
+                    <label>Profile Photo <span
+                            style="color:var(--text-muted);font-weight:400;">(Optional)</span></label>
+                    <div class="photo-upload-zone" onclick="document.getElementById('profilePhoto').click()">
+                        <div class="photo-preview" id="photoPreview">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8" stroke-linecap="round">
+                                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
                         </div>
-                        <div class="form-group">
-                            <label for="regPhone">Phone Number</label>
-                            <input type="tel" id="regPhone" name="phone" placeholder="Enter Your Number" required>
+                        <div>
+                            <div style="font-weight:700;font-size:.88rem;color:var(--neutral-700);">Click to upload
+                                photo</div>
+                            <div style="font-size:.76rem;color:var(--neutral-500);margin-top:2px;">PNG, JPG up to 2MB
+                            </div>
                         </div>
                     </div>
+                    <input type="file" id="profilePhoto" accept="image/*" style="display:none;">
+                </div>
 
-                    <div class="auth-form-grid">
-                        <div class="form-group">
-                            <label for="regPassword">Password</label>
-                            <input type="password" id="regPassword" name="password" placeholder="••••••••" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="regConfirm">Confirm Password</label>
-                            <input type="password" id="regConfirm" name="confirm_password" placeholder="••••••••"
-                                required>
-                        </div>
-                    </div>
+                <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:20px;">
+                    <input type="checkbox" id="terms" required
+                        style="width:18px;height:18px;accent-color:var(--primary);margin-top:3px;flex-shrink:0;">
+                    <label for="terms" style="font-size:.82rem;color:var(--text-muted);line-height:1.55;">
+                        I agree to the <a href="#" style="color:var(--primary);font-weight:600;">Terms of Service</a>
+                        and <a href="#" style="color:var(--primary);font-weight:600;">Privacy Policy</a>.
+                    </label>
+                </div>
 
-                    <!-- Profile Photo Selection -->
-                    <div class="form-group" style="margin-bottom: 1.5rem;">
-                        <label>Profile Photo (Optional)</label>
-                        <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
-                            <div id="photoPreview"
-                                style="width: 50px; height: 50px; background: var(--neutral-100); border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
-                                👤</div>
-                            <input type="file" id="profilePhoto" accept="image/*"
-                                style="font-size: 0.8rem; color: var(--text-muted);">
-                        </div>
-                    </div>
-
-                    <div style="display: flex; gap: 10px; align-items: flex-start; margin-bottom: 1.5rem;">
-                        <input type="checkbox" id="terms" required
-                            style="width: 18px; height: 18px; accent-color: var(--primary); margin-top: 3px;">
-                        <label for="terms" style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">
-                            I agree to the <a href="#" style="color: var(--primary);">Terms of Service</a> and <a
-                                href="#" style="color: var(--primary);">Privacy Policy</a>.
-                        </label>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary"
-                        style="width: 100%; padding: 1rem; font-size: 1rem;">Registerr</button>
-
-                    <p style="text-align: center; margin-top: 1.5rem; font-size: 0.95rem; color: var(--text-muted);">
-                        Already have an account? <a href="login.html"
-                            style="color: var(--primary); font-weight: 700; text-decoration: none;">Sign in here</a>
-                    </p>
-                </form>
-            </div>
+                <button type="submit" class="btn-auth">Create My Account &rarr;</button>
+                <p style="text-align:center;margin-top:18px;font-size:.88rem;color:var(--text-muted);">
+                    Already have an account? <a href="login.html" style="color:var(--primary);font-weight:700;">Sign in
+                        here</a>
+                </p>
+            </form>
         </div>
     </div>
 
-    <style>
-        input[type="radio"]:checked+.role-card {
-            border-color: var(--primary) !important;
-            background: var(--primary-soft);
-            color: var(--primary);
-            box-shadow: var(--shadow-sm);
-        }
-    </style>
-
-    <script src="js/script.js"></script>
+    <script src="js/script.js?v=3.0"></script>
+    <script>
+        document.getElementById('profilePhoto').addEventListener('change', function () {
+            const file = this.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                const preview = document.getElementById('photoPreview');
+                preview.innerHTML = `<img src="${e.target.result}" alt="Profile">`;
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
 </body>
 
 </html>

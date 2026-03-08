@@ -4,248 +4,465 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile - Food Waste Management System</title>
+    <title>My Profile - FWMS</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/png" href="images/logo.png.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Simple & Professional Profile Styling */
         body {
-            background-color: var(--neutral-50);
-            background-image:
-                radial-gradient(at 0% 0%, hsla(var(--h), 72%, 29%, 0.05) 0, transparent 50%),
-                radial-gradient(at 100% 100%, hsla(30, 90%, 50%, 0.05) 0, transparent 50%);
-            min-height: 100vh;
+            background: var(--neutral-50);
         }
 
-        .profile-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: var(--shadow-xl);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .profile-page {
+            padding: 120px 0 80px;
         }
 
-        .profile-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.15);
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 32px;
+            align-items: start;
+            max-width: 960px;
+            margin: 0 auto;
         }
 
-        .profile-photo-wrapper {
+        /* ── Profile Sidebar Card ── */
+        .profile-sidebar-card {
+            background: var(--surface);
+            border: 1px solid var(--neutral-100);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 100px;
+        }
+
+        .profile-cover {
+            height: 120px;
+            background: linear-gradient(135deg, #0d2b1a, #1a4d2e, #2d6a4f);
             position: relative;
-            display: inline-block;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .profile-photo-wrapper:hover {
-            transform: scale(1.08);
+        .profile-avatar-wrap {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
         }
 
-        .photo-inner {
-            width: 140px;
-            height: 140px;
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
+            border: 4px solid var(--surface);
             background: var(--neutral-100);
-            border: 4px solid white;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 3rem;
             box-shadow: var(--shadow-md);
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin: 25px 0;
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .stat-badge {
-            background: white;
-            padding: 12px;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--neutral-100);
-            transition: all 0.3s ease;
-        }
-
-        .stat-badge:hover {
-            border-color: var(--primary-light);
-            transform: scale(1.05);
-            background: var(--primary-soft);
-        }
-
-        .stat-val {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--primary);
-            display: block;
-        }
-
-        .stat-label {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .profile-field {
-            background: white;
-            border-radius: var(--radius-md);
-            padding: 15px 20px;
-            border: 1px solid var(--neutral-200);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: all 0.3s ease;
-            text-align: left;
-        }
-
-        .profile-field:hover {
-            border-color: var(--primary);
-            background: var(--primary-soft);
-            transform: scale(1.02);
-        }
-
-        .field-icon {
-            background: var(--primary-soft);
-            color: var(--primary);
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+        .profile-avatar-edit {
+            position: absolute;
+            bottom: 2px;
+            right: -4px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: .9rem;
+            border: 2px solid var(--surface);
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
         }
 
-        .field-label {
-            font-size: 0.7rem;
+        .profile-sidebar-body {
+            padding: 70px 24px 28px;
+            text-align: center;
+        }
+
+        .profile-name-big {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--neutral-900);
+            margin-bottom: 4px;
+        }
+
+        .profile-email-small {
+            font-size: .82rem;
             color: var(--text-muted);
-            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .profile-role-badge {
+            display: inline-block;
+            background: var(--primary-soft);
+            color: var(--primary);
+            border-radius: 50px;
+            padding: 4px 14px;
+            font-size: .75rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: .05em;
+            margin-bottom: 24px;
+        }
+
+        .profile-mini-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .mini-stat {
+            background: var(--neutral-50);
+            border: 1px solid var(--neutral-100);
+            border-radius: var(--radius-sm);
+            padding: 14px 10px;
+            text-align: center;
+        }
+
+        .mini-stat-num {
+            display: block;
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--primary);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .mini-stat-label {
+            font-size: .68rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            color: var(--text-muted);
+        }
+
+        /* ── Main Content ── */
+        .profile-main {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .profile-section-card {
+            background: var(--surface);
+            border: 1px solid var(--neutral-100);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .section-card-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 24px;
+            color: var(--neutral-900);
+        }
+
+        .section-card-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--primary-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .info-field {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            border: 1px solid var(--neutral-100);
+            border-radius: var(--radius-sm);
+            margin-bottom: 10px;
+            transition: var(--transition);
+        }
+
+        .info-field:hover {
+            border-color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .info-field-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--primary-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .info-field-label {
+            font-size: .68rem;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            color: var(--text-muted);
+            font-weight: 700;
             margin-bottom: 2px;
         }
 
-        .field-value {
-            font-size: 1.05rem;
+        .info-field-val {
+            font-size: .95rem;
             font-weight: 600;
-            color: var(--text);
-            margin: 0;
+            color: var(--neutral-900);
         }
 
-        .btn {
-            padding: 14px 28px;
+        /* Donations history */
+        .donation-history-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 16px;
+            border: 1px solid var(--neutral-100);
             border-radius: var(--radius-md);
-            font-weight: 600;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
+            margin-bottom: 10px;
+            transition: var(--transition);
+        }
+
+        .donation-history-item:hover {
+            border-color: var(--primary-light);
+            background: var(--primary-soft);
+        }
+
+        .dhi-status {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
         }
 
-        .btn-logout {
-            background: #fee2e2;
-            color: #ef4444;
-            border: 1px solid #fecaca;
+        .dhi-status.pending {
+            background: #FFF3E0;
         }
 
-        .btn-logout:hover {
-            background: #ef4444;
-            color: white;
+        .dhi-status.claimed {
+            background: #E8F5E9;
+        }
+
+        .dhi-desc {
+            font-weight: 700;
+            font-size: .9rem;
+            margin-bottom: 3px;
+        }
+
+        .dhi-meta {
+            font-size: .78rem;
+            color: var(--text-muted);
+        }
+
+        .dhi-badge {
+            font-size: .7rem;
+            padding: 3px 10px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-left: auto;
+            flex-shrink: 0;
+            align-self: center;
+        }
+
+        .dhi-badge.pending {
+            background: #FFF3E0;
+            color: #E65100;
+        }
+
+        .dhi-badge.claimed {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        /* Action buttons */
+        .profile-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-danger {
+            background: #FEE2E2;
+            color: #EF4444;
+            border: 1px solid #FECACA;
+            border-radius: var(--radius-md);
+            padding: 12px 24px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: .9rem;
+        }
+
+        .btn-danger:hover {
+            background: #EF4444;
+            color: #fff;
             transform: translateY(-2px);
+        }
+
+        @media(max-width:768px) {
+            .profile-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-sidebar-card {
+                position: static;
+            }
         }
     </style>
 </head>
 
 <body>
+    <div id="scroll-progress"></div>
     <header>
         <div class="container">
-            <nav id="mainNav" class="glass-nav">
-                <a href="index.html" class="logo">
-                    <img src="images/logo.png.png" alt="FWMS Logo"> FWMS
-                </a>
+            <nav class="glass-nav" id="mainNav">
+                <a href="index.html" class="logo"><img src="images/logo.png.png" alt="FWMS"> FWMS</a>
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="about.html">About</a></li>
                     <li><a href="contact.html">Contact</a></li>
-                    <li><a href="donor.html">Donor</a></li>
-                    <li><a href="volunteer.html">Volunteer</a></li>
+                    <li><a href="donor.html">Donate Food</a></li>
                 </ul>
-                <button class="mobile-menu-btn">☰</button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu"><svg width="22" height="22"
+                        viewBox="0 0 22 22" fill="none">
+                        <rect y="4" width="22" height="2.5" rx="1.25" fill="currentColor" />
+                        <rect y="10" width="22" height="2.5" rx="1.25" fill="currentColor" />
+                        <rect y="16" width="22" height="2.5" rx="1.25" fill="currentColor" />
+                    </svg></button>
             </nav>
         </div>
     </header>
 
     <main>
-        <section class="profile-section" style="padding: 120px 0 80px;">
-            <div class="container animate-fade-in">
-                <div class="profile-card"
-                    style="max-width: 550px; margin: 0 auto; padding: 40px; border-radius: 24px; text-align: center;">
-
-                    <div style="margin-bottom: 30px;">
-                        <h2 style="font-size: 2.2rem; font-weight: 800; color: var(--neutral-900);">My Profile</h2>
-                        <p style="color: var(--text-muted);">Donor Account Settings</p>
-                    </div>
-
-                    <div style="margin-bottom: 30px;">
-                        <input type="file" id="updatePhoto" accept="image/*" style="display: none;">
-                        <div class="profile-photo-wrapper">
-                            <div class="photo-inner" id="profilePhotoDisplay">
-                                <span style="font-size: 3.5rem; color: var(--neutral-200);">👤</span>
+        <section class="profile-page">
+            <div class="container">
+                <div class="profile-layout">
+                    <!-- Sidebar -->
+                    <div class="profile-sidebar-card reveal">
+                        <div class="profile-cover"></div>
+                        <div class="profile-avatar-wrap">
+                            <div class="profile-avatar" id="profilePhotoDisplay">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ccc"
+                                    stroke-width="1.5" stroke-linecap="round">
+                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg>
                             </div>
-                            <label for="updatePhoto" title="Update Photo"
-                                style="position: absolute; bottom: 5px; right: 5px; background: var(--primary); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-md); cursor: pointer; border: 3px solid white;">
-                                📸
+                            <label for="updatePhoto" class="profile-avatar-edit" title="Update Photo">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.5" stroke-linecap="round">
+                                    <path
+                                        d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" />
+                                    <circle cx="12" cy="13" r="4" />
+                                </svg>
                             </label>
+                            <input type="file" id="updatePhoto" accept="image/*" style="display:none;">
                         </div>
-                    </div>
-                    <!-- 
-                    <div class="stats-grid">
-                        <div class="stat-badge">
-                            <span class="stat-val">12</span>
-                            <span class="stat-label">Donations</span>
-                        </div>
-                        <div class="stat-badge">
-                            <span class="stat-val">450kg</span>
-                            <span class="stat-label">Impact</span>
-                        </div>
-                        <div class="stat-badge">
-                            <span class="stat-val">Gold</span>
-                            <span class="stat-label">Tier</span>
-                        </div>
-                    </div> -->
-
-                    <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px;">
-                        <div class="profile-field">
-                            <div class="field-icon">👤</div>
-                            <div class="field-content">
-                                <label class="field-label">Full Name</label>
-                                <p id="profileName" class="field-value"></p>
-                            </div>
-                        </div>
-
-                        <div class="profile-field">
-                            <div class="field-icon">✉️</div>
-                            <div class="field-content">
-                                <label class="field-label">Email Address</label>
-                                <p id="profileEmail" class="field-value"></p>
+                        <div class="profile-sidebar-body">
+                            <div class="profile-name-big" id="profileNameSide">Loading...</div>
+                            <div class="profile-email-small" id="profileEmailSide">—</div>
+                            <div class="profile-role-badge">Donor Account</div>
+                            <div class="profile-mini-stats">
+                                <div class="mini-stat"><span class="mini-stat-num" id="statTotal">0</span><span
+                                        class="mini-stat-label">Donations</span></div>
+                                <div class="mini-stat"><span class="mini-stat-num" id="statClaimed">0</span><span
+                                        class="mini-stat-label">Claimed</span></div>
                             </div>
                         </div>
                     </div>
 
-                    <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px;">
-                        <button id="saveProfileBtn" class="btn btn-primary"
-                            style="padding: 14px 40px; border-radius: 12px;">
-                            Save Changes
-                        </button>
-                        <button id="logoutBtnProfile" class="btn btn-logout"
-                            style="padding: 14px 40px; border-radius: 12px;">
-                            Logout
-                        </button>
+                    <!-- Main -->
+                    <div class="profile-main">
+                        <!-- Account Info -->
+                        <div class="profile-section-card reveal">
+                            <div class="section-card-title">
+                                <div class="section-card-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
+                                        stroke-width="2" stroke-linecap="round">
+                                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                                        <circle cx="12" cy="7" r="4" />
+                                    </svg>
+                                </div>
+                                Account Information
+                            </div>
+                            <div class="info-field">
+                                <div class="info-field-icon">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
+                                        stroke-width="2" stroke-linecap="round">
+                                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                                        <circle cx="12" cy="7" r="4" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="info-field-label">Full Name</div>
+                                    <div class="info-field-val" id="profileName">—</div>
+                                </div>
+                            </div>
+                            <div class="info-field">
+                                <div class="info-field-icon">✉️</div>
+                                <div>
+                                    <div class="info-field-label">Email Address</div>
+                                    <div class="info-field-val" id="profileEmail">—</div>
+                                </div>
+                            </div>
+                            <div class="profile-actions" style="margin-top:16px;">
+                                <button id="saveProfileBtn" class="btn btn-primary" style="padding:12px 28px;">Save
+                                    Changes</button>
+                                <button id="logoutBtnProfile" class="btn-danger">Sign Out</button>
+                                <a href="donor.html" class="btn btn-secondary"
+                                    style="text-decoration:none;padding:12px 24px;">+ New Donation</a>
+                            </div>
+                        </div>
+
+                        <!-- Donation History -->
+                        <div class="profile-section-card reveal">
+                            <div class="section-card-title">
+                                <div class="section-card-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
+                                        stroke-width="2" stroke-linecap="round">
+                                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                        <line x1="16" y1="13" x2="8" y2="13" />
+                                        <line x1="16" y1="17" x2="8" y2="17" />
+                                    </svg>
+                                </div>
+                                My Donation History
+                            </div>
+                            <div id="donationHistoryList">
+                                <div style="text-align:center;padding:40px;color:var(--text-muted);">
+                                    <div
+                                        style="width:56px;height:56px;border-radius:14px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:var(--primary);">
+                                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                                            <path d="M11 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-6" />
+                                            <path d="M9 12l3 3L22 4" />
+                                        </svg></div>
+                                    <p>No donations yet. <a href="donor.html"
+                                            style="color:var(--primary);font-weight:600;">Make your first donation →</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -253,72 +470,74 @@
     </main>
 
     <footer>
-        <div class="container">
-            <p>&copy; 2026 Food Waste Management System - Telangana Chapter. All rights reserved.</p>
+        <div class="container" style="text-align:center;">
+            <p style="color:var(--neutral-200);opacity:.5;">© 2026 Food Waste Management System — All rights reserved.
+            </p>
         </div>
     </footer>
 
-    <script src="js/script.js"></script>
+    <script src="js/script.js?v=2.0"></script>
     <script>
-        // Profile specific initialization
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             const user = getCurrentUser();
-            if (!user) {
-                window.location.href = 'login.html';
-                return;
-            }
+            if (!user) { window.location.href = 'login.html'; return; }
 
-            const nameEl = document.getElementById('profileName');
-            const emailEl = document.getElementById('profileEmail');
-            const photoDisplay = document.getElementById('profilePhotoDisplay');
-            const updatePhotoInput = document.getElementById('updatePhoto');
-            const saveBtn = document.getElementById('saveProfileBtn');
-
-            nameEl.innerText = user.name;
-            emailEl.innerText = user.email;
+            // Populate sidebar
+            document.getElementById('profileNameSide').textContent = user.name;
+            document.getElementById('profileEmailSide').textContent = user.email;
+            document.getElementById('profileName').textContent = user.name;
+            document.getElementById('profileEmail').textContent = user.email;
 
             if (user.photo) {
-                photoDisplay.innerHTML = `<img src="${user.photo}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                document.getElementById('profilePhotoDisplay').innerHTML = `<img src="${user.photo}" alt="Profile">`;
             }
 
-            updatePhotoInput.addEventListener('change', function () {
-                const file = this.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        const base64Photo = e.target.result;
-                        photoDisplay.innerHTML = `<img src="${base64Photo}" style="width: 100%; height: 100%; object-fit: cover;">`;
+            // Load donation history
+            try {
+                const donations = await fetch('/api/donations').then(r => r.json()).catch(() => []);
+                const myDonations = donations.filter(d => d.userId === user.email);
+                document.getElementById('statTotal').textContent = myDonations.length;
+                document.getElementById('statClaimed').textContent = myDonations.filter(d => d.status === 'claimed').length;
 
-                        // Update in storage immediately for preview consistency
-                        user.photo = base64Photo;
-                        // We'll save it to the users list in script.js logic or here
-                    };
-                    reader.readAsDataURL(file);
+                if (myDonations.length > 0) {
+                    document.getElementById('donationHistoryList').innerHTML = myDonations.slice().reverse().map(d => `
+                    <div class="donation-history-item">
+                            <div class="dhi-status ${d.status}">${d.status === 'claimed' ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>' : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E65100" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'}</div>
+                        <div style="flex:1;">
+                            <div class="dhi-desc">${d.donorName} — ${d.description.slice(0, 60)}${d.description.length > 60 ? '...' : ''}</div>
+                            <div class="dhi-meta">${d.location.slice(0, 50)}... &middot; ${new Date(d.timestamp).toLocaleDateString()}</div>
+                        </div>
+                        <span class="dhi-badge ${d.status}">${d.status === 'claimed' ? 'Claimed' : 'Pending'}</span>
+                    </div>
+                `).join('');
                 }
+            } catch (e) { }
+
+            // Photo update
+            document.getElementById('updatePhoto').addEventListener('change', function () {
+                const file = this.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = e => {
+                    user.photo = e.target.result;
+                    document.getElementById('profilePhotoDisplay').innerHTML = `<img src="${user.photo}" alt="Profile">`;
+                };
+                reader.readAsDataURL(file);
             });
 
-            saveBtn.addEventListener('click', () => {
-                // Find and update user in global users list
-                const users = getUsers();
-                const index = users.findIndex(u => u.email === user.email);
-                if (index !== -1) {
-                    users[index] = user;
-                    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-                }
+            // Save
+            document.getElementById('saveProfileBtn').addEventListener('click', () => {
                 localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+                const btn = document.getElementById('saveProfileBtn');
+                btn.textContent = 'Saved!';
+                setTimeout(() => btn.textContent = 'Save Changes', 2000);
+            });
 
-                alert('Profile updated successfully!');
+            // Logout
+            document.getElementById('logoutBtnProfile').addEventListener('click', () => {
+                localStorage.removeItem(SESSION_KEY);
                 window.location.href = 'index.html';
             });
-
-            const logoutBtn = document.getElementById('logoutBtnProfile');
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', () => {
-                    localStorage.removeItem(SESSION_KEY);
-                    alert('Logged out successfully.');
-                    window.location.href = 'index.html';
-                });
-            }
         });
     </script>
 </body>

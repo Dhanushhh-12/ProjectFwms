@@ -5,144 +5,233 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volunteer Dashboard - FWMS</title>
-    <!-- Styles -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/volunteer.css">
-        <link rel="icon" type="image/png" href="images/logo.png.png">
+    <link rel="icon" type="image/png" href="images/logo.png.png">
+    <style>
+        body {
+            background: var(--neutral-50);
+        }
 
-    <link rel="icon" type="image/png" href="images/logo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        /* Filter button override — no emojis */
+        .vol-filter-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+    </style>
 </head>
 <script>
-    // Immediate auth check
-    const volunteerUser = localStorage.getItem('fwms_current_volunteer');
-    const donorUser = localStorage.getItem('fwms_current_user');
-
-    // Proactive strict access control
-    if (donorUser && !volunteerUser) {
-        alert('Donors cannot act as volunteers. Redirecting to Add Donation.');
-        window.location.href = 'donor.html';
-    } else if (!volunteerUser) {
-        alert('Access denied. Please login as a volunteer first.');
-        window.location.href = 'login.html';
-    }
+    const _vol = localStorage.getItem('fwms_current_volunteer');
+    const _don = localStorage.getItem('fwms_current_user');
+    if (_don && !_vol) { alert('Donors cannot act as volunteers. Redirecting.'); window.location.href = 'donor.html'; }
+    else if (!_vol) { alert('Access denied. Please login as a volunteer first.'); window.location.href = 'login.html'; }
 </script>
 
 <body>
-    <header>
+    <div id="scroll-progress"></div>
+    <header id="mainHeader">
         <div class="container">
             <nav class="glass-nav">
-                <a href="index.html" class="logo">
-                    <img src="images/logo.png.png" alt="FWMS Logo"> FWMS
-                </a>
+                <a href="index.html" class="logo"><img src="images/logo.png.png" alt="FWMS"> FWMS</a>
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="about.html">About</a></li>
                     <li><a href="contact.html">Contact</a></li>
-                    <li><a href="donor.html">Donor</a></li>
-                    <li><a href="volunteer.html" class="active">Volunteer</a></li>
+                    <li><a href="volunteer.html" class="active">Dashboard</a></li>
                 </ul>
-                <button class="mobile-menu-btn">☰</button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                        <rect y="4" width="22" height="2.5" rx="1.25" fill="currentColor" />
+                        <rect y="10" width="22" height="2.5" rx="1.25" fill="currentColor" />
+                        <rect y="16" width="22" height="2.5" rx="1.25" fill="currentColor" />
+                    </svg>
+                </button>
             </nav>
         </div>
     </header>
 
     <main>
+        <!-- Hero -->
         <section class="volunteer-hero">
-            <div class="container animate-fade-in">
-                <h1 id="volunteerGreeting">Volunteer Dashboard</h1>
-                <p>View available food donations and coordinate pickups to help those in need.</p>
+            <div class="container">
+                <div class="vol-hero-inner">
+                    <div>
+                        <div class="vol-hero-badge">
+                            <span class="badge-dot"></span> Live Pickup Network
+                        </div>
+                        <h1 id="volunteerGreeting">Volunteer Dashboard</h1>
+                        <p>Claim food pickups, help your community, and track your impact.</p>
+                    </div>
+                    <div class="vol-hero-actions">
+                        <a href="volunteer-profile.html" class="btn btn-secondary"
+                            style="text-decoration:none;gap:8px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.2" stroke-linecap="round">
+                                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
+                            My Profile
+                        </a>
+                        <button id="refreshDashBtn" class="btn btn-outline-white" onclick="renderDonations()"
+                            style="gap:8px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.2" stroke-linecap="round">
+                                <polyline points="1 4 1 10 7 10" />
+                                <path d="M3.51 15a9 9 0 102.13-9.36L1 10" />
+                            </svg>
+                            Refresh
+                        </button>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section class="dashboard-container animate-fade-in">
-            <div class="dashboard-grid">
-
-                <!-- Volunteer Stats Profile Card -->
-                <div class="glass-panel" id="volunteerStatsCard" style="margin-bottom: 20px;">
-                    <div class="panel-header">
-                        <h2>My Profile & Stats</h2>
+        <!-- Stats Bar -->
+        <div class="vol-stats-bar">
+            <div class="container">
+                <div class="vol-stats-row">
+                    <div class="vol-stat-item">
+                        <span class="vol-stat-num" id="volDashDeliveries">0</span>
+                        <span class="vol-stat-label">My Deliveries</span>
                     </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; padding: 10px 0;">
-                        <div style="flex: 1; min-width: 200px;">
-                            <p style="margin-bottom: 8px; color: var(--text-color);"><strong
-                                    style="color: var(--primary-color);">Name:</strong> <span
-                                    id="volDashName">Loading...</span></p>
-                            <p style="margin-bottom: 8px; color: var(--text-color);"><strong
-                                    style="color: var(--primary-color);">Phone:</strong> <span
-                                    id="volDashPhone">Loading...</span></p>
-                        </div>
-                        <div
-                            style="flex: 1; min-width: 150px; text-align: center; background: rgba(230, 81, 0, 0.1); border-radius: 12px; padding: 20px;">
-                            <h3 style="font-size: 2.5rem; color: #e65100; margin: 0; line-height: 1;"
-                                id="volDashDeliveries">0</h3>
-                            <p
-                                style="margin: 5px 0 0; font-size: 0.9rem; font-weight: 600; color: #666; text-transform: uppercase;">
-                                Total Deliveries</p>
-                        </div>
+                    <div class="vol-stat-divider"></div>
+                    <div class="vol-stat-item">
+                        <span class="vol-stat-num" id="pendingCountStat">&mdash;</span>
+                        <span class="vol-stat-label">Pending Requests</span>
+                    </div>
+                    <div class="vol-stat-divider"></div>
+                    <div class="vol-stat-item">
+                        <span class="vol-stat-num" id="volDashName">&mdash;</span>
+                        <span class="vol-stat-label">Volunteer Name</span>
+                    </div>
+                    <div class="vol-stat-divider"></div>
+                    <div class="vol-stat-item">
+                        <span class="vol-stat-num" id="volDashPhone">&mdash;</span>
+                        <span class="vol-stat-label">Phone</span>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="glass-panel">
-                    <div class="panel-header">
+        <!-- Donations Board -->
+        <section class="vol-board-section">
+            <div class="container">
+                <div class="vol-board-header">
+                    <div>
                         <h2>Available Donations</h2>
+                        <p>Click "Claim Pickup" on any card to accept the delivery.</p>
                     </div>
-
-                    <!-- We will dynamically populate this with JS based on actual donations -->
-                    <div id="donationsList" class="donation-list">
-                        <!-- Example Empty State if no JS populates -->
-                        <div class="empty-state">
-                            <span>🍽️</span>
-                            <h3>No pending donations</h3>
-                            <p>Check back later for new requests.</p>
-                        </div>
+                    <div class="vol-filter-row">
+                        <button class="vol-filter-btn active" onclick="filterDonations('all',this)">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round">
+                                <line x1="8" y1="6" x2="21" y2="6" />
+                                <line x1="8" y1="12" x2="21" y2="12" />
+                                <line x1="8" y1="18" x2="21" y2="18" />
+                                <line x1="3" y1="6" x2="3.01" y2="6" />
+                                <line x1="3" y1="12" x2="3.01" y2="12" />
+                                <line x1="3" y1="18" x2="3.01" y2="18" />
+                            </svg>
+                            All
+                        </button>
+                        <button class="vol-filter-btn" onclick="filterDonations('cooked',this)">Cooked</button>
+                        <button class="vol-filter-btn" onclick="filterDonations('raw',this)">Raw</button>
+                        <button class="vol-filter-btn" onclick="filterDonations('baked',this)">Baked</button>
                     </div>
                 </div>
-
+                <div id="donationsList" class="donations-grid">
+                    <div class="empty-state">
+                        <div
+                            style="width:64px;height:64px;border-radius:16px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--primary);">
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8" stroke-linecap="round">
+                                <path d="M11 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-6" />
+                                <path d="M9 12l3 3L22 4" />
+                            </svg>
+                        </div>
+                        <h3>No pending donations</h3>
+                        <p>Check back later for new requests.</p>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
 
     <footer>
         <div class="container">
-            <p>&copy; 2026 Food Waste Management System - All rights reserved.</p>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo" style="color:#fff;">
+                        <img src="images/logo.png.png" alt="FWMS" style="filter:brightness(0) invert(1); opacity:.85;">
+                        FWMS
+                    </a>
+                    <p>Food Waste Management System — turning surplus into sustenance across Telangana since 2024.</p>
+                    <div class="footer-badge"><span class="footer-dot"></span>Live Network Active</div>
+                </div>
+                <div class="footer-links">
+                    <h5>Platform</h5>
+                    <ul>
+                        <li><a href="donor.html">Donate Food</a></li>
+                        <li><a href="volunteer.html">Volunteer Dashboard</a></li>
+                        <li><a href="register.html">Create Account</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h5>Company</h5>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 Food Waste Management System. All rights reserved.</span>
+                <span>Built for Telangana, with care.</span>
+            </div>
         </div>
     </footer>
 
-    <script src="js/script.js?v=2.0"></script>
+    <script src="js/script.js?v=3.0"></script>
     <script>
+        let allDonations = [];
+        let currentFilter = 'all';
+
         document.addEventListener('DOMContentLoaded', () => {
-            const updateVolunteerStats = () => {
-                const volDataStr = localStorage.getItem('fwms_current_volunteer');
-                if (volDataStr) {
-                    const volData = JSON.parse(volDataStr);
-                    const greeting = document.getElementById('volunteerGreeting');
-
-                    const volDashName = document.getElementById('volDashName');
-                    const volDashPhone = document.getElementById('volDashPhone');
-                    const volDashDeliveries = document.getElementById('volDashDeliveries');
-
-                    if (greeting) {
-                        greeting.textContent = `Welcome, ${volData.name.split(' ')[0]}!`;
-                    }
-
-                    if (volDashName) volDashName.textContent = volData.name;
-                    if (volDashPhone) volDashPhone.textContent = volData.phone || 'Not Provided';
-
-                    const deliveries = JSON.parse(localStorage.getItem('fwms_deliveries_completed') || '{}');
-                    const myDeliveries = deliveries[volData.email] || 0;
-
-                    if (volDashDeliveries) volDashDeliveries.textContent = myDeliveries;
-                }
-            };
-
-            // Initial Load
-            updateVolunteerStats();
+            const volData = JSON.parse(localStorage.getItem('fwms_current_volunteer') || '{}');
+            if (volData.name) {
+                document.getElementById('volunteerGreeting').textContent = `Welcome back, ${volData.name.split(' ')[0]}`;
+                document.getElementById('volDashName').textContent = volData.name;
+                document.getElementById('volDashPhone').textContent = volData.phone || 'N/A';
+                const deliveries = JSON.parse(localStorage.getItem('fwms_deliveries_completed') || '{}');
+                document.getElementById('volDashDeliveries').textContent = deliveries[volData.email] || 0;
+            }
             if (typeof renderDonations === 'function') renderDonations();
-
-            // Listen for changes (e.g. from claimDonation function in script.js)
-            document.addEventListener('statsUpdated', updateVolunteerStats);
+            document.addEventListener('statsUpdated', () => {
+                const d = JSON.parse(localStorage.getItem('fwms_deliveries_completed') || '{}');
+                const volData2 = JSON.parse(localStorage.getItem('fwms_current_volunteer') || '{}');
+                document.getElementById('volDashDeliveries').textContent = d[volData2.email] || 0;
+            });
         });
+
+        function filterDonations(category, btn) {
+            currentFilter = category;
+            document.querySelectorAll('.vol-filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderDonations();
+        }
+
+        const _origRender = window.renderDonations;
+        window.renderDonations = async function () {
+            if (typeof _origRender === 'function') {
+                await _origRender();
+                try {
+                    const donations = await fetch('/api/donations').then(r => r.json()).catch(() => []);
+                    const pending = donations.filter(d => d.status === 'pending');
+                    document.getElementById('pendingCountStat').textContent = pending.length;
+                } catch (e) { }
+            }
+        };
     </script>
 </body>
 
