@@ -12,75 +12,75 @@ const EMAILJS_TEMPLATE_ID_DONOR = "template_1j27g9j";
     }
 
     // --- Dynamic UI Enhancements ---
-
-    // Inject Scroll Progress Bar
-    const progressDiv = document.createElement('div');
-    progressDiv.id = 'scrollProgress';
-    document.body.prepend(progressDiv);
-
-    window.addEventListener('scroll', () => {
-        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const scrolled = (winScroll / height) * 100;
-        progressDiv.style.width = scrolled + "%";
-
-        // Navbar Transformation
+    const updateHeader = () => {
         const header = document.querySelector('header');
-        if (winScroll > 50) {
+        if (window.scrollY > 20) {
             header.classList.add('scrolled');
         } else {
             header.classList.remove('scrolled');
         }
-    });
-
-    // Magnetic Button Effect
-    const handleMagnetic = (e) => {
-        const btn = e.currentTarget;
-        const rect = btn.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-
-        btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
     };
 
-    const resetMagnetic = (e) => {
-        e.currentTarget.style.transform = `translate(0, 0)`;
+    const updateScrollProgress = () => {
+        const scrollBar = document.getElementById('scroll-progress');
+        if (!scrollBar) return;
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        scrollBar.style.width = scrolled + "%";
     };
 
-    // Auto-Stagger Logic
-    const initStagger = () => {
-        document.querySelectorAll('.stagger-parent').forEach(parent => {
-            const children = parent.children;
-            Array.from(children).forEach((child, index) => {
-                child.style.animationDelay = `${(index + 1) * 0.1}s`;
-            });
+    const trackActiveNavLink = () => {
+        const sections = document.querySelectorAll('section[id]');
+        const scrollPos = window.scrollY + 100;
+
+        sections.forEach(section => {
+            if (scrollPos >= section.offsetTop && scrollPos < section.offsetTop + section.offsetHeight) {
+                const id = section.getAttribute('id');
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${id}` || (id === 'home' && link.getAttribute('href') === 'index.html')) {
+                        link.classList.add('active');
+                    }
+                });
+            }
         });
     };
 
+    // Suble Hero Parallax
+    const handleHeroParallax = (e) => {
+        const visual = document.querySelector('.hero-visual');
+        if (!visual) return;
+        const x = (window.innerWidth - e.pageX * 2) / 100;
+        const y = (window.innerHeight - e.pageY * 2) / 100;
+        visual.style.transform = `translateX(${x}px) translateY(${y}px)`;
+    };
+
+    window.addEventListener('scroll', () => {
+        updateHeader();
+        updateScrollProgress();
+        trackActiveNavLink();
+    });
+
+    window.addEventListener('mousemove', handleHeroParallax);
+
     // Scroll Reveal Logic
-    const revealCallback = (entries, observer) => {
+    const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
             }
         });
-    };
-
-    const revealObserver = new IntersectionObserver(revealCallback, {
-        threshold: 0.1
+    }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -80px 0px'
     });
 
     window.addEventListener('DOMContentLoaded', () => {
         const reveals = document.querySelectorAll('.reveal');
         reveals.forEach(el => revealObserver.observe(el));
 
-        // Initialize Pro Effects
-        initStagger();
-
-        document.querySelectorAll('.btn-magnetic, .nav-links a, .logo').forEach(btn => {
-            btn.addEventListener('mousemove', handleMagnetic);
-            btn.addEventListener('mouseleave', resetMagnetic);
-        });
+        updateHeader();
 
         // --- Protocol Check ---
         if (window.location.protocol === 'file:') {

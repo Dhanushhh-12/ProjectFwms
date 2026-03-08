@@ -5,376 +5,147 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Food Waste Management System</title>
-    <link rel="icon" type="image/png" href="images/logo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f5f0e8;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 30px 20px;
-        }
-
-        /* --- Header --- */
-        .page-header {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .page-header h1 {
-            font-size: 2.8rem;
-            font-weight: 800;
-            line-height: 1.1;
-        }
-
-        .page-header h1 .food {
-            color: #2e7d32;
-        }
-
-        .page-header h1 .waste {
-            color: #e65100;
-        }
-
-        .page-header .sub {
-            font-size: 1rem;
-            color: #555;
-            letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 4px;
-        }
-
-        .page-header .sub::before,
-        .page-header .sub::after {
-            content: '';
-            height: 1.5px;
-            width: 40px;
-            background: #888;
-        }
-
-        /* --- Green Banner --- */
-        .green-banner {
-            background: #2e7d32;
-            color: white;
-            font-weight: 700;
-            font-size: 1.05rem;
-            text-align: center;
-            padding: 10px 40px;
-            border-radius: 4px;
-            margin-bottom: 24px;
-            letter-spacing: 0.5px;
-        }
-
-        /* --- Main Card --- */
-        .auth-wrapper {
-            display: flex;
-            gap: 0;
-            width: 100%;
-            max-width: 900px;
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
-        }
-
-        /* --- Form Panel --- */
-        .form-panel {
-            flex: 1;
-            padding: 36px 40px;
-            min-width: 0;
-        }
-
-        .form-panel h2 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-            color: #1a1a1a;
-        }
-
-        .form-panel .divider {
-            width: 100%;
-            height: 1.5px;
-            background: #e0e0e0;
-            margin-bottom: 20px;
-        }
-
-        .input-row {
-            display: flex;
-            gap: 14px;
-        }
-
-        .field {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 14px;
-            flex: 1;
-        }
-
-        .field label {
-            font-size: 0.82rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .field label .icon {
-            font-size: 0.85rem;
-        }
-
-        .field input,
-        .field select {
-            padding: 9px 12px;
-            border: 1.5px solid #ddd;
-            border-radius: 6px;
-            font-size: 0.88rem;
-            font-family: 'Inter', sans-serif;
-            color: #333;
-            background: #fafafa;
-            transition: border-color 0.2s;
-            width: 100%;
-        }
-
-        .field input:focus,
-        .field select:focus {
-            outline: none;
-            border-color: #2e7d32;
-            background: white;
-        }
-
-        .terms-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            margin-bottom: 18px;
-            font-size: 0.8rem;
-            color: #555;
-        }
-
-        .terms-row input[type="checkbox"] {
-            margin-top: 2px;
-            accent-color: #2e7d32;
-            width: 14px;
-            height: 14px;
-            flex-shrink: 0;
-        }
-
-        .terms-row a {
-            color: #e65100;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .btn-register {
-            width: 100%;
-            background: #e65100;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 13px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
-            letter-spacing: 0.3px;
-        }
-
-        .btn-register:hover {
-            background: #bf360c;
-            transform: translateY(-1px);
-        }
-
-        .auth-link {
-            text-align: center;
-            margin-top: 14px;
-            font-size: 0.82rem;
-            color: #666;
-        }
-
-        .auth-link a {
-            color: #e65100;
-            font-weight: 600;
-            text-decoration: none;
-        }
-
-        .auth-link a:hover {
-            text-decoration: underline;
-        }
-
-
-        .illus-panel {
-            width: 340px;
-            flex-shrink: 0;
-            background: linear-gradient(160deg, #f1f8e9 0%, #fff8e1 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 30px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .illus-panel img {
-            width: 100%;
-            max-height: 420px;
-            object-fit: contain;
-        }
-
-        .illus-art {
-            text-align: center;
-        }
-
-        .illus-art .emoji-scene {
-            font-size: 5rem;
-            line-height: 1.4;
-        }
-
-        .illus-art p {
-            color: #2e7d32;
-            font-weight: 600;
-            margin-top: 16px;
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        .recycle-bubble {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 2.5rem;
-            opacity: 0.3;
-        }
-
-        .leaf-bubble {
-            position: absolute;
-            bottom: 20px;
-            left: 15px;
-            font-size: 2rem;
-            opacity: 0.25;
-        }
-
-        @media (max-width: 700px) {
-            .illus-panel {
-                display: none;
-            }
-
-            .form-panel {
-                padding: 28px 22px;
-            }
-
-            .page-header h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
+    <link rel="icon" type="image/png" href="images/logo.png.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
+    <div id="scroll-progress"></div>
+    <div class="split-auth-container">
+        <!-- Sidebar -->
+        <div class="auth-sidebar reveal">
+            <h1 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 2rem; color: var(--secondary);">GROW THE
+                IMPACT</h1>
+            <h2>Be the Change <br><span style="color: var(--secondary);">Our Planet Needs.</span></h2>
+            <p>Join our community of growers, businesses, and individuals dedicated to making Telangana zero-waste.</p>
 
-    <!-- Page Header -->
-    <div class="page-header">
-        <h1><span class="food">Food</span> <span class="waste">Waste</span></h1>
-        <div class="sub">Management System</div>
-    </div>
-
-    <!-- Green Banner -->
-    <div class="green-banner">Register for an Account</div>
-
-    <!-- Main Card -->
-    <div class="auth-wrapper">
+            <div style="margin-top: 4rem;">
+                <div class="reveal stagger-1"
+                    style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                    <div
+                        style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                        🧑‍🌾</div>
+                    <span>Empower Local Producers</span>
+                </div>
+                <div class="reveal stagger-2"
+                    style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                    <div
+                        style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                        ♻️</div>
+                    <span>Circular Economy Support</span>
+                </div>
+                <div class="reveal stagger-3" style="display: flex; align-items: center; gap: 15px;">
+                    <div
+                        style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                        🍎</div>
+                    <span>Zero Hunger Mission</span>
+                </div>
+            </div>
+        </div>
 
         <!-- Form Panel -->
-        <div class="form-panel">
-            <h2>Create Your Account</h2>
-            <div class="divider"></div>
+        <div class="auth-form-panel">
+            <div class="reveal">
+                <a href="index.html" class="logo" style="margin-bottom: 2.5rem; text-decoration: none;">
+                    <img src="images/logo.png.png" alt="FWMS Logo"> FWMS
+                </a>
+                <h2>Create Account</h2>
+                <p>Join the movement today. It only takes a minute.</p>
 
-            <form id="registerForm">
-                <div class="field">
-                    <label><span class="icon"></span> Select Role</label>
-                    <div style="display: flex; gap: 20px; align-items: center; margin-top: 5px; margin-bottom: 10px;">
-                        <label
-                            style="display: flex; flex-direction: row; align-items: center; font-size: 0.9rem; font-weight: 500; cursor: pointer;">
-                            <input type="radio" name="role" value="donor" checked
-                                style="width: auto; margin-right: 8px;"> Donor
+                <form id="registerForm">
+                    <!-- Role Selection -->
+                    <div class="form-group" style="margin-bottom: 2rem;">
+                        <label style="margin-bottom: 0.75rem;">I want to register as a...</label>
+                        <div style="display: flex; gap: 1rem;">
+                            <label style="flex: 1; cursor: pointer;">
+                                <input type="radio" name="role" value="donor" checked style="display: none;">
+                                <div class="role-card"
+                                    style="padding: 0.75rem; border: 2px solid var(--neutral-200); border-radius: var(--radius-md); text-align: center; transition: var(--transition);">
+                                    <span style="font-weight: 700;">Donor</span>
+                                </div>
+                            </label>
+                            <label style="flex: 1; cursor: pointer;">
+                                <input type="radio" name="role" value="volunteer" style="display: none;">
+                                <div class="role-card"
+                                    style="padding: 0.75rem; border: 2px solid var(--neutral-200); border-radius: var(--radius-md); text-align: center; transition: var(--transition);">
+                                    <span style="font-weight: 700;">Volunteer</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regName">Full Name</label>
+                        <input type="text" id="regName" name="name" placeholder="Enter Your Name" required>
+                    </div>
+
+                    <div class="auth-form-grid">
+                        <div class="form-group">
+                            <label for="regEmail">Email Address</label>
+                            <input type="email" id="regEmail" name="email" placeholder="Enter Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regPhone">Phone Number</label>
+                            <input type="tel" id="regPhone" name="phone" placeholder="Enter Your Number" required>
+                        </div>
+                    </div>
+
+                    <div class="auth-form-grid">
+                        <div class="form-group">
+                            <label for="regPassword">Password</label>
+                            <input type="password" id="regPassword" name="password" placeholder="••••••••" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regConfirm">Confirm Password</label>
+                            <input type="password" id="regConfirm" name="confirm_password" placeholder="••••••••"
+                                required>
+                        </div>
+                    </div>
+
+                    <!-- Profile Photo Selection -->
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label>Profile Photo (Optional)</label>
+                        <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
+                            <div id="photoPreview"
+                                style="width: 50px; height: 50px; background: var(--neutral-100); border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                                👤</div>
+                            <input type="file" id="profilePhoto" accept="image/*"
+                                style="font-size: 0.8rem; color: var(--text-muted);">
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; align-items: flex-start; margin-bottom: 1.5rem;">
+                        <input type="checkbox" id="terms" required
+                            style="width: 18px; height: 18px; accent-color: var(--primary); margin-top: 3px;">
+                        <label for="terms" style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">
+                            I agree to the <a href="#" style="color: var(--primary);">Terms of Service</a> and <a
+                                href="#" style="color: var(--primary);">Privacy Policy</a>.
                         </label>
-                        <label
-                            style="display: flex; flex-direction: row; align-items: center; font-size: 0.9rem; font-weight: 500; cursor: pointer;">
-                            <input type="radio" name="role" value="volunteer" style="width: auto; margin-right: 8px;">
-                            Volunteer
-                        </label>
                     </div>
-                </div>
-                <div class="field">
-                    <label><span class="icon"></span> Full Name</label>
-                    <input type="text" id="regName" name="name" placeholder="Enter your full name" required>
-                </div>
 
-                <div class="field">
-                    <label><span class="icon"></span> Email Address</label>
-                    <input type="email" id="regEmail" name="email" placeholder="Enter your email" required>
-                </div>
+                    <button type="submit" class="btn btn-primary"
+                        style="width: 100%; padding: 1rem; font-size: 1rem;">Registerr</button>
 
-                <div class="field">
-                    <label><span class="icon"></span> Phone Number</label>
-                    <input type="tel" id="regPhone" name="phone" placeholder="+91 9876543210" required>
-                </div>
-
-                <div class="input-row">
-                    <div class="field">
-                        <label><span class="icon"></span> Create Password</label>
-                        <input type="password" id="regPassword" name="password" placeholder="••••••••" required>
-                    </div>
-                    <div class="field">
-                        <label><span class="icon"></span> Confirm Password</label>
-                        <input type="password" id="regConfirm" name="confirm_password" placeholder="••••••••" required>
-                    </div>
-                </div>
-
-
-
-                <div class="terms-row">
-                    <input type="checkbox" id="terms" required>
-                    <label for="terms">I agree to the <a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy
-                            Policy.</a></label>
-                </div>
-
-                <button type="submit" class="btn-register">Register Now</button>
-            </form>
-
-            <div class="auth-link">
-                Already have an account? <a href="login.html">Login Here</a>
-            </div>
-            <div class="auth-link" style="margin-top: 10px;">
-                <a href="index.html" style="color: #666; font-weight: normal;">← Back to Home</a>
+                    <p style="text-align: center; margin-top: 1.5rem; font-size: 0.95rem; color: var(--text-muted);">
+                        Already have an account? <a href="login.html"
+                            style="color: var(--primary); font-weight: 700; text-decoration: none;">Sign in here</a>
+                    </p>
+                </form>
             </div>
         </div>
-
-        <!-- Illustration Panel -->
-        <div class="illus-panel">
-            <span class="recycle-bubble">♻️</span>
-            <span class="leaf-bubble">🌿</span>
-            <div class="illus-art">
-                <div class="emoji-scene">
-                    🧑‍🌾<br>🥕🍎🥦<br>🗑️♻️
-                </div>
-                <p>Reduce. Redistribute.<br>Make a difference.</p>
-            </div>
-        </div>
-
     </div>
+
+    <style>
+        input[type="radio"]:checked+.role-card {
+            border-color: var(--primary) !important;
+            background: var(--primary-soft);
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+    </style>
 
     <script src="js/script.js"></script>
 </body>

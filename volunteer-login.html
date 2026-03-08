@@ -5,298 +5,113 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volunteer Login - Food Waste Management System</title>
-    <link rel="icon" type="image/png" href="images/logo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f5f0e8;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 30px 20px;
-        }
-
-        .page-header {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .page-header h1 {
-            font-size: 2.8rem;
-            font-weight: 800;
-            line-height: 1.1;
-        }
-
-        .page-header h1 .food {
-            color: #e65100;
-        }
-
-        .page-header h1 .waste {
-            color: #2e7d32;
-        }
-
-        .page-header .sub {
-            font-size: 1rem;
-            color: #555;
-            letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 4px;
-        }
-
-        .green-banner {
-            background: #e65100;
-            color: white;
-            font-weight: 700;
-            font-size: 1.05rem;
-            text-align: center;
-            padding: 10px 40px;
-            border-radius: 4px;
-            margin-bottom: 24px;
-            letter-spacing: 0.5px;
-        }
-
-        .auth-wrapper {
-            display: flex;
-            width: 100%;
-            max-width: 900px;
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
-        }
-
-        .form-panel {
-            flex: 1;
-            padding: 48px 48px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .form-panel h2 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-            color: #1a1a1a;
-        }
-
-        .form-panel .divider {
-            width: 100%;
-            height: 1.5px;
-            background: #e0e0e0;
-            margin-bottom: 28px;
-        }
-
-        .field {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 18px;
-        }
-
-        .field label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .field input {
-            padding: 11px 14px;
-            border: 1.5px solid #ddd;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-family: 'Inter', sans-serif;
-            color: #333;
-            background: #fafafa;
-            transition: border-color 0.2s;
-            width: 100%;
-        }
-
-        .field input:focus {
-            outline: none;
-            border-color: #e65100;
-            background: white;
-        }
-
-        .forgot {
-            text-align: right;
-            margin-top: -10px;
-            margin-bottom: 20px;
-            font-size: 0.78rem;
-        }
-
-        .forgot a {
-            color: #2e7d32;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .btn-login {
-            width: 100%;
-            background: #2e7d32;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 13px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
-            letter-spacing: 0.3px;
-        }
-
-        .btn-login:hover {
-            background: #1b5e20;
-            transform: translateY(-1px);
-        }
-
-        .auth-link {
-            text-align: center;
-            margin-top: 18px;
-            font-size: 0.82rem;
-            color: #666;
-        }
-
-        .auth-link a {
-            color: #2e7d32;
-            font-weight: 600;
-            text-decoration: none;
-        }
-
-        .auth-link a:hover {
-            text-decoration: underline;
-        }
-
-        /* Illustration Panel */
-        .illus-panel {
-            width: 340px;
-            flex-shrink: 0;
-            background: linear-gradient(160deg, #fff8e1 0%, #f1f8e9 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 30px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .illus-art {
-            text-align: center;
-        }
-
-        .illus-art .emoji-scene {
-            font-size: 5rem;
-            line-height: 1.5;
-        }
-
-        .illus-art p {
-            color: #e65100;
-            font-weight: 600;
-            margin-top: 16px;
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        @media (max-width: 700px) {
-            .illus-panel {
-                display: none;
-            }
-
-            .form-panel {
-                padding: 30px 22px;
-            }
-
-            .page-header h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
+    <link rel="icon" type="image/png" href="images/logo.png.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
+    <div id="scroll-progress"></div>
+    <div class="split-auth-container">
+        <!-- Sidebar -->
+        <div class="auth-sidebar reveal"
+            style="background: linear-gradient(rgba(230, 81, 0, 0.85), rgba(230, 81, 0, 0.95)), url('https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=1200&q=80'); background-size: cover; background-position: center;">
+            <h1 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 2rem; color: var(--surface);">VOLUNTEER
+                FORCE</h1>
+            <h2>Be the Hero <br><span style="color: var(--surface); opacity: 0.8;">Our Streets Need.</span></h2>
+            <p>Join the dedicated force ensuring food moves from abundance to need. Your logistics skills save lives.
+            </p>
 
-    <div class="page-header">
-        <h1><span class="food">Volunteer</span> <span class="waste">Portal</span></h1>
-        <div class="sub">Food Waste Management System</div>
-    </div>
-
-    <div class="green-banner">Welcome Back! Please Sign In</div>
-
-    <div class="auth-wrapper">
-
-        <div class="form-panel">
-            <h2>Sign In as Volunteer</h2>
-            <div class="divider"></div>
-
-            <form id="volunteerLoginForm">
-                <div class="field">
-                    <label><span></span> Email Address</label>
-                    <input type="email" id="loginEmail" name="email" placeholder="Enter your email" required>
+            <div style="margin-top: 4rem;">
+                <div class="reveal stagger-1"
+                    style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                    <div
+                        style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                        📦</div>
+                    <span>Efficient Pickup Routing</span>
                 </div>
-
-                <div class="field">
-                    <label><span></span> Password</label>
-                    <input type="password" id="loginPassword" name="password" placeholder="••••••••" required>
+                <div class="reveal stagger-2"
+                    style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                    <div
+                        style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                        🚚</div>
+                    <span>Last-mile Delivery Impact</span>
                 </div>
-
-                <div class="forgot">
-                    <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+                <div class="reveal stagger-3" style="display: flex; align-items: center; gap: 15px;">
+                    <div
+                        style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                        ❤️</div>
+                    <span>Direct Community Service</span>
                 </div>
-
-                <button type="submit" class="btn-login">Sign In →</button>
-            </form>
-
-            <div class="auth-link">
-                Don't have an account? <a href="volunteer-register.html">Register Here</a>
-            </div>
-            <div class="auth-link" style="margin-top: 10px;">
-                <a href="role.html" style="color: #666; font-weight: normal;">← Back to Role Selection</a>
             </div>
         </div>
 
-        <div class="illus-panel">
-            <div class="illus-art">
-                <div class="emoji-scene">
-                    🤝<br>📦🚚<br>❤️🌍
-                </div>
-                <p>Your time makes<br>a world of difference.</p>
+        <!-- Form Panel -->
+        <div class="auth-form-panel">
+            <div class="reveal">
+                <a href="index.html" class="logo" style="margin-bottom: 3rem; text-decoration: none;">
+                    <img src="images/logo.png.png" alt="FWMS Logo"> FWMS
+                </a>
+                <h2 style="color: #e65100;">Volunteer Sign In</h2>
+                <p>Access your dashboard to claim pending pickups.</p>
+
+                <form id="volunteerLoginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email Address</label>
+                        <input type="email" id="loginEmail" name="email" placeholder="volunteer@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" name="password" placeholder="••••••••" required>
+                    </div>
+
+                    <div style="text-align: right; margin-bottom: 2rem;">
+                        <a href="#" id="forgotPasswordLink"
+                            style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none; font-weight: 500;">Forgot
+                            Password?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary"
+                        style="width: 100%; padding: 1.25rem; font-size: 1rem; background: #e65100; border-color: #e65100;">Sign
+                        In as Volunteer</button>
+
+                    <p style="text-align: center; margin-top: 2rem; font-size: 0.95rem; color: var(--text-muted);">
+                        New to the force? <a href="volunteer-register.html"
+                            style="color: #e65100; font-weight: 700; text-decoration: none;">Apply to Volunteer</a>
+                    </p>
+
+                    <div
+                        style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--neutral-100); text-align: center;">
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Are you a donor?
+                        </p>
+                        <a href="login.html" class="btn"
+                            style="border: 1px solid var(--neutral-200); display: block; width: 100%;">Donor Login</a>
+                    </div>
+                </form>
             </div>
         </div>
-
     </div>
 
-    <!-- Forgot Password Modal -->
+    <!-- Forgot Modal -->
     <div id="forgotModal"
-        style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
-        <div
-            style="background:white; border-radius:14px; padding:36px 32px; max-width:400px; width:90%; box-shadow:0 10px 40px rgba(0,0,0,0.2);">
-            <h3 style="margin-bottom:8px; font-size:1.15rem; color:#1a1a1a;">Reset Password</h3>
-            <p style="font-size:0.82rem; color:#666; margin-bottom:20px;">Enter your registered email and we'll show
-                your account details.</p>
-            <input type="email" id="forgotEmail" placeholder="Enter your email address"
-                style="width:100%; padding:10px 14px; border:1.5px solid #ddd; border-radius:8px; font-family:inherit; font-size:0.9rem; margin-bottom:14px;">
-            <div id="forgotMsg" style="font-size:0.82rem; min-height:20px; margin-bottom:14px;"></div>
-            <div style="display:flex; gap:10px;">
-                <button onclick="handleForgotPassword()"
-                    style="flex:1; background:#e65100; color:white; border:none; border-radius:8px; padding:11px; font-weight:700; cursor:pointer; font-family:inherit;">Find
-                    Account</button>
-                <button onclick="closeForgotModal()"
-                    style="flex:1; background:#f5f0e8; color:#333; border:none; border-radius:8px; padding:11px; font-weight:600; cursor:pointer; font-family:inherit;">Cancel</button>
+        style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:2000; align-items:center; justify-content:center; backdrop-filter: blur(4px);">
+        <div class="reveal"
+            style="background:white; border-radius:var(--radius-lg); padding:40px; max-width:450px; width:90%; box-shadow:var(--shadow-xl);">
+            <h3 style="margin-bottom:10px; font-size:1.75rem; color:#e65100; font-family: 'Outfit';">Retrieve Hint</h3>
+            <p style="font-size:0.95rem; color:var(--text-muted); margin-bottom:25px;">Enter your volunteer email to get
+                your security hint.</p>
+            <div class="form-group">
+                <input type="email" id="forgotEmail" placeholder="Enter your email address">
+            </div>
+            <div id="forgotMsg" style="font-size:0.9rem; min-height:24px; margin-bottom:20px;"></div>
+            <div style="display:flex; gap:15px;">
+                <button onclick="handleForgotPassword()" class="btn btn-primary"
+                    style="flex:1; background: #e65100; border-color: #e65100;">Find Account</button>
+                <button onclick="closeForgotModal()" class="btn"
+                    style="flex:1; background:var(--neutral-100);">Cancel</button>
             </div>
         </div>
     </div>
@@ -309,6 +124,7 @@
             document.getElementById('forgotModal').style.display = 'flex';
             document.getElementById('forgotMsg').textContent = '';
             document.getElementById('forgotEmail').value = '';
+            document.querySelector('#forgotModal .reveal').classList.add('active');
         });
 
         function closeForgotModal() {
@@ -336,14 +152,14 @@
 
                 if (response.ok) {
                     msgEl.style.color = '#e65100';
-                    msgEl.textContent = `✅ Account found! Your password hint: "${result.hint}"`;
+                    msgEl.textContent = `✅ Hint: "${result.hint}"`;
                 } else {
                     msgEl.style.color = '#c62828';
-                    msgEl.textContent = '❌ No account found with this email. Please register first.';
+                    msgEl.textContent = '❌ Account not found.';
                 }
             } catch (err) {
                 msgEl.style.color = '#c62828';
-                msgEl.textContent = 'Server error. Please try again later.';
+                msgEl.textContent = 'Server error.';
             }
         }
 

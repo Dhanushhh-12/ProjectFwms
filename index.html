@@ -12,12 +12,12 @@
 </head>
 
 <body>
+    <div id="scroll-progress"></div>
     <header>
         <div class="container">
             <nav class="glass-nav">
                 <a href="index.html" class="logo">
-                    <img src="images/logo.png.png" alt="FWMS Logo"
-                        style="width: 48px; height: 48px; object-fit: contain;">
+                    <img src="images/logo.png.png" alt="FWMS Logo">
                     FWMS
                 </a>
                 <ul class="nav-links">
@@ -33,147 +33,124 @@
     </header>
 
     <main>
-        <!-- Hero Section -->
-        <section class="hero"
-            style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); background-size: cover; background-position: center; color: white; text-align: center; padding: 120px 0;">
-            <div class="container hero-text-entrance">
-                <h1 class="text-reveal" style="font-size: 3.5rem; margin-bottom: 20px;">Fight Hunger, Reduce Waste</h1>
-                <p class="text-reveal stagger-1" style="font-size: 1.25rem; max-width: 800px; margin: 0 auto 30px;">A
-                    professional initiative to
-                    manage surplus food and ensure it reaches those in need across Telangana. Join our mission to create
-                    a zero-waste community.</p>
-                <div class="cta-btns" id="heroCTABtns"
-                    style="display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap;">
-                    <button id="heroDonorBtn" onclick="handleHeroCTA('donor')"
-                        class="btn btn-secondary pulse btn-magnetic"
-                        style="border-radius: 30px; padding: 15px 35px; border: none; font-size: 1.15rem; font-weight: 700; cursor: pointer; box-shadow: 0 10px 20px rgba(230, 81, 0, 0.3);">Donate
-                        Food</button>
-                    <button id="heroVolunteerBtn" onclick="handleHeroCTA('volunteer')"
-                        class="btn btn-primary btn-magnetic"
-                        style="border-radius: 30px; padding: 14px 35px; border: 2px solid white; background: transparent; color: white; font-size: 1.15rem; font-weight: 600; cursor: pointer;">Become
-                        a Volunteer</button>
+        <!-- Polished Hero Section -->
+        <section class="hero" style="position: relative; overflow: hidden; background: #fff; padding: 140px 0 100px;">
+            <div class="container" style="display: flex; align-items: center; gap: 60px; flex-wrap: wrap;">
+                <div class="hero-content" style="flex: 1; min-width: 320px;">
+                    <div
+                        style="display: inline-block; padding: 6px 16px; background: var(--primary-soft); color: var(--primary); border-radius: var(--radius-full); font-weight: 700; font-size: 0.85rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.05em;">
+                        Zero Waste Initiative
+                    </div>
+                    <h1 style="font-size: 4rem; line-height: 1.1; margin-bottom: 24px;">Transforming <span
+                            style="color: var(--primary);">Surplus</span> into Solutions.</h1>
+                    <p style="font-size: 1.2rem; color: var(--text-muted); margin-bottom: 40px; line-height: 1.7;">
+                        Join our mission to eliminate food waste in Telangana. We connect surplus food from donors to
+                        those who need it most, creating a sustainable and zero-hunger community.
+                    </p>
+                    <div class="cta-btns" style="display: flex; gap: 20px; flex-wrap: wrap;">
+                        <button onclick="handleHeroCTA('donor')" class="btn btn-primary">Donate Food</button>
+                        <button onclick="handleHeroCTA('volunteer')" class="btn"
+                            style="border: 1px solid var(--neutral-200); color: var(--neutral-900);">Become a
+                            Volunteer</button>
+                    </div>
                 </div>
-
-                <script>
-                    document.addEventListener('DOMContentLoaded', () => {
-                        const isDonor = localStorage.getItem('fwms_current_user');
-                        const isVolunteer = localStorage.getItem('fwms_current_volunteer');
-
-                        const donorBtn = document.getElementById('heroDonorBtn');
-                        const volunteerBtn = document.getElementById('heroVolunteerBtn');
-
-                        if (isDonor && donorBtn && volunteerBtn) {
-                            volunteerBtn.style.display = 'none'; // Only show Donor button for donors
-                        } else if (isVolunteer && donorBtn && volunteerBtn) {
-                            donorBtn.style.display = 'none'; // Only show Volunteer button for volunteers
-                        }
-                        // If no one is logged in, leave both as is (entry points)
-                    });
-
-                    function handleHeroCTA(role) {
-                        if (role === 'donor') {
-                            if (localStorage.getItem('fwms_current_user')) {
-                                window.location.href = 'donor.html';
-                            } else {
-                                window.location.href = 'register.html';
-                            }
-                        } else if (role === 'volunteer') {
-                            if (localStorage.getItem('fwms_current_volunteer')) {
-                                window.location.href = 'volunteer.html';
-                            } else {
-                                window.location.href = 'register.html';
-                            }
-                        }
-                    }
-                </script>
-                <style>
-                    /* Removed shake and select focus styles since the dropdown is gone */
-                </style>
+                <div class="hero-visual" style="flex: 1; min-width: 320px; transition: transform 0.2s ease-out;">
+                    <div
+                        style="position: relative; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-xl);">
+                        <img src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80"
+                            alt="Sustainable Food" style="width: 100%; display: block;">
+                        <div
+                            style="position: absolute; bottom: 20px; left: 20px; right: 20px; background: rgba(255,255,255,0.9); backdrop-filter: blur(8px); padding: 15px; border-radius: var(--radius-md); display: flex; align-items: center; gap: 15px;">
+                            <div class="float-anim"
+                                style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.2rem;">
+                                🌍</div>
+                            <div>
+                                <h4 style="font-size: 0.95rem; margin-bottom: 2px;">Over 50,000 Lives Impacted</h4>
+                                <p style="font-size: 0.75rem; color: var(--text-muted);">Join our growing community
+                                    today.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- Mission Statement -->
-        <section class="mission reveal">
-            <div class="container animate-fade-in">
+        <section class="mission reveal" style="background: var(--surface);">
+            <div class="container">
                 <div class="section-title">
-                    <h2>Our Mission</h2>
-                    <p>Building a sustainable future where no food goes to waste.</p>
+                    <h2>Driven by Purpose</h2>
+                    <p>We build bridges between surplus and necessity.</p>
                 </div>
-                <div style="display: flex; align-items: center; gap: 50px; flex-wrap: wrap;">
-                    <div style="flex: 1; min-width: 300px;">
-                        <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 20px;">
-                            A Food Waste Management System (FWMS) is a systematic, often technology-driven approach to
-                            reducing, redistributing, and responsibly disposing of surplus food. Globally, approximately
-                            one-third of all food produced—about 1.3 billion tons—is wasted annually, leading to severe
-                            economic losses and environmental damage, such as high methane emissions from landfills.
-                            Core Objectives:
-                            Modern systems focus on a "Food Recovery Hierarchy" to maximize utility and minimize harm:
-                            Source Reduction: Preventing waste at the start through accurate demand forecasting and
-                            inventory tracking.
-                            Redistribution: Connecting donors (like restaurants or households) with recipients (NGOs,
-                            orphanages, or individuals in need) via web or mobile applications.
-                            Valorisation: Converting unavoidable waste into useful byproducts like animal feed, compost,
-                            or renewable energy (biogas) through anaerobic digestion.
-                        </p>
-                        <ul style="list-style: none;">
-                            <li style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
-                                <span style="color: var(--primary-color); font-weight: bold;">✔</span> Real-time food
-                                surplus tracking.
-                            </li>
-                            <li style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
-                                <span style="color: var(--primary-color); font-weight: bold;">✔</span> Efficient
-                                distribution network across Telangana.
-                            </li>
-                            <li style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
-                                <span style="color: var(--primary-color); font-weight: bold;">✔</span> Verified donor
-                                and partner community.
-                            </li>
-                            <li style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
-                                <span style="color: var(--primary-color); font-weight: bold;">✔</span> Data-driven waste
-                                reduction strategies.
-                            </li>
-                        </ul>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;">
+                    <div class="glass-card stagger-1">
+                        <div class="float-anim" style="font-size: 2.5rem; margin-bottom: 20px;">📉</div>
+                        <h3 style="margin-bottom: 15px;">Source Reduction</h3>
+                        <p>We help businesses track and minimize waste before it happens using smart data analytics.</p>
                     </div>
-                    <div
-                        style="flex: 1; min-width: 300px; border-radius: 15px; overflow: hidden; box-shadow: var(--shadow);">
-                        <img src="images/sustainable-food.png" alt="Sustainable Food" class="animate-float"
-                            style="width: 100%; display: block;">
+                    <div class="glass-card stagger-2">
+                        <div class="float-anim" style="font-size: 2.5rem; margin-bottom: 20px; animation-delay: -1s;">🥗
+                        </div>
+                        <h3 style="margin-bottom: 15px;">Redistribution</h3>
+                        <p>Fast, efficient connection between restaurants, households, and local shelters.</p>
+                    </div>
+                    <div class="glass-card stagger-3">
+                        <div class="float-anim" style="font-size: 2.5rem; margin-bottom: 20px; animation-delay: -2s;">♻️
+                        </div>
+                        <h3 style="margin-bottom: 15px;">Sustainable Valorisation</h3>
+                        <p>Ensuring unavoidable waste is converted into compost or renewable energy.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Benefits Section -->
-        <section class="benefits reveal" style="background-color: var(--white);">
+        <!-- Benefits Summary -->
+        <section class="benefits reveal" style="padding-top: 50px;">
             <div class="container">
-                <div class="section-title animate-fade-in">
-                    <h2>Why Join Us?</h2>
-                    <p>Be part of the solution and make a tangible impact.</p>
-                </div>
-                <div class="stagger-parent"
-                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
-                    <div class="benefit-card glass-card animate-zoom"
-                        style="text-align: center; padding: 30px; border-radius: 10px; transition: var(--transition);">
-                        <div style="font-size: 3rem; margin-bottom: 15px;">🌍</div>
-                        <h3>Environmental Impact</h3>
-                        <p>Reduce methane emissions by keeping food waste out of landfills.</p>
+                <div
+                    style="background: var(--primary); border-radius: var(--radius-lg); padding: 60px; color: var(--surface); display: flex; align-items: center; gap: 40px; flex-wrap: wrap; box-shadow: var(--shadow-xl);">
+                    <div style="flex: 1; min-width: 280px;">
+                        <h2 style="color: var(--surface); font-size: 2.5rem; margin-bottom: 20px;">Make an Impact in 30
+                            Seconds.</h2>
+                        <p style="color: hsla(142, 72%, 96%, 0.8); font-size: 1.1rem; margin-bottom: 30px;">Whether
+                            you're a restaurant with surplus food or a volunteer with a vehicle, your contribution
+                            matters.</p>
+                        <div style="display: flex; gap: 15px;">
+                            <button onclick="handleHeroCTA('donor')" class="btn btn-secondary">Start Donating</button>
+                        </div>
                     </div>
-                    <div class="benefit-card glass-card animate-zoom"
-                        style="text-align: center; padding: 30px; border-radius: 10px; transition: var(--transition);">
-                        <div style="font-size: 3rem; margin-bottom: 15px;">🤝</div>
-                        <h3>Community Support</h3>
-                        <p>Directly help local shelters and organizations in Telangana.</p>
-                    </div>
-                    <div class="benefit-card glass-card animate-zoom"
-                        style="text-align: center; padding: 30px; border-radius: 10px; transition: var(--transition);">
-                        <div style="font-size: 3rem; margin-bottom: 15px;">📊</div>
-                        <h3>Track Your Impact</h3>
-                        <p>Get insights into how much food you've saved and lives you've touched.</p>
+                    <div style="flex: 1; min-width: 280px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: var(--radius-md);">
+                            <h3 style="font-size: 2rem; margin-bottom: 5px;"></h3>
+                            <p style="font-size: 0.85rem; opacity: 0.8;">Tons wasted annually</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: var(--radius-md);">
+                            <h3 style="font-size: 2rem; margin-bottom: 5px;"></h3>
+                            <p style="font-size: 0.85rem; opacity: 0.8;">Lower emissions</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
     </main>
+
+    <script>
+        function handleHeroCTA(role) {
+            if (role === 'donor') {
+                if (localStorage.getItem('fwms_current_user')) {
+                    window.location.href = 'donor.html';
+                } else {
+                    window.location.href = 'register.html';
+                }
+            } else if (role === 'volunteer') {
+                if (localStorage.getItem('fwms_current_volunteer')) {
+                    window.location.href = 'volunteer.html';
+                } else {
+                    window.location.href = 'register.html';
+                }
+            }
+        }
+    </script>
 
     <footer>
         <div class="container">

@@ -9,102 +9,167 @@
     <link rel="icon" type="image/png" href="images/logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Pro Profile Styling */
+        /* Simple & Professional Volunteer Profile Styling */
         body {
-            background: url('images/auth-food-bg.png') no-repeat center center fixed;
-            background-size: cover;
-            position: relative;
-        }
-
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(230, 81, 0, 0.85);
-            /* Deep Orange Overlay */
-            z-index: -1;
+            background-color: var(--neutral-50);
+            background-image:
+                radial-gradient(at 0% 0%, rgba(230, 81, 0, 0.05) 0, transparent 50%),
+                radial-gradient(at 100% 100%, hsla(142, 72%, 29%, 0.05) 0, transparent 50%);
+            min-height: 100vh;
         }
 
         .profile-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s ease;
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: var(--shadow-xl);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
         }
 
         .profile-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: 0 40px 70px -15px rgba(0, 0, 0, 0.12);
         }
 
         .profile-photo-wrapper {
             position: relative;
             display: inline-block;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .profile-photo-wrapper:hover {
-            transform: scale(1.05);
+            transform: scale(1.1) rotate(2deg);
         }
 
-        .photo-overlay {
-            position: absolute;
-            bottom: 15px;
-            right: 0;
-            background: #e65100;
-            color: white;
-            width: 40px;
-            height: 40px;
+        .photo-inner {
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
+            background: var(--neutral-100);
+            border: 4px solid white;
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            border: 3px solid white;
-            cursor: pointer;
-            transition: background 0.3s ease;
+            box-shadow: var(--shadow-md);
         }
 
-        .photo-overlay:hover {
-            background: #bf360c;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 25px 0;
+        }
+
+        .stat-badge {
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--neutral-100);
+            transition: all 0.3s ease;
+        }
+
+        .stat-badge:hover {
+            border-color: #fb8c00;
+            transform: translateY(-3px);
+            background: #fff3e0;
+        }
+
+        .stat-val {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #e65100;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .profile-field {
-            background: #f8f9fa;
+            background: white;
             border-radius: 12px;
             padding: 15px 20px;
-            border: 1px solid #e9ecef;
+            border: 1px solid var(--neutral-200);
             display: flex;
             align-items: center;
             gap: 15px;
             transition: all 0.3s ease;
+            text-align: left;
         }
 
         .profile-field:hover {
-            background: #ffffff;
             border-color: #e65100;
-            box-shadow: 0 4px 15px rgba(230, 81, 0, 0.08);
-            transform: translateX(5px);
+            background: #fff3e0;
+            transform: scale(1.02);
         }
 
         .field-icon {
-            background: rgba(230, 81, 0, 0.1);
+            background: #fff3e0;
             color: #e65100;
             width: 40px;
             height: 40px;
-            border-radius: 50%;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.2rem;
         }
 
-        .field-content {
-            flex-grow: 1;
+        .field-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .field-value {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text);
+            margin: 0;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-save {
+            background: #e65100;
+            color: white;
+            box-shadow: 0 10px 20px rgba(230, 81, 0, 0.2);
+        }
+
+        .btn-save:hover {
+            background: #ef6c00;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(230, 81, 0, 0.3);
+        }
+
+        .btn-logout {
+            background: #fee2e2;
+            color: #ef4444;
+            border: 1px solid #fecaca;
+        }
+
+        .btn-logout:hover {
+            background: #ef4444;
+            color: white;
+            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -112,7 +177,7 @@
 <body>
     <header>
         <div class="container">
-            <nav id="mainNav">
+            <nav id="mainNav" class="glass-nav">
                 <a href="index.html" class="logo">
                     <img src="images/logo.png.png" alt="FWMS Logo"> FWMS
                 </a>
@@ -121,7 +186,7 @@
                     <li><a href="about.html">About</a></li>
                     <li><a href="contact.html">Contact</a></li>
                     <li><a href="donor.html">Donor</a></li>
-                    <li><a href="volunteer.html">Volunteer</a></li>
+                    <li><a href="volunteer.html" class="active">Volunteer</a></li>
                 </ul>
                 <button class="mobile-menu-btn">☰</button>
             </nav>
@@ -129,66 +194,70 @@
     </header>
 
     <main>
-        <section class="profile-section reveal"
-            style="padding: 120px 0 80px; min-height: calc(100vh - 80px); display: flex; align-items: center;">
-            <div class="container animate-fade-in" style="width: 100%;">
-                <div class="animate-zoom profile-card"
-                    style="max-width: 650px; margin: 0 auto; padding: 50px; border-radius: 24px; text-align: center;">
-                    <div style="margin-bottom: 40px;">
-                        <span style="font-size: 3rem; margin-bottom: 10px; display: block;">🤝</span>
-                        <h2 style="color: var(--dark-color); font-size: 2.5rem; font-weight: 800;">Volunteer Profile
+        <section class="profile-section" style="padding: 120px 0 80px;">
+            <div class="container animate-fade-in">
+                <div class="profile-card"
+                    style="max-width: 550px; margin: 0 auto; padding: 40px; border-radius: 24px; text-align: center;">
+
+                    <div style="margin-bottom: 30px;">
+                        <h2 style="font-size: 2.2rem; font-weight: 800; color: var(--neutral-900);">Volunteer Profile
                         </h2>
-                        <p style="color: var(--text-muted); font-size: 1.1rem;">Manage your volunteer information and
-                            settings.</p>
+                        <p style="color: var(--text-muted);">Heroic Community Member</p>
                     </div>
 
-                    <div style="margin-bottom: 40px;">
+                    <div style="margin-bottom: 30px;">
                         <input type="file" id="updatePhoto" accept="image/*" style="display: none;">
                         <div class="profile-photo-wrapper">
-                            <div id="profilePhotoDisplay"
-                                style="width: 160px; height: 160px; border-radius: 50%; background: #f0f2f5; margin: 0 auto; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 5px solid white; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
-                                <span style="font-size: 4rem; color: #ccc;">👤</span>
+                            <div class="photo-inner" id="profilePhotoDisplay">
+                                <span style="font-size: 3.5rem; color: var(--neutral-200);">👤</span>
                             </div>
-                            <label for="updatePhoto" class="photo-overlay" title="Update Photo">
-                                📷
+                            <label for="updatePhoto" title="Update Photo"
+                                style="position: absolute; bottom: 5px; right: 5px; background: #e65100; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-md); cursor: pointer; border: 3px solid white;">
+                                📸
                             </label>
                         </div>
                     </div>
 
-                    <div
-                        style="text-align: left; margin-bottom: 40px; display: flex; flex-direction: column; gap: 20px;">
+                    <!-- <div class="stats-grid">
+                        <div class="stat-badge">
+                            <span class="stat-val">24</span>
+                            <span class="stat-label">Pickups</span>
+                        </div>
+                        <div class="stat-badge">
+                            <span class="stat-val">1.2k</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                        <div class="stat-badge">
+                            <span class="stat-val">Elite</span>
+                            <span class="stat-label">Rank</span>
+                        </div>
+                    </div> -->
+
+                    <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px;">
                         <div class="profile-field">
                             <div class="field-icon">👤</div>
                             <div class="field-content">
-                                <label
-                                    style="display: block; font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Full
-                                    Name</label>
-                                <p id="profileName"
-                                    style="font-size: 1.25rem; font-weight: 700; color: var(--dark-color); margin: 0;">
-                                </p>
+                                <label class="field-label">Full Name</label>
+                                <p id="profileName" class="field-value"></p>
                             </div>
                         </div>
 
                         <div class="profile-field">
                             <div class="field-icon">✉️</div>
                             <div class="field-content">
-                                <label
-                                    style="display: block; font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Email
-                                    Address</label>
-                                <p id="profileEmail"
-                                    style="font-size: 1.15rem; font-weight: 500; color: var(--text-color); margin: 0;">
-                                </p>
+                                <label class="field-label">Email Address</label>
+                                <p id="profileEmail" class="field-value"></p>
                             </div>
                         </div>
                     </div>
-                    <div style="display: flex; gap: 20px; justify-content: center; margin-top: 10px;">
-                        <button id="saveProfileBtn" class="btn btn-primary"
-                            style="padding: 16px 30px; font-size: 1.1rem; font-weight: 700; border-radius: 12px; background: #e65100; box-shadow: 0 8px 20px rgba(230, 81, 0, 0.3); border: none;">Save
-                            Changes & Home</button>
-                        <button id="logoutBtnProfile" class="btn"
-                            style="padding: 16px 30px; font-size: 1.1rem; font-weight: 600; border-radius: 12px; background: rgba(211, 47, 47, 0.1); color: var(--error-color); transition: all 0.3s ease;"
-                            onmouseover="this.style.background='var(--error-color)'; this.style.color='white'"
-                            onmouseout="this.style.background='rgba(211, 47, 47, 0.1)'; this.style.color='var(--error-color)'">Logout</button>
+
+                    <div style="display: flex; gap: 20px; justify-content: center;">
+                        <button id="saveProfileBtn" class="btn btn-save" style="padding: 14px 40px;">
+                            Save Progress
+                        </button>
+                        <button id="logoutBtnProfile" class="btn btn-logout" style="padding: 14px 40px;">
+                            Logout
+                        </button>
                     </div>
                 </div>
             </div>

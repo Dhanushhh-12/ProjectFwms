@@ -5,364 +5,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volunteer Registration - Food Waste Management System</title>
-    <link rel="icon" type="image/png" href="images/logo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f5f0e8;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 30px 20px;
-        }
-
-        .page-header {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .page-header h1 {
-            font-size: 2.8rem;
-            font-weight: 800;
-            line-height: 1.1;
-        }
-
-        .page-header h1 .food {
-            color: #e65100;
-        }
-
-        .page-header h1 .waste {
-            color: #2e7d32;
-        }
-
-        .page-header .sub {
-            font-size: 1rem;
-            color: #555;
-            letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 4px;
-        }
-
-        .green-banner {
-            background: #e65100;
-            color: white;
-            font-weight: 700;
-            font-size: 1.05rem;
-            text-align: center;
-            padding: 10px 40px;
-            border-radius: 4px;
-            margin-bottom: 24px;
-            letter-spacing: 0.5px;
-        }
-
-        .auth-wrapper {
-            display: flex;
-            width: 100%;
-            max-width: 1000px;
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
-        }
-
-        .form-panel {
-            flex: 1.5;
-            padding: 40px 48px;
-        }
-
-        .form-panel h2 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-            color: #1a1a1a;
-        }
-
-        .form-panel .divider {
-            width: 100%;
-            height: 1.5px;
-            background: #e0e0e0;
-            margin-bottom: 24px;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        @media (max-width: 600px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .field {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 16px;
-        }
-
-        .field.full {
-            grid-column: 1 / -1;
-        }
-
-        .field label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .field input,
-        .field select {
-            padding: 10px 14px;
-            border: 1.5px solid #ddd;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-family: 'Inter', sans-serif;
-            color: #333;
-            background: #fafafa;
-            transition: border-color 0.2s;
-            width: 100%;
-        }
-
-        .field input:focus,
-        .field select:focus {
-            outline: none;
-            border-color: #e65100;
-            background: white;
-        }
-
-        .btn-register {
-            width: 100%;
-            background: #2e7d32;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 13px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
-            letter-spacing: 0.3px;
-            margin-top: 10px;
-        }
-
-        .btn-register:hover {
-            background: #1b5e20;
-            transform: translateY(-1px);
-        }
-
-        .auth-link {
-            text-align: center;
-            margin-top: 18px;
-            font-size: 0.82rem;
-            color: #666;
-        }
-
-        .auth-link a {
-            color: #2e7d32;
-            font-weight: 600;
-            text-decoration: none;
-        }
-
-        .auth-link a:hover {
-            text-decoration: underline;
-        }
-
-        /* Profile Photo Upload Style */
-        .photo-upload-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .photo-preview {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: #eee;
-            border: 2px dashed #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-
-        .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-        }
-
-        .file-input-wrapper input[type=file] {
-            font-size: 100px;
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .btn-upload {
-            background: #fff;
-            border: 1.5px solid #e65100;
-            color: #e65100;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-upload:hover {
-            background: #e65100;
-            color: white;
-        }
-
-        /* Illustration Panel */
-        .illus-panel {
-            flex: 1;
-            background: linear-gradient(160deg, #fff8e1 0%, #f1f8e9 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 30px;
-            position: relative;
-        }
-
-        .illus-art {
-            text-align: center;
-        }
-
-        .illus-art .emoji-scene {
-            font-size: 5rem;
-            line-height: 1.5;
-        }
-
-        .illus-art p {
-            color: #e65100;
-            font-weight: 600;
-            margin-top: 16px;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        @media (max-width: 850px) {
-            .illus-panel {
-                display: none;
-            }
-
-            .form-panel {
-                padding: 30px 25px;
-            }
-        }
-    </style>
+    <link rel="icon" type="image/png" href="images/logo.png.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
+    <div id="scroll-progress"></div>
+    <div class="split-auth-container">
+        <!-- Sidebar -->
+        <div class="auth-sidebar reveal"
+            style="background: linear-gradient(rgba(230, 81, 0, 0.85), rgba(230, 81, 0, 0.95)), url('https://images.unsplash.com/photo-1559027615-cd260194c0af?auto=format&fit=crop&w=1200&q=80'); background-size: cover; background-position: center;">
+            <h1 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 2rem; color: var(--surface);">JOIN THE SQUAD
+            </h1>
+            <h2>Lend a Hand. <br><span style="color: var(--surface); opacity: 0.8;">Save a Life.</span></h2>
+            <p>Your journey as a change-maker begins here. Help us bridge the gap between waste and want.</p>
 
-    <div class="page-header">
-        <h1><span class="food">Volunteer</span> <span class="waste">Portal</span></h1>
-        <div class="sub">Food Waste Management System</div>
-    </div>
-
-    <div class="green-banner">Join the Community Today</div>
-
-    <div class="auth-wrapper">
-
-        <div class="form-panel">
-            <h2>Create a Volunteer Account</h2>
-            <div class="divider"></div>
-
-            <form id="volunteerRegisterForm">
-                <div class="photo-upload-container">
-                    <div class="photo-preview" id="volunteerPhotoPreview">
-                        <span style="color:#aaa; font-size:1.5rem;">📷</span>
+            <div style="margin-top: 4rem;">
+                <div class="reveal stagger-1"
+                    style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                    <div
+                        style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
                     </div>
-                    <div>
-                        <div class="file-input-wrapper">
-                            <button type="button" class="btn-upload">Choose Profile Photo</button>
-                            <input type="file" id="volunteerProfilePhoto" accept="image/*">
-                        </div>
-                        <div style="font-size: 0.75rem; color: #888; margin-top: 4px;">Optional. Max size 2MB.</div>
-                    </div>
+                    <span>Global Impact Network</span>
                 </div>
+                <div class="reveal stagger-2"
+                    style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                    <div
+                        style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                    </div>
+                    <span>Skill Development</span>
+                </div>
+                <div class="reveal stagger-3" style="display: flex; align-items: center; gap: 15px;">
+                    <div
+                        style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                        🌱</div>
+                    <span>Greener Future</span>
+                </div>
+            </div>
+        </div>
 
-                <div class="form-grid">
-                    <div class="field">
-                        <label>👤 Full Name</label>
+        <!-- Form Panel -->
+        <div class="auth-form-panel">
+            <div class="reveal">
+                <a href="index.html" class="logo" style="margin-bottom: 2.5rem; text-decoration: none;">
+                    <img src="images/logo.png.png" alt="FWMS Logo"> FWMS
+                </a>
+                <h2 style="color: #e65100;">Become a Volunteer</h2>
+                <p>Register to start claiming pickups in your area.</p>
+
+                <form id="volunteerRegisterForm">
+                    <!-- Photo Upload -->
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label style="margin-bottom: 0.5rem;">Profile Photo</label>
+                        <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
+                            <div id="volunteerPhotoPreview"
+                                style="width: 60px; height: 60px; background: var(--neutral-100); border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 2px solid #e65100; border-style: dashed;">
+                                📷</div>
+                            <input type="file" id="volunteerProfilePhoto" accept="image/*"
+                                style="font-size: 0.8rem; color: var(--text-muted);">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Full Name</label>
                         <input type="text" name="name" placeholder="John Doe" required>
                     </div>
 
-                    <div class="field">
-                        <label>📞 Phone Number</label>
-                        <input type="tel" name="phone" placeholder="+91 98765 43210" required>
+                    <div class="auth-form-grid">
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" name="email" placeholder="john@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" name="phone" placeholder="+91 98765 43210" required>
+                        </div>
                     </div>
 
-                    <div class="field full">
-                        <label>✉️ Email Address</label>
-                        <input type="email" name="email" placeholder="john@example.com" required>
+                    <div class="auth-form-grid">
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" name="password" id="regPassword" placeholder="Min. 8 chars" required
+                                minlength="8">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" id="regConfirm" placeholder="Repeat password" required>
+                            <div id="pwdError"
+                                style="color: #c62828; font-size: 0.75rem; margin-top: 5px; display: none;">Passwords do
+                                not match</div>
+                        </div>
                     </div>
 
-                    <div class="field">
-                        <label>🔒 Password</label>
-                        <input type="password" name="password" id="regPassword" placeholder="Min. 8 characters" required
-                            minlength="8">
-                    </div>
+                    <button type="submit" class="btn btn-primary"
+                        style="width: 100%; padding: 1rem; font-size: 1rem; background: #e65100; border-color: #e65100;">Apply
+                        to Join</button>
 
-                    <div class="field">
-                        <label>🔐 Confirm Password</label>
-                        <input type="password" id="regConfirm" placeholder="Repeat password" required>
-                        <div id="pwdError" style="color: #c62828; font-size: 0.75rem; margin-top: 4px; display: none;">
-                            Passwords do not match</div>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-register">Create Account →</button>
-            </form>
-
-            <div class="auth-link">
-                Already have an account? <a href="volunteer-login.html">Sign In Here</a>
-            </div>
-            <div class="auth-link" style="margin-top: 10px;">
-                <a href="role.html?action=register" style="color: #666; font-weight: normal;">← Back to Role
-                    Selection</a>
-            </div>
-        </div>
-
-        <div class="illus-panel">
-            <div class="illus-art">
-                <div class="emoji-scene">
-                    🌱<br>💪🤝<br>🏢🏫
-                </div>
-                <p>Every helping hand<br>brings us closer to<br>a zero-waste world.</p>
+                    <p style="text-align: center; margin-top: 1.5rem; font-size: 0.95rem; color: var(--text-muted);">
+                        Already a volunteer? <a href="volunteer-login.html"
+                            style="color: #e65100; font-weight: 700; text-decoration: none;">Sign in here</a>
+                    </p>
+                </form>
             </div>
         </div>
-
     </div>
 
     <script src="js/script.js"></script>
     <script>
-        // Form Validation Logic
+        // Local Validation
         const form = document.getElementById('volunteerRegisterForm');
         const pwd = document.getElementById('regPassword');
         const conf = document.getElementById('regConfirm');
@@ -373,15 +126,12 @@
                 e.preventDefault();
                 err.style.display = 'block';
                 conf.style.borderColor = '#c62828';
-            } else {
-                err.style.display = 'none';
-                conf.style.borderColor = '#ddd';
             }
         });
 
         conf.addEventListener('input', () => {
             err.style.display = 'none';
-            conf.style.borderColor = '#ddd';
+            conf.style.borderColor = 'var(--neutral-200)';
         });
     </script>
 </body>
