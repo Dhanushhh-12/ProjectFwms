@@ -1,14 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* ============================================================
-   FWMS — PREMIUM DESIGN SYSTEM  v3.0
-   ============================================================ */
 
 :root {
-    /* ─── Brand Palette ─── */
+
     --h: 148;
     --primary: hsl(var(--h), 64%, 26%);
-    /* Deep Forest Green */
+
     --primary-mid: hsl(var(--h), 58%, 36%);
     --primary-light: hsl(var(--h), 55%, 52%);
     --primary-soft: hsl(var(--h), 60%, 96%);
