@@ -1035,6 +1035,27 @@ input[type="radio"]:checked+.role-option .role-option-label {
         display: block;
     }
 
+    /* Show mobile nav when toggled */
+    .nav-links.active {
+        display: flex;
+        position: absolute;
+        top: 100%;
+        right: 1.75rem;
+        background: var(--surface);
+        border: 1px solid var(--neutral-200);
+        border-radius: var(--radius-lg);
+        padding: 12px;
+        flex-direction: column;
+        gap: 8px;
+        box-shadow: var(--shadow-md);
+        z-index: 999;
+        width: calc(100% - 3.5rem);
+    }
+
+    .nav-links.active a {
+        padding: 10px 14px;
+    }
+
     .section-title h2 {
         font-size: 2rem;
     }
