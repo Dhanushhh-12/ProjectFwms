@@ -10,6 +10,13 @@
             "password": "password",
             "phone": "8919647087",
             "photo": null
+        },
+        {
+            "name": "Test User",
+            "email": "",
+            "password": "",
+            "phone": "",
+            "photo": null
         }
     ],
     "donations": [
