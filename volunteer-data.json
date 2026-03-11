@@ -1,16 +1,5 @@
 {
     "users": [
-        {},
-        {},
-        {},
-        {},
-        {},
-        {
-            "name": "CHEDADEEPU DHANUSH",
-            "email": "chedadeepudhanush@gmail.com",
-            "password": "passwowrd",
-            "phone": "8919647087",
-            "photo": null
-        }
+        {}
     ]
 }

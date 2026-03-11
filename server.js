@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join(__dirname, 'data.json');
 
 app.use(cors());
@@ -174,5 +174,5 @@ const server = app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 
-// Heartbeat to keep event loop alive for certain Node versions
+
 setInterval(() => { }, 1000000);

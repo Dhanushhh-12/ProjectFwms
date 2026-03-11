@@ -294,8 +294,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert(result.error || 'Registration failed.');
                 }
             } catch (err) {
-                console.error('API Error:', err);
-                alert('An error occurred during registration. Please ensure the server is running.');
+                console.error('Registration Error:', err);
+                let errorMsg = 'An error occurred during registration.';
+
+                if (window.location.protocol === 'file:') {
+                    errorMsg += '\n\n⚠️ CRITICAL: You are running this via "file://" protocol. Please use a local server (e.g., http://localhost:3000) for registration to work.';
+                } else if (err.message.includes('Failed to fetch')) {
+                    errorMsg += '\n\n⚠️ Server Connection Failed: Ensure the backend server is running and accessible.';
+                } else {
+                    errorMsg += `\n\nDetails: ${err.message}`;
+                }
+                alert(errorMsg);
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerText = originalText;
@@ -341,8 +350,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert(result.error || 'Invalid email or password.');
                 }
             } catch (err) {
-                console.error('API Error:', err);
-                alert('An error occurred during login. Please ensure the server is running.');
+                console.error('Login Error:', err);
+                let errorMsg = 'An error occurred during login.';
+
+                if (window.location.protocol === 'file:') {
+                    errorMsg += '\n\n⚠️ CRITICAL: You are running this via "file://" protocol. Please use a local server (e.g., http://localhost:3000) for login to work.';
+                } else if (err.message.includes('Failed to fetch')) {
+                    errorMsg += '\n\n⚠️ Server Connection Failed: Ensure the backend server is running and accessible.';
+                } else {
+                    errorMsg += `\n\nDetails: ${err.message}`;
+                }
+                alert(errorMsg);
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerText = originalText;
