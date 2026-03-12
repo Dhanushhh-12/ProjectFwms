@@ -43,12 +43,36 @@ app.get('/api/users', (req, res) => {
 // POST /api/register - Register a new user
 app.post('/api/register', (req, res) => {
     const data = readData();
-    const newUser = req.body;
+    const newUser = req.body || {};
+
+    // Basic server-side validation
+    const validateUser = (u) => {
+        if (!u.name || typeof u.name !== 'string' || u.name.trim().length < 2) return 'Invalid name.';
+        const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!u.email || !emailRe.test(u.email)) return 'Invalid email format.';
+        if (!u.password || typeof u.password !== 'string' || u.password.length < 6) return 'Password must be at least 6 characters.';
+        const phoneRe = /^\+?[0-9\s\-]{7,20}$/;
+        if (u.phone && !phoneRe.test(u.phone)) return 'Invalid phone number format.';
+        return null;
+    };
+
+    const vErr = validateUser(newUser);
+    if (vErr) return res.status(400).json({ error: vErr });
 
     if (!data.users) data.users = [];
     const exists = data.users.find(u => u.email === newUser.email);
     if (exists) {
         return res.status(400).json({ error: 'Email already registered.' });
+    }
+
+    // Sanitize photo: accept data URLs only, otherwise clear
+    if (newUser.photo && typeof newUser.photo === 'string') {
+        if (!newUser.photo.startsWith('data:')) {
+            // if upstream provided a large or malformed string, drop it
+            newUser.photo = null;
+        }
+    } else {
+        newUser.photo = null;
     }
 
     data.users.push(newUser);
@@ -132,10 +156,30 @@ const writeVolunteerData = (data) => {
 
 app.post('/api/volunteer/register', (req, res) => {
     const data = readVolunteerData();
-    const newUser = req.body;
+    const newUser = req.body || {};
+
+    const validateUser = (u) => {
+        if (!u.name || typeof u.name !== 'string' || u.name.trim().length < 2) return 'Invalid name.';
+        const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!u.email || !emailRe.test(u.email)) return 'Invalid email format.';
+        if (!u.password || typeof u.password !== 'string' || u.password.length < 6) return 'Password must be at least 6 characters.';
+        const phoneRe = /^\+?[0-9\s\-]{7,20}$/;
+        if (u.phone && !phoneRe.test(u.phone)) return 'Invalid phone number format.';
+        return null;
+    };
+
+    const vErr = validateUser(newUser);
+    if (vErr) return res.status(400).json({ error: vErr });
+
     if (!data.users) data.users = [];
     const exists = data.users.find(u => u.email === newUser.email);
     if (exists) return res.status(400).json({ error: 'Email already registered.' });
+
+    if (newUser.photo && typeof newUser.photo === 'string') {
+        if (!newUser.photo.startsWith('data:')) newUser.photo = null;
+    } else {
+        newUser.photo = null;
+    }
 
     data.users.push(newUser);
     writeVolunteerData(data);

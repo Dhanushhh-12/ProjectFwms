@@ -228,6 +228,12 @@
         </div>
     </div>
 
+    <script>
+        // Configure API base for Netlify or other hosts.
+        // Set this to your backend URL (e.g. https://your-backend.example.com) when deploying.
+        // If left empty, calls will use the same origin (`/api/...`).
+        window.API_BASE = window.API_BASE || '';
+    </script>
     <script src="js/script.js?v=3.0"></script>
     <script>
         document.getElementById('profilePhoto').addEventListener('change', function () {

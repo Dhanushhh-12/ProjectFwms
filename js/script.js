@@ -5,6 +5,18 @@ const EMAILJS_SERVICE_ID = "service_iyh2kcs";
 const EMAILJS_TEMPLATE_ID_CONTACT = "template_5bz428h";
 const EMAILJS_TEMPLATE_ID_DONOR = "template_1j27g9j";
 
+// Allow configuring a backend URL from the hosting environment (e.g. Netlify).
+// On Netlify set an environment variable `API_BASE` and inject it into the site
+// by adding a small script in your HTML that sets `window.API_BASE` to the URL.
+const API_BASE = window.API_BASE || '';
+const __orig_fetch = window.fetch.bind(window);
+window.fetch = (input, init) => {
+    try {
+        if (typeof input === 'string' && input.startsWith('/api/')) input = API_BASE + input;
+    } catch (e) { /* ignore */ }
+    return __orig_fetch(input, init);
+};
+
 (function () {
     // Initialize EmailJS
     if (typeof emailjs !== 'undefined') {
