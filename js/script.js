@@ -8,12 +8,21 @@ const EMAILJS_TEMPLATE_ID_DONOR = "template_1j27g9j";
 // Allow configuring a backend URL from the hosting environment (e.g. Netlify).
 // On Netlify set an environment variable `API_BASE` and inject it into the site
 // by adding a small script in your HTML that sets `window.API_BASE` to the URL.
-const API_BASE = window.API_BASE || '';
+const API_BASE = (typeof window !== 'undefined' && window.API_BASE) ? String(window.API_BASE).trim() : '';
 const __orig_fetch = window.fetch.bind(window);
-window.fetch = (input, init) => {
+
+// Robust API Interceptor
+window.fetch = async (...args) => {
+    let [input, init] = args;
     try {
-        if (typeof input === 'string' && input.startsWith('/api/')) input = API_BASE + input;
-    } catch (e) { /* ignore */ }
+        if (typeof input === 'string' && input.startsWith('/api/')) {
+            const targetUrl = API_BASE + input;
+            console.log(`[Fetch Interceptor] Routing ${input} -> ${targetUrl}`);
+            input = targetUrl;
+        }
+    } catch (e) {
+        console.warn('[Fetch Interceptor] URL processing failed:', e);
+    }
     return __orig_fetch(input, init);
 };
 
@@ -101,6 +110,21 @@ window.fetch = (input, init) => {
     });
 })();
 
+// Utility: sanitize and validate phone numbers from user input
+function sanitizePhoneInput(raw) {
+    if (!raw) return '';
+    // Keep leading + and digits only, remove spaces, parentheses, dots, etc.
+    let keepPlus = raw.trim().startsWith('+');
+    let cleaned = raw.replace(/[^0-9+]/g, '');
+    if (!keepPlus) cleaned = cleaned.replace(/\+/g, '');
+    // Ensure only one leading plus
+    if (cleaned.indexOf('+') > 0) cleaned = cleaned.replace(/\+/g, '');
+    // Validate digit count
+    const digits = cleaned.replace(/\D/g, '');
+    if (digits.length < 7 || digits.length > 15) return null; // invalid
+    return cleaned;
+}
+
 // --- Authentication & Data Persistence ---
 
 const USERS_KEY = 'fwms_users';
@@ -112,8 +136,12 @@ const DONATIONS_KEY = 'fwms_donations';
  * Enhanced Fetch Wrapper to handle non-JSON responses gracefully
  */
 async function apiFetch(url, options = {}) {
+    const startTime = Date.now();
     try {
         const response = await fetch(url, options);
+        const duration = Date.now() - startTime;
+        console.log(`[apiFetch] ${options.method || 'GET'} ${url} - Status: ${response.status} (${duration}ms)`);
+
         const contentType = response.headers.get("content-type");
 
         if (contentType && contentType.indexOf("application/json") !== -1) {
@@ -123,11 +151,15 @@ async function apiFetch(url, options = {}) {
         } else {
             // Not JSON - likely an HTML error page from the server
             const text = await response.text();
-            console.error('Non-JSON Response:', text);
+            console.error('[apiFetch] Non-JSON Response Body:', text.substring(0, 500));
             throw new Error(`Server returned HTML instead of JSON. Check if the API route '${url}' exists in server.js.`);
         }
     } catch (err) {
-        console.error(`Fetch Error (${url}):`, err);
+        console.error(`[apiFetch] Error (${url}):`, {
+            message: err.message,
+            name: err.name,
+            stack: err.stack
+        });
         throw err;
     }
 }
@@ -297,20 +329,27 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify(userData)
                 });
 
-                const result = await response.json();
+                const contentType = response.headers.get("content-type");
+                let result;
+                if (contentType && contentType.includes("application/json")) {
+                    result = await response.json();
+                }
 
                 if (response.ok) {
                     alert('Registration successful! You can now login.');
                     window.location.href = 'login.html';
                 } else {
-                    alert(result.error || 'Registration failed.');
+                    const errorMsg = (result && result.error) || 'Registration failed.';
+                    alert(errorMsg);
                 }
             } catch (err) {
-                console.error('Registration Error:', err);
+                console.error('[Registration] Critical Error:', err);
                 let errorMsg = 'An error occurred during registration.';
 
                 if (window.location.protocol === 'file:') {
                     errorMsg += '\n\n⚠️ CRITICAL: You are running this via "file://" protocol. Please use a local server (e.g., http://localhost:3000) for registration to work.';
+                } else if (err.name === 'TypeError' && err.message.includes('pattern')) {
+                    errorMsg += '\n\n⚠️ Browser Constraint: The request pattern was rejected. This can happen if the API URL is malformed or blocked.';
                 } else if (err.message.includes('Failed to fetch')) {
                     errorMsg += '\n\n⚠️ Server Connection Failed: Ensure the backend server is running and accessible.';
                 } else {
@@ -337,9 +376,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const formData = new FormData(loginForm);
             const email = formData.get('email');
             const password = formData.get('password');
-            const role = formData.get('role');
+            const roleEl = loginForm.querySelector('input[name="role"]:checked');
+            const role = roleEl ? roleEl.value : 'donor'; 
 
             const endpoint = role === 'volunteer' ? '/api/volunteer/login' : '/api/login';
+
+            console.log(`[Login] Attempting ${role} login for: ${email} via ${endpoint}`);
 
             try {
                 const response = await fetch(endpoint, {
@@ -348,9 +390,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ email, password })
                 });
 
-                const result = await response.json();
+                const contentType = response.headers.get("content-type");
+                let result;
+                if (contentType && contentType.includes("application/json")) {
+                    result = await response.json();
+                }
 
-                if (response.ok) {
+                if (response.ok && result) {
                     if (role === 'volunteer') {
                         localStorage.setItem(VOLUNTEER_SESSION_KEY, JSON.stringify(result.user));
                     } else {
@@ -359,14 +405,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert(`Welcome back, ${result.user.name}!`);
                     window.location.href = role === 'volunteer' ? 'volunteer-profile.html' : 'profile.html';
                 } else {
-                    alert(result.error || 'Invalid email or password.');
+                    const errorMsg = (result && result.error) || 'Invalid email or password.';
+                    alert(errorMsg);
                 }
             } catch (err) {
-                console.error('Login Error:', err);
+                console.error('[Login] Critical Error:', err);
                 let errorMsg = 'An error occurred during login.';
 
                 if (window.location.protocol === 'file:') {
                     errorMsg += '\n\n⚠️ CRITICAL: You are running this via "file://" protocol. Please use a local server (e.g., http://localhost:3000) for login to work.';
+                } else if (err.name === 'TypeError' && err.message.includes('pattern')) {
+                    errorMsg += '\n\n⚠️ Browser Constraint: The request pattern was rejected. This can happen if the API URL is malformed or blocked.';
                 } else if (err.message.includes('Failed to fetch')) {
                     errorMsg += '\n\n⚠️ Server Connection Failed: Ensure the backend server is running and accessible.';
                 } else {
@@ -425,17 +474,28 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify(userData)
                 });
 
-                const result = await response.json();
+                const contentType = response.headers.get("content-type");
+                let result;
+                if (contentType && contentType.includes("application/json")) {
+                    result = await response.json();
+                }
 
                 if (response.ok) {
                     alert('Volunteer registration successful!');
                     window.location.href = 'volunteer-login.html';
                 } else {
-                    alert(result.error || 'Registration failed.');
+                    const errorMsg = (result && result.error) || 'Registration failed.';
+                    alert(errorMsg);
                 }
             } catch (err) {
-                console.error('API Error:', err);
-                alert('An error occurred during registration.');
+                console.error('[Volunteer Registration] Critical Error:', err);
+                let errorMsg = 'An error occurred during registration.';
+                if (err.name === 'TypeError' && err.message.includes('pattern')) {
+                    errorMsg += '\n\n⚠️ Browser Constraint: The request pattern was rejected.';
+                } else {
+                    errorMsg += `\n\nDetails: ${err.message}`;
+                }
+                alert(errorMsg);
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerText = originalText;
@@ -464,18 +524,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ email, password })
                 });
 
-                const result = await response.json();
+                const contentType = response.headers.get("content-type");
+                let result;
+                if (contentType && contentType.includes("application/json")) {
+                    result = await response.json();
+                }
 
-                if (response.ok) {
+                if (response.ok && result) {
                     localStorage.setItem('fwms_current_volunteer', JSON.stringify(result.user));
                     alert(`Welcome back, volunteer ${result.user.name}!`);
                     window.location.href = 'index.html';
                 } else {
-                    alert(result.error || 'Invalid email or password.');
+                    const errorMsg = (result && result.error) || 'Invalid email or password.';
+                    alert(errorMsg);
                 }
             } catch (err) {
-                console.error('API Error:', err);
-                alert('An error occurred during login.');
+                console.error('[Volunteer Login] Critical Error:', err);
+                let errorMsg = 'An error occurred during login.';
+                if (err.name === 'TypeError' && err.message.includes('pattern')) {
+                    errorMsg += '\n\n⚠️ Browser Constraint: The request pattern was rejected.';
+                } else {
+                    errorMsg += `\n\nDetails: ${err.message}`;
+                }
+                alert(errorMsg);
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerText = originalText;
@@ -569,12 +640,21 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.innerText = 'Submitting...';
 
             const formData = new FormData(donorForm);
+            const rawPhone = formData.get('phone');
+            const sanitizedPhone = sanitizePhoneInput(rawPhone);
+            if (sanitizedPhone === null) {
+                alert('Please enter a valid phone number (7–15 digits).');
+                submitBtn.disabled = false;
+                submitBtn.innerText = originalBtnText;
+                return;
+            }
+
             const donation = {
                 id: Date.now(),
                 userId: user.email,
                 userName: user.name,
                 donorName: formData.get('donor_name'),
-                phone: formData.get('phone'),
+                phone: sanitizedPhone,
                 location: formData.get('location'),
                 description: formData.get('description'),
                 foodPhoto: window.lastDonationPhoto,
