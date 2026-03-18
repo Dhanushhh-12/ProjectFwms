@@ -163,6 +163,12 @@ ul {
     padding: 0 1.75rem;
 }
 
+@media (max-width: 600px) {
+    .container {
+        padding: 0 1.25rem;
+    }
+}
+
 section {
     padding: 96px 0;
 }
@@ -275,6 +281,7 @@ header.scrolled .glass-nav {
     display: inline-block;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
+
 
 @keyframes move-logo-bg {
     0% { background-position: 0% 50%; }
@@ -1057,24 +1064,34 @@ input[type="radio"]:checked+.role-option .role-option-label {
         display: flex;
         position: absolute;
         top: 100%;
-        right: 1.75rem;
+        left: 0;
+        right: 0;
+        margin-top: 10px;
         background: var(--surface);
         border: 1px solid var(--neutral-200);
         border-radius: var(--radius-lg);
-        padding: 12px;
+        padding: 24px;
         flex-direction: column;
-        gap: 8px;
-        box-shadow: var(--shadow-md);
+        gap: 12px;
+        box-shadow: var(--shadow-xl);
         z-index: 999;
-        width: calc(100% - 3.5rem);
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav-links.active li {
+        width: 100%;
     }
 
     .nav-links.active a {
-        padding: 10px 14px;
+        display: block;
+        padding: 12px;
+        font-size: 1rem;
     }
 
     .section-title h2 {
-        font-size: 2rem;
+        font-size: clamp(1.75rem, 5vw, 2.5rem);
+        line-height: 1.2;
     }
 
     section {
@@ -1128,3 +1145,100 @@ input[type="radio"]:checked+.role-option .role-option-label {
         grid-template-columns: 1fr;
     }
 }
+
+/* ─── Premium Magic Cursor ─── */
+body {
+    cursor: none;
+}
+
+a, button, input, select, textarea, .btn, .logo, .icon-box {
+    cursor: none !important;
+}
+
+@media (pointer: coarse), (max-width: 768px) {
+    body, a, button, input, select, textarea, .btn, .logo, .icon-box {
+        cursor: auto !important;
+    }
+    .magic-cursor, .magic-cursor-dot {
+        display: none !important;
+    }
+}
+
+.magic-cursor, .magic-cursor-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 999999;
+    transform: translate(-50%, -50%);
+}
+
+.magic-cursor {
+    width: 38px;
+    height: 38px;
+    border: 1.5px solid var(--primary-light);
+    border-radius: 50%;
+    transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                height 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                background-color 0.3s, 
+                border-color 0.3s;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.magic-cursor-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--primary);
+    border-radius: 50%;
+    transition: width 0.3s, height 0.3s, opacity 0.3s, background-color 0.3s;
+    box-shadow: 0 0 8px var(--primary);
+}
+
+.magic-cursor.hovering {
+    width: 65px;
+    height: 65px;
+    background-color: var(--primary-glow);
+    border-color: transparent;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+}
+
+.magic-cursor-dot.hovering {
+    opacity: 0;
+}
+
+.magic-cursor.clicking {
+    width: 32px;
+    height: 32px;
+    background-color: var(--primary-light);
+    border-color: var(--primary);
+    transition: width 0.15s, height 0.15s, background-color 0.15s;
+}
+
+.magic-cursor-dot.clicking {
+    transform: translate(-50%, -50%) scale(0.6);
+}
+
+.ambient-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle at center, hsla(var(--h), 64%, 26%, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.5s ease;
+}
+
+/* Updated cursor for velocity stretch support */
+.magic-cursor {
+    /* Existing properties reinforced */
+    transform-origin: center center;
+    will-change: transform, width, height;
+}
+
+/* Hide custom cursor on mobile or touch devices via JS class if needed, or rely on media query above */

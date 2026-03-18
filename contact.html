@@ -75,11 +75,12 @@
         }
 
         .contact-hero h1 {
-            font-size: clamp(2.6rem, 5vw, 3.6rem);
+            font-size: clamp(2.4rem, 8vw, 3.6rem);
             font-weight: 900;
             margin-bottom: 14px;
             position: relative;
             z-index: 1;
+            line-height: 1.1;
         }
 
         .contact-hero p {
@@ -244,14 +245,23 @@
         }
 
         @media(max-width:900px) {
+            .contact-hero {
+                padding: 120px 0 60px;
+            }
             .contact-layout {
                 grid-template-columns: 1fr;
+            }
+            .contact-info, .contact-form-card {
+                padding: 32px 24px;
             }
         }
 
         @media(max-width:540px) {
             .contact-form-row {
                 grid-template-columns: 1fr;
+            }
+            .contact-hero h1 {
+                font-size: 2.2rem;
             }
         }
     </style>

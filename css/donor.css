@@ -145,10 +145,10 @@ footer {
 }
 
 .hero-title {
-    font-size: 4rem;
+    font-size: clamp(2.4rem, 8vw, 4rem);
     font-weight: 900;
-    line-height: 1.05;
-    letter-spacing: -2px;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
     margin-bottom: 20px;
     animation: fadeInDown 0.9s 0.1s ease both;
 }
@@ -1282,7 +1282,7 @@ footer {
     }
 
     .donor-sidebar {
-        order: -1;
+        order: 1;
     }
 
     .sticky-sidebar {
@@ -1290,53 +1290,68 @@ footer {
     }
 
     .how-steps {
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-
-    .how-step {
-        flex: 1 1 45%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
     }
 }
 
 @media (max-width: 768px) {
-    .hero-title {
-        font-size: 2.6rem;
+    .donor-hero {
+        padding: 120px 0 80px;
     }
 
     .hero-subtitle {
         font-size: 1rem;
+        padding: 0 1rem;
     }
 
     .impact-strip {
         flex-direction: column;
         gap: 16px;
-        border-radius: var(--radius-md);
+        padding: 24px;
+        width: calc(100% - 40px);
     }
 
     .impact-divider {
-        width: 60px;
-        height: 1px;
+        width: 100px;
+        height: 1.5px;
     }
 
     .wizard-step {
-        padding: 30px 22px;
+        padding: 32px 20px;
     }
 
     .form-row-2 {
         grid-template-columns: 1fr;
     }
 
+    .type-selector {
+        flex-direction: column;
+    }
+
+    .type-btn {
+        width: 100%;
+        text-align: center;
+    }
+
     .food-category-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
     }
 
     .steps-progress {
-        padding: 30px 10px 40px;
+        padding: 32px 10px;
+        gap: 5px;
     }
 
-    .step-label {
+    .step-item .step-label {
         display: none;
+    }
+
+    .step-bubble {
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
     }
 
     .success-card {
@@ -1345,5 +1360,11 @@ footer {
 
     .success-stats {
         flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .how-steps {
+        grid-template-columns: 1fr;
     }
 }

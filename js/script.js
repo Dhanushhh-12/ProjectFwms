@@ -8,7 +8,21 @@ const EMAILJS_TEMPLATE_ID_DONOR = "template_1j27g9j";
 // Allow configuring a backend URL from the hosting environment (e.g. Netlify).
 // On Netlify set an environment variable `API_BASE` and inject it into the site
 // by adding a small script in your HTML that sets `window.API_BASE` to the URL.
-const API_BASE = (typeof window !== 'undefined' && window.API_BASE) ? String(window.API_BASE).trim() : '';
+let API_BASE = (typeof window !== 'undefined' && window.API_BASE) ? String(window.API_BASE).trim() : '';
+
+// Auto-detect local development environments (Live Server, file://, or LAN IP on a phone)
+if (!API_BASE) {
+    if (window.location.protocol === 'file:') {
+        API_BASE = 'http://localhost:3000';
+    } else if (window.location.port !== '3000' && (
+        window.location.hostname === 'localhost' || 
+        window.location.hostname === '127.0.0.1' || 
+        /^(192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[0-1])\.)/.test(window.location.hostname)
+    )) {
+        // If accessed via PC IP (e.g. 192.168.1.5:5500) from a phone, point API to the same PC on port 3000
+        API_BASE = window.location.protocol + '//' + window.location.hostname + ':3000';
+    }
+}
 const __orig_fetch = window.fetch.bind(window);
 
 // Robust API Interceptor
@@ -314,10 +328,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const role = formData.get('role');
             const endpoint = role === 'volunteer' ? '/api/volunteer/register' : '/api/register';
 
+            const password = formData.get('password');
+            const confirmPassword = formData.get('confirm_password');
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                submitBtn.disabled = false;
+                submitBtn.innerText = originalText;
+                return;
+            }
+
             const userData = {
                 name: formData.get('name'),
                 email: formData.get('email'),
-                password: formData.get('password'),
+                password: password,
                 phone: formData.get('phone'),
                 photo: regPhotoBase64 // Store photo as Base64
             };
@@ -432,8 +456,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Volunteer Register Form Handling
     const volunteerRegisterForm = document.getElementById('volunteerRegisterForm');
     if (volunteerRegisterForm) {
-        const volPhotoInput = document.getElementById('volunteerProfilePhoto');
-        const volPhotoPreview = document.getElementById('volunteerPhotoPreview');
+        const volPhotoInput = document.getElementById('volPhoto') || document.getElementById('volunteerProfilePhoto');
+        const volPhotoPreview = document.getElementById('volPhotoPreview') || document.getElementById('volunteerPhotoPreview');
         let volPhotoBase64 = null;
 
         if (volPhotoInput && volPhotoPreview) {
@@ -458,11 +482,21 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.innerText = 'Registering...';
 
             const formData = new FormData(volunteerRegisterForm);
+            
+            const password = formData.get('password');
+            const confirmPassword = formData.get('confirm_password');
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                submitBtn.disabled = false;
+                submitBtn.innerText = originalText;
+                return;
+            }
 
             const userData = {
                 name: formData.get('name'),
                 email: formData.get('email'),
-                password: formData.get('password'),
+                password: password,
                 phone: formData.get('phone'),
                 photo: volPhotoBase64
             };
@@ -896,3 +930,124 @@ window.addEventListener('storage', (e) => {
     }
 });
 
+// --- Custom Magic Cursor ---
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+
+    const cursor = document.createElement('div');
+    cursor.classList.add('magic-cursor');
+    
+    const cursorDot = document.createElement('div');
+    cursorDot.classList.add('magic-cursor-dot');
+
+    const ambientGlow = document.createElement('div');
+    ambientGlow.classList.add('ambient-glow');
+    
+    document.body.appendChild(cursor);
+    document.body.appendChild(cursorDot);
+    document.body.appendChild(ambientGlow);
+
+    let mouseX = 0, mouseY = 0;
+    let cursorX = 0, cursorY = 0;
+    let dotX = 0, dotY = 0;
+    let lastMouseX = 0, lastMouseY = 0;
+    let angle = 0, scale = 1;
+    let isHovering = false;
+    let targetEl = null;
+
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        
+        // Ambient glow moves instantly
+        ambientGlow.style.left = mouseX + 'px';
+        ambientGlow.style.top = mouseY + 'px';
+    });
+
+    document.addEventListener('mousedown', () => {
+        cursor.classList.add('clicking');
+        cursorDot.classList.add('clicking');
+    });
+
+    document.addEventListener('mouseup', () => {
+        cursor.classList.remove('clicking');
+        cursorDot.classList.remove('clicking');
+    });
+
+    const render = () => {
+        // Dot follows with slight interpolation for smoothness
+        dotX += (mouseX - dotX) * 0.45;
+        dotY += (mouseY - dotY) * 0.45;
+        cursorDot.style.left = dotX + 'px';
+        cursorDot.style.top = dotY + 'px';
+
+        // Calculate Velocity & Angle for stretching
+        const deltaX = mouseX - lastMouseX;
+        const deltaY = mouseY - lastMouseY;
+        lastMouseX = mouseX;
+        lastMouseY = mouseY;
+
+        // Only calculate angle/scale if moving
+        if (Math.abs(deltaX) > 0.1 || Math.abs(deltaY) > 0.1) {
+            angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
+            const velocity = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            scale = 1 + Math.min(velocity / 120, 0.45); // Max stretch 45%
+        }
+
+        // --- Magnetic Logic ---
+        let targetX = mouseX;
+        let targetY = mouseY;
+
+        if (isHovering && targetEl) {
+            const rect = targetEl.getBoundingClientRect();
+            targetX = rect.left + rect.width / 2;
+            targetY = rect.top + rect.height / 2;
+            // Snap the circle more firmly to center
+            cursorX += (targetX - cursorX) * 0.25;
+            cursorY += (targetY - cursorY) * 0.25;
+            
+            // Override scale/rotation when hovering (static circle)
+            cursor.style.transform = `translate(-50%, -50%) scale(1) rotate(0deg)`;
+        } else {
+            // Normal trailing
+            cursorX += (targetX - cursorX) * 0.18;
+            cursorY += (targetY - cursorY) * 0.18;
+            
+            // Apply stretch effect
+            cursor.style.transform = `translate(-50%, -50%) rotate(${angle}deg) scaleX(${scale}) scaleY(${1 / scale})`;
+        }
+        
+        cursor.style.left = cursorX + 'px';
+        cursor.style.top = cursorY + 'px';
+        
+        requestAnimationFrame(render);
+    };
+    requestAnimationFrame(render);
+
+    const addHoverLinks = () => {
+        document.querySelectorAll('a, button, input, select, textarea, .btn, .logo, .icon-box').forEach(el => {
+            if(!el.dataset.cursorAttached) {
+                el.dataset.cursorAttached = 'true';
+                el.addEventListener('mouseenter', () => {
+                    isHovering = true;
+                    targetEl = el;
+                    cursor.classList.add('hovering');
+                    cursorDot.classList.add('hovering');
+                });
+                el.addEventListener('mouseleave', () => {
+                    isHovering = false;
+                    targetEl = null;
+                    cursor.classList.remove('hovering');
+                    cursorDot.classList.remove('hovering');
+                });
+            }
+        });
+    };
+    
+    addHoverLinks();
+    
+    const observer = new MutationObserver(() => {
+        addHoverLinks();
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+});
