@@ -13,9 +13,21 @@
             "password": "password",
             "phone": "8919647087",
             "photo": null
+        },
+        {
+            "name": "Test User",
+            "email": "testuser999@test.com",
+            "password": "test123",
+            "phone": "9999999999",
+            "photo": null
+        },
+        {
+            "name": "Sai Himanth",
+            "email": "sai15@gmail.com",
+            "password": "password",
+            "phone": "8919647087",
+            "photo": null
         }
     ],
-    "donations": [
-        {}
-    ]
+    "donations": []
 }

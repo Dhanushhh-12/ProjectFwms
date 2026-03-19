@@ -29,7 +29,12 @@ const readData = () => {
 
 // Helper to write data
 const writeData = (data) => {
-    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 4), 'utf8');
+    try {
+        fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 4), 'utf8');
+    } catch (err) {
+        console.error('[writeData] Failed to write data.json:', err.message);
+        throw err;
+    }
 };
 
 // --- API ROUTES FIRST ---
@@ -151,7 +156,12 @@ const readVolunteerData = () => {
 };
 
 const writeVolunteerData = (data) => {
-    fs.writeFileSync(VOLUNTEER_DATA_FILE, JSON.stringify(data, null, 4), 'utf8');
+    try {
+        fs.writeFileSync(VOLUNTEER_DATA_FILE, JSON.stringify(data, null, 4), 'utf8');
+    } catch (err) {
+        console.error('[writeVolunteerData] Failed to write volunteer-data.json:', err.message);
+        throw err;
+    }
 };
 
 app.post('/api/volunteer/register', (req, res) => {
@@ -205,10 +215,10 @@ app.post('/api/volunteer/forgot-password', (req, res) => {
 });
 
 // --- API 404 HANDLER ---
-// This ensures that any missing /api/* route returns JSON, not HTML
-// In Express 5, we use app.use('/api', ...) to catch all unmatched /api routes
-app.use('/api', (req, res) => {
-    res.status(404).json({ error: `API route not found: ${req.method} ${req.url}` });
+// Must use app.all with wildcard — app.use('/api') in Express 5 intercepts
+// ALL /api/* routes (even matched ones), breaking registration & login.
+app.all('/api/*path', (req, res) => {
+    res.status(404).json({ error: `API route not found: ${req.method} /api/${req.params.path}` });
 });
 
 // --- STATIC FILES LAST ---
