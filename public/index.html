@@ -28,11 +28,13 @@
 
         .hero-mesh {
             position: absolute;
-            inset: 0;
+            inset: -20%;
             pointer-events: none;
             background:
-                radial-gradient(ellipse 70% 55% at 60% -10%, hsla(148, 64%, 26%, 0.09) 0%, transparent 65%),
-                radial-gradient(ellipse 50% 40% at 90% 80%, hsla(33, 95%, 53%, 0.06) 0%, transparent 60%);
+                radial-gradient(ellipse 70% 55% at 60% -10%, hsla(148, 64%, 26%, 0.12) 0%, transparent 65%),
+                radial-gradient(ellipse 50% 40% at 90% 80%, hsla(33, 95%, 53%, 0.08) 0%, transparent 60%);
+            animation: mesh-move 25s ease-in-out infinite alternate;
+            background-size: 200% 200%;
         }
 
         .hero-dots {
@@ -130,6 +132,39 @@
             color: var(--neutral-900);
         }
 
+        /* Glint for Buttons */
+        .btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transform: skewX(-25deg);
+            transition: 0s;
+        }
+
+        .btn:hover::after {
+            animation: glint 1.2s infinite;
+        }
+
+        @keyframes glint {
+            0% { left: -150%; }
+            100% { left: 150%; }
+        }
+
+        @keyframes mesh-move {
+            0% { transform: scale(1) translate(0, 0); }
+            50% { transform: scale(1.1) translate(-2%, 2%); }
+            100% { transform: scale(1) translate(0, 0); }
+        }
+
                 /* Hero image side */
         .hero-visual {
             position: relative;
@@ -172,6 +207,25 @@
             0% { transform: rotate(0deg) scale(1); opacity: 0.6; }
             50% { transform: rotate(180deg) scale(1.2); opacity: 1; }
             100% { transform: rotate(360deg) scale(1); opacity: 0.6; }
+        }
+
+        .hero-spotlight {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 5;
+            background: radial-gradient(circle 500px at var(--x, 50%) var(--y, 50%), hsla(148, 64%, 26%, 0.1) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.6s var(--ease-out);
+        }
+
+        .hero:hover .hero-spotlight {
+            opacity: 1;
+        }
+
+        .hero-visual {
+            transform-style: preserve-3d;
+            perspective: 1200px;
         }
 
         .hero-float-card {
@@ -632,6 +686,30 @@
 </head>
 
 <body>
+    <!-- ═══ PRELOADER ═══ -->
+    <div id="preloader" class="preloader">
+        <div class="preloader-bg"></div>
+        <div class="preloader-scanline"></div>
+        <div class="preloader-particles" id="preloaderParticles"></div>
+        <div class="preloader-content">
+            <div class="preloader-logo">
+                <span class="p-letter">F</span>
+                <span class="p-letter">o</span>
+                <span class="p-letter">o</span>
+                <span class="p-letter">d</span>
+                <span class="p-letter">S</span>
+                <span class="p-letter">e</span>
+                <span class="p-letter">v</span>
+                <span class="p-letter">a</span>
+            </div>
+            <div class="preloader-progress-wrap">
+                <div class="preloader-progress-bar" id="preloader-progress"></div>
+            </div>
+            <div class="preloader-stats" id="preloader-status">Initializing FoodSeva...</div>
+        </div>
+        <div class="preloader-glow"></div>
+    </div>
+
     <div id="scroll-progress"></div>
 
     <header id="mainHeader">
@@ -669,6 +747,7 @@
         <section class="hero">
             <div class="hero-mesh"></div>
             <div class="hero-dots"></div>
+            <div class="hero-spotlight" id="heroSpotlight"></div>
             <div class="container">
                 <div class="hero-grid">
                     <div class="hero-content">
@@ -804,7 +883,7 @@
                     <h2>Driven by Purpose</h2>
                     <p>Three pillars of our approach to eliminating food waste across Telangana.</p>
                 </div>
-                <div class="mission-grid">
+                <div class="mission-grid reveal-stagger">
                     <div class="mission-card reveal stagger-1">
                         <div class="mission-icon-wrap">
                             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -882,7 +961,7 @@
                     <h2>How FoodSeva Works</h2>
                     <p>Connecting surplus food to empty plates in four simple steps.</p>
                 </div>
-                <div class="steps-row">
+                <div class="steps-row reveal-stagger">
                     <div class="step-box reveal stagger-1">
                         <div class="step-circle">1</div>
                         <h4>Donor Submits</h4>

@@ -49,10 +49,12 @@ window.fetch = async (...args) => {
     // --- Dynamic UI Enhancements ---
     const updateHeader = () => {
         const header = document.querySelector('header');
-        if (window.scrollY > 20) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
+        if (header) {
+            if (window.scrollY > 20) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
         }
     };
 
@@ -99,7 +101,7 @@ window.fetch = async (...args) => {
 
     window.addEventListener('mousemove', handleHeroParallax);
 
-    // Scroll Reveal Logic
+    // --- Enhanced Scroll Reveal Logic ---
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -107,19 +109,113 @@ window.fetch = async (...args) => {
             }
         });
     }, {
-        threshold: 0.15,
-        rootMargin: '0px 0px -80px 0px'
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
     });
 
     window.addEventListener('DOMContentLoaded', () => {
-        const reveals = document.querySelectorAll('.reveal');
+        const reveals = document.querySelectorAll('.reveal, .reveal-stagger');
         reveals.forEach(el => revealObserver.observe(el));
 
+        // --- Hero Mouse Interaction ---
+        const hero = document.querySelector('.hero');
+        const spotlight = document.getElementById('heroSpotlight');
+        const heroVisual = document.querySelector('.hero-visual');
+
+        if (hero) {
+            hero.addEventListener('mousemove', (e) => {
+                if (spotlight) {
+                    const rect = hero.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    spotlight.style.setProperty('--x', `${x}px`);
+                    spotlight.style.setProperty('--y', `${y}px`);
+                }
+
+                if (heroVisual) {
+                    const xVal = (window.innerWidth / 2 - e.clientX) / 50;
+                    const yVal = (window.innerHeight / 2 - e.clientY) / 50;
+                    heroVisual.style.transform = `rotateY(${xVal}deg) rotateX(${yVal}deg)`;
+                }
+            });
+        }
+
         updateHeader();
+
+        // --- Premium Preloader Lifecycle ---
+        const preloader = document.getElementById('preloader');
+        const progressBar = document.getElementById('preloader-progress');
+        const statusText = document.getElementById('preloader-status');
+        
+        if (preloader && progressBar) {
+            // --- Particle Generation ---
+            const particleContainer = document.getElementById('preloaderParticles');
+            if (particleContainer) {
+                for (let i = 0; i < 20; i++) {
+                    const p = document.createElement('div');
+                    p.className = 'p-particle';
+                    const size = Math.random() * 4 + 2;
+                    p.style.width = size + 'px';
+                    p.style.height = size + 'px';
+                    p.style.left = Math.random() * 100 + '%';
+                    p.style.top = Math.random() * 100 + '%';
+                    p.style.setProperty('--d', (Math.random() * 3 + 2) + 's');
+                    p.style.animationDelay = Math.random() * 2 + 's';
+                    particleContainer.appendChild(p);
+                }
+            }
+
+            let progress = 0;
+            const steps = [
+                { p: 15, t: 'Connecting to Network...' },
+                { p: 35, t: 'Loading Sustainable Data...' },
+                { p: 65, t: 'Syncing Community Donations...' },
+                { p: 85, t: 'Validating Zero-Waste Logic...' },
+                { p: 100, t: 'Starting FoodSeva...' }
+            ];
+            
+            let currentStep = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 5 + 1;
+                
+                if (currentStep < steps.length && progress >= steps[currentStep].p) {
+                    statusText.innerText = steps[currentStep].t;
+                    currentStep++;
+                }
+                
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    
+                    setTimeout(() => {
+                        const logo = preloader.querySelector('.preloader-logo');
+                        const barWrap = preloader.querySelector('.preloader-progress-wrap');
+                        
+                        if (logo) logo.classList.add('animate-exit');
+                        if (barWrap) barWrap.classList.add('animate-exit');
+                        
+                        setTimeout(() => {
+                            preloader.classList.add('fade-out');
+                            // After preloader fades, trigger hero animations if needed
+                            document.body.style.overflow = 'auto'; // Re-enable scroll
+                        }, 600);
+                    }, 500);
+                }
+                
+                progressBar.style.width = progress + '%';
+            }, 60);
+        }
 
         // --- Protocol Check ---
         if (window.location.protocol === 'file:') {
             alert('⚠️ Important: You are opening this via File Explorer. Please open http://localhost:3000 in your browser instead so the system can connect to the database.');
+        }
+    });
+
+    // Disable scroll during preloader
+    window.addEventListener('load', () => {
+        if (document.getElementById('preloader')) {
+            document.body.style.overflow = 'hidden';
         }
     });
 })();
@@ -930,124 +1026,3 @@ window.addEventListener('storage', (e) => {
     }
 });
 
-// --- Custom Magic Cursor ---
-document.addEventListener('DOMContentLoaded', () => {
-    if (window.matchMedia("(pointer: coarse)").matches) return;
-
-    const cursor = document.createElement('div');
-    cursor.classList.add('magic-cursor');
-    
-    const cursorDot = document.createElement('div');
-    cursorDot.classList.add('magic-cursor-dot');
-
-    const ambientGlow = document.createElement('div');
-    ambientGlow.classList.add('ambient-glow');
-    
-    document.body.appendChild(cursor);
-    document.body.appendChild(cursorDot);
-    document.body.appendChild(ambientGlow);
-
-    let mouseX = 0, mouseY = 0;
-    let cursorX = 0, cursorY = 0;
-    let dotX = 0, dotY = 0;
-    let lastMouseX = 0, lastMouseY = 0;
-    let angle = 0, scale = 1;
-    let isHovering = false;
-    let targetEl = null;
-
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        
-        // Ambient glow moves instantly
-        ambientGlow.style.left = mouseX + 'px';
-        ambientGlow.style.top = mouseY + 'px';
-    });
-
-    document.addEventListener('mousedown', () => {
-        cursor.classList.add('clicking');
-        cursorDot.classList.add('clicking');
-    });
-
-    document.addEventListener('mouseup', () => {
-        cursor.classList.remove('clicking');
-        cursorDot.classList.remove('clicking');
-    });
-
-    const render = () => {
-        // Dot follows with slight interpolation for smoothness
-        dotX += (mouseX - dotX) * 0.45;
-        dotY += (mouseY - dotY) * 0.45;
-        cursorDot.style.left = dotX + 'px';
-        cursorDot.style.top = dotY + 'px';
-
-        // Calculate Velocity & Angle for stretching
-        const deltaX = mouseX - lastMouseX;
-        const deltaY = mouseY - lastMouseY;
-        lastMouseX = mouseX;
-        lastMouseY = mouseY;
-
-        // Only calculate angle/scale if moving
-        if (Math.abs(deltaX) > 0.1 || Math.abs(deltaY) > 0.1) {
-            angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
-            const velocity = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-            scale = 1 + Math.min(velocity / 120, 0.45); // Max stretch 45%
-        }
-
-        // --- Magnetic Logic ---
-        let targetX = mouseX;
-        let targetY = mouseY;
-
-        if (isHovering && targetEl) {
-            const rect = targetEl.getBoundingClientRect();
-            targetX = rect.left + rect.width / 2;
-            targetY = rect.top + rect.height / 2;
-            // Snap the circle more firmly to center
-            cursorX += (targetX - cursorX) * 0.25;
-            cursorY += (targetY - cursorY) * 0.25;
-            
-            // Override scale/rotation when hovering (static circle)
-            cursor.style.transform = `translate(-50%, -50%) scale(1) rotate(0deg)`;
-        } else {
-            // Normal trailing
-            cursorX += (targetX - cursorX) * 0.18;
-            cursorY += (targetY - cursorY) * 0.18;
-            
-            // Apply stretch effect
-            cursor.style.transform = `translate(-50%, -50%) rotate(${angle}deg) scaleX(${scale}) scaleY(${1 / scale})`;
-        }
-        
-        cursor.style.left = cursorX + 'px';
-        cursor.style.top = cursorY + 'px';
-        
-        requestAnimationFrame(render);
-    };
-    requestAnimationFrame(render);
-
-    const addHoverLinks = () => {
-        document.querySelectorAll('a, button, input, select, textarea, .btn, .logo, .icon-box').forEach(el => {
-            if(!el.dataset.cursorAttached) {
-                el.dataset.cursorAttached = 'true';
-                el.addEventListener('mouseenter', () => {
-                    isHovering = true;
-                    targetEl = el;
-                    cursor.classList.add('hovering');
-                    cursorDot.classList.add('hovering');
-                });
-                el.addEventListener('mouseleave', () => {
-                    isHovering = false;
-                    targetEl = null;
-                    cursor.classList.remove('hovering');
-                    cursorDot.classList.remove('hovering');
-                });
-            }
-        });
-    };
-    
-    addHoverLinks();
-    
-    const observer = new MutationObserver(() => {
-        addHoverLinks();
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
-});

@@ -30,10 +30,12 @@ const readData = () => {
 // Helper to write data
 const writeData = (data) => {
     try {
-        fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 4), 'utf8');
+        if (fs.existsSync(DATA_FILE)) {
+             fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 4), 'utf8');
+        }
     } catch (err) {
-        console.error('[writeData] Failed to write data.json:', err.message);
-        throw err;
+        console.error('[writeData] Failed to write data.json (likely Vercel read-only FS):', err.message);
+        // Do not throw; allow the response to proceed as 200/201
     }
 };
 
@@ -157,10 +159,12 @@ const readVolunteerData = () => {
 
 const writeVolunteerData = (data) => {
     try {
-        fs.writeFileSync(VOLUNTEER_DATA_FILE, JSON.stringify(data, null, 4), 'utf8');
+        if (fs.existsSync(VOLUNTEER_DATA_FILE)) {
+            fs.writeFileSync(VOLUNTEER_DATA_FILE, JSON.stringify(data, null, 4), 'utf8');
+        }
     } catch (err) {
-        console.error('[writeVolunteerData] Failed to write volunteer-data.json:', err.message);
-        throw err;
+        console.error('[writeVolunteerData] Failed to write volunteer-data.json (likely Vercel read-only FS):', err.message);
+        // Do not throw; allow the response to proceed as 200/201
     }
 };
 
