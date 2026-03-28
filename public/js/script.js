@@ -1,9 +1,8 @@
-// EmailJS Initialization Placeholder
-// Replace these with your actual keys from EmailJS Dashboard
-const EMAILJS_PUBLIC_KEY = "buSCnAcqcxD13_E_g";
-const EMAILJS_SERVICE_ID = "service_iyh2kcs";
-const EMAILJS_TEMPLATE_ID_CONTACT = "template_5bz428h";
-const EMAILJS_TEMPLATE_ID_DONOR = "template_1j27g9j";
+// Configuration placeholders (populated dynamically from the server)
+let EMAILJS_PUBLIC_KEY = "";
+let EMAILJS_SERVICE_ID = "";
+let EMAILJS_TEMPLATE_ID_CONTACT = "";
+let EMAILJS_TEMPLATE_ID_DONOR = "";
 
 // Allow configuring a backend URL from the hosting environment (e.g. Netlify).
 // On Netlify set an environment variable `API_BASE` and inject it into the site
@@ -41,10 +40,50 @@ window.fetch = async (...args) => {
 };
 
 (function () {
-    // Initialize EmailJS
-    if (typeof emailjs !== 'undefined') {
-        emailjs.init(EMAILJS_PUBLIC_KEY);
-    }
+    // Initialize EmailJS (Fetch config first)
+    const initApp = async () => {
+        try {
+            const res = await fetch((window.API_BASE || '') + '/api/config');
+            if (res.ok) {
+                const config = await res.json();
+                EMAILJS_PUBLIC_KEY = config.emailjs_public;
+                EMAILJS_SERVICE_ID = config.emailjs_service;
+                EMAILJS_TEMPLATE_ID_CONTACT = config.emailjs_contact;
+                EMAILJS_TEMPLATE_ID_DONOR = config.emailjs_donor;
+                
+                if (typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY) {
+                    emailjs.init(EMAILJS_PUBLIC_KEY);
+                    console.log('[Config] EmailJS initialized from server.');
+                }
+
+                // --- NEW: Initialize Google Auth dynamically ---
+                if (typeof google !== 'undefined' && config.google_client_id) {
+                    google.accounts.id.initialize({
+                        client_id: config.google_client_id,
+                        callback: window.handleGoogleAuth,
+                        context: window.location.pathname.includes('register') ? 'signup' : 'signin'
+                    });
+                    
+                    const googleContainers = document.querySelectorAll('.google-auth-dynamic');
+                    googleContainers.forEach(container => {
+                        google.accounts.id.renderButton(container, {
+                            type: 'standard',
+                            shape: 'rectangular',
+                            theme: 'outline',
+                            text: 'continue_with',
+                            size: 'large',
+                            logo_alignment: 'left',
+                            width: container.dataset.width || '100%'
+                        });
+                    });
+                    console.log('[Config] Google Identity Services initialized.');
+                }
+            }
+        } catch (e) {
+            console.error('[Config] Failed to load remote configuration:', e);
+        }
+    };
+    initApp();
 
     // --- Dynamic UI Enhancements ---
     const updateHeader = () => {
@@ -1025,4 +1064,46 @@ window.addEventListener('storage', (e) => {
         renderDonations();
     }
 });
+
+// --- Google Authentication Handler ---
+window.handleGoogleAuth = async function(response) {
+    console.log("Encoded JWT ID token: " + response.credential);
+    
+    // Determine the role from the radio buttons (if present, default to donor)
+    const roleEl = document.querySelector('input[name="role"]:checked');
+    const role = roleEl ? roleEl.value : 'donor';
+
+    try {
+        const res = await fetch((window.API_BASE || '') + '/api/google-auth', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                idToken: response.credential,
+                role: role
+            })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            // Success! Store session and redirect
+            localStorage.setItem('user', JSON.stringify(data.user));
+            localStorage.setItem('role', data.user.role);
+            
+            // Redirect based on role
+            if (data.user.role === 'volunteer') {
+                window.location.href = 'volunteer.html';
+            } else {
+                window.location.href = 'donor.html';
+            }
+        } else {
+            alert(data.error || 'Google Authentication failed.');
+        }
+    } catch (err) {
+        console.error('Google Auth Error:', err);
+        alert('Could not connect to the server for Google Authentication.');
+    }
+};
 

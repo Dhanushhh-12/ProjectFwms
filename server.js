@@ -1,7 +1,12 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const { OAuth2Client } = require('google-auth-library');
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const googleClient = new OAuth2Client(CLIENT_ID, CLIENT_SECRET);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -45,6 +50,17 @@ const writeData = (data) => {
 app.get('/api/users', (req, res) => {
     const data = readData();
     res.json(data.users || []);
+});
+
+// GET /api/config - Provide non-secret frontend configuration
+app.get('/api/config', (req, res) => {
+    res.json({
+        emailjs_public: process.env.EMAILJS_PUBLIC_KEY,
+        emailjs_service: process.env.EMAILJS_SERVICE_ID,
+        emailjs_contact: process.env.EMAILJS_TEMPLATE_ID_CONTACT,
+        emailjs_donor: process.env.EMAILJS_TEMPLATE_ID_DONOR,
+        google_client_id: process.env.GOOGLE_CLIENT_ID
+    });
 });
 
 // POST /api/register - Register a new user
@@ -97,6 +113,64 @@ app.post('/api/login', (req, res) => {
         res.json({ message: 'Login successful.', user });
     } else {
         res.status(401).json({ error: 'Invalid email or password.' });
+    }
+});
+
+// POST /api/google-auth - Verify Google ID Token and login/register
+app.post('/api/google-auth', async (req, res) => {
+    const { idToken, role } = req.body;
+    console.log(`[Google Auth] Attempting login for role: ${role}`);
+
+    try {
+        const ticket = await googleClient.verifyIdToken({
+            idToken,
+            audience: CLIENT_ID,
+        });
+        const payload = ticket.getPayload();
+        const { email, name, picture, sub: googleId } = payload;
+
+        // Check if user exists in the specified role's data
+        let userData = role === 'volunteer' ? readVolunteerData() : readData();
+        let user = (userData.users || []).find(u => u.email === email);
+
+        if (!user) {
+            console.log(`[Google Auth] New user detected: ${email}. Auto-registering...`);
+            // Auto-register user if they don't exist
+            user = {
+                id: Date.now(),
+                name,
+                email,
+                photo: picture,
+                googleId,
+                role: role,
+                password: 'google-auth-' + Math.random().toString(36).slice(-8), 
+                phone: ''
+            };
+            userData.users.push(user);
+            if (role === 'volunteer') {
+                writeVolunteerData(userData);
+            } else {
+                writeData(userData);
+            }
+        } else {
+            console.log(`[Google Auth] Existing user found: ${email}`);
+            // Update photo if changed
+            if (picture && user.photo !== picture) {
+                user.photo = picture;
+                if (role === 'volunteer') {
+                    writeVolunteerData(userData);
+                } else {
+                    writeData(userData);
+                }
+            }
+        }
+
+        // Return user with role for frontend redirection
+        const userToReturn = { ...user, role: role };
+        res.json({ message: 'Google Authentication successful.', user: userToReturn });
+    } catch (err) {
+        console.error('[Google Auth Error]:', err.message);
+        res.status(401).json({ error: 'Invalid Google Identity token.' });
     }
 });
 

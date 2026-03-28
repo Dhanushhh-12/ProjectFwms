@@ -143,6 +143,7 @@
         .auth-divider:not(:empty)::before { margin-right: 1rem; }
         .auth-divider:not(:empty)::after { margin-left: 1rem; }
     </style>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body>
@@ -269,6 +270,12 @@
                         style="color:var(--text-muted);font-size:.83rem;font-weight:500;">Forgot Password?</a>
                 </div>
                 <button type="submit" class="btn-auth">Sign In to FoodSeva &rarr;</button>
+
+                <!-- Social Auth -->
+                <div class="auth-divider">OR</div>
+                <div class="social-auth">
+                    <div id="google-auth-btn" class="google-auth-dynamic" data-width="100%"></div>
+                </div>
                 <p style="text-align:center;margin-top:18px;font-size:.88rem;color:var(--text-muted);">
                     Don't have an account? <a href="register.html" style="color:var(--primary);font-weight:700;">Create
                         one now</a>
