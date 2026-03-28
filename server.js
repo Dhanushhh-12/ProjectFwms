@@ -100,7 +100,7 @@ app.post('/api/register', (req, res) => {
 
     data.users.push(newUser);
     writeData(data);
-    res.status(201).json({ message: 'User registered successfully.' });
+    res.status(201).json({ message: 'User registered successfully.', user: newUser });
 });
 
 // POST /api/login - Authenticate a user
@@ -121,6 +121,11 @@ app.post('/api/google-auth', async (req, res) => {
     const { idToken, role } = req.body;
     console.log(`[Google Auth] Attempting login for role: ${role}`);
 
+    if (!CLIENT_ID) {
+        console.error('[Google Auth Error] GOOGLE_CLIENT_ID is not configured in .env file.');
+        return res.status(500).json({ error: 'Server configuration error: GOOGLE_CLIENT_ID is missing.' });
+    }
+
     try {
         const ticket = await googleClient.verifyIdToken({
             idToken,
@@ -131,10 +136,14 @@ app.post('/api/google-auth', async (req, res) => {
 
         // Check if user exists in the specified role's data
         let userData = role === 'volunteer' ? readVolunteerData() : readData();
-        let user = (userData.users || []).find(u => u.email === email);
+        
+        // Ensure users array exists
+        if (!userData.users) userData.users = [];
+        
+        let user = userData.users.find(u => u.email === email);
 
         if (!user) {
-            console.log(`[Google Auth] New user detected: ${email}. Auto-registering...`);
+            console.log(`[Google Auth] New user detected: ${email}. Auto-registering as ${role}...`);
             // Auto-register user if they don't exist
             user = {
                 id: Date.now(),
@@ -154,6 +163,8 @@ app.post('/api/google-auth', async (req, res) => {
             }
         } else {
             console.log(`[Google Auth] Existing user found: ${email}`);
+            // Ensure role is updated if it was missing or different
+            user.role = role; 
             // Update photo if changed
             if (picture && user.photo !== picture) {
                 user.photo = picture;
@@ -271,7 +282,7 @@ app.post('/api/volunteer/register', (req, res) => {
 
     data.users.push(newUser);
     writeVolunteerData(data);
-    res.status(201).json({ message: 'Volunteer registered successfully.' });
+    res.status(201).json({ message: 'Volunteer registered successfully.', user: newUser });
 });
 
 app.post('/api/volunteer/login', (req, res) => {

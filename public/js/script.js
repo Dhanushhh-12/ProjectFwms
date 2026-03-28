@@ -505,8 +505,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (response.ok) {
-                    alert('Registration successful! You can now login.');
-                    window.location.href = 'login.html';
+                    // Auto-login after successful registration using server-provided user object
+                    const registeredUser = (result && result.user) || userData;
+                    if (role === 'volunteer') {
+                        localStorage.setItem(VOLUNTEER_SESSION_KEY, JSON.stringify(registeredUser));
+                    } else {
+                        localStorage.setItem(SESSION_KEY, JSON.stringify(registeredUser));
+                    }
+                    alert('Registration successful! Welcome to FoodSeva.');
+                    window.location.href = 'index.html';
                 } else {
                     const errorMsg = (result && result.error) || 'Registration failed.';
                     alert(errorMsg);
@@ -572,7 +579,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         localStorage.setItem(SESSION_KEY, JSON.stringify(result.user));
                     }
                     alert(`Welcome back, ${result.user.name}!`);
-                    window.location.href = role === 'volunteer' ? 'volunteer-profile.html' : 'profile.html';
+                    window.location.href = 'index.html';
                 } else {
                     const errorMsg = (result && result.error) || 'Invalid email or password.';
                     alert(errorMsg);
@@ -660,8 +667,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (response.ok) {
-                    alert('Volunteer registration successful!');
-                    window.location.href = 'volunteer-login.html';
+                    // Auto-login after successful volunteer registration using server-provided user object
+                    const registeredUser = (result && result.user) || userData;
+                    localStorage.setItem(VOLUNTEER_SESSION_KEY, JSON.stringify(registeredUser));
+                    alert('Volunteer registration successful! Welcome to the team.');
+                    window.location.href = 'index.html';
                 } else {
                     const errorMsg = (result && result.error) || 'Registration failed.';
                     alert(errorMsg);
@@ -1098,16 +1108,15 @@ window.handleGoogleAuth = async function(response) {
         const data = await res.json();
 
         if (res.ok) {
-            // Success! Store session and redirect
-            localStorage.setItem('user', JSON.stringify(data.user));
-            localStorage.setItem('role', data.user.role);
-            
-            // Redirect based on role
+            // Success! Store session using THE CORRECT KEYS recognized by updateAuthUI
             if (data.user.role === 'volunteer') {
-                window.location.href = 'volunteer.html';
+                localStorage.setItem(VOLUNTEER_SESSION_KEY, JSON.stringify(data.user));
+                alert(`Welcome back, ${data.user.name}!`);
             } else {
-                window.location.href = 'donor.html';
+                localStorage.setItem(SESSION_KEY, JSON.stringify(data.user));
+                alert(`Welcome back, ${data.user.name}!`);
             }
+            window.location.href = 'index.html';
         } else {
             alert(data.error || 'Google Authentication failed.');
         }

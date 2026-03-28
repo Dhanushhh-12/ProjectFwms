@@ -1492,4 +1492,84 @@ input[type="radio"]:checked+.role-option .role-option-label {
     to { opacity: 0.5; filter: blur(15px); }
 }
 
-/* ─── Premium Magic Cursor ─── */
+/* ─── Premium Magic Cursor ─── */
+/* (Assuming magic cursor styles continue...) */
+
+/* ──────────────────────────────────────────
+   GOOGLE AUTH ENHANCED UI
+   ────────────────────────────────────────── */
+.google-auth-dynamic {
+    position: relative;
+    border-radius: var(--radius-md);
+    overflow: visible;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    transform: translateY(10px);
+    animation: google-reveal 0.8s 0.5s var(--ease-out) forwards;
+    background: white; /* Ensure button contrast */
+    box-shadow: 0 0 0 1px var(--neutral-200);
+}
+
+.google-auth-dynamic:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -10px rgba(0,0,0,0.1), 0 0 0 1px var(--primary-light);
+}
+
+/* Pulse Aura behind Google button */
+.google-auth-dynamic::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    background: radial-gradient(circle at center, var(--primary-glow) 0%, transparent 70%);
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.4s ease;
+    border-radius: var(--radius-lg);
+    pointer-events: none;
+}
+
+.google-auth-dynamic:hover::before {
+    opacity: 0.6;
+    animation: p-pulse-aura 2s infinite alternate;
+}
+
+/* Shimmer Light Sweep */
+.social-auth::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+    );
+    transform: translateY(-50%) skewX(-25deg);
+    pointer-events: none;
+    z-index: 2;
+    animation: google-shimmer 6s infinite;
+}
+
+@keyframes google-reveal {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes google-shimmer {
+    0% { left: -150%; }
+    20% { left: 150%; }
+    100% { left: 150%; }
+}
+
+/* Make standard social auth group relative for the shimmer */
+.social-auth {
+    position: relative;
+    overflow: hidden;
+    padding: 5px;
+    border-radius: var(--radius-lg);
+}
