@@ -222,7 +222,13 @@ app.all('/api/*path', (req, res) => {
 });
 
 // --- STATIC FILES LAST ---
-app.use(express.static(__dirname));
+// Root route serves index.html from the 'public' folder
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Serve static assets from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 const server = app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

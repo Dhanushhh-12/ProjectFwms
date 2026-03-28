@@ -65,6 +65,57 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Social Login Styles */
+        .social-auth {
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-social {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid var(--neutral-200);
+            border-radius: var(--radius-md);
+            background: white;
+            color: var(--neutral-700);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-social:hover {
+            background: var(--neutral-50);
+            border-color: var(--neutral-300);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 24px 0;
+            color: var(--neutral-400);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .auth-divider::before, .auth-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--neutral-200);
+        }
+
+        .auth-divider:not(:empty)::before { margin-right: 1rem; }
+        .auth-divider:not(:empty)::after { margin-left: 1rem; }
     </style>
 </head>
 
