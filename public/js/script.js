@@ -56,28 +56,38 @@ window.fetch = async (...args) => {
                     console.log('[Config] EmailJS initialized from server.');
                 }
 
-                // --- NEW: Initialize Google Auth dynamically ---
-                if (typeof google !== 'undefined' && config.google_client_id) {
-                    google.accounts.id.initialize({
-                        client_id: config.google_client_id,
-                        callback: window.handleGoogleAuth,
-                        context: window.location.pathname.includes('register') ? 'signup' : 'signin'
-                    });
-                    
-                    const googleContainers = document.querySelectorAll('.google-auth-dynamic');
-                    googleContainers.forEach(container => {
-                        google.accounts.id.renderButton(container, {
-                            type: 'standard',
-                            shape: 'rectangular',
-                            theme: 'outline',
-                            text: 'continue_with',
-                            size: 'large',
-                            logo_alignment: 'left',
-                            width: container.dataset.width || '100%'
-                        });
-                    });
-                    console.log('[Config] Google Identity Services initialized.');
-                }
+                // --- NEW: Initialize Google Auth dynamically (Wait for library load) ---
+                const initGoogleSafe = () => {
+                    if (typeof google !== 'undefined' && config.google_client_id) {
+                        try {
+                            google.accounts.id.initialize({
+                                client_id: config.google_client_id,
+                                callback: window.handleGoogleAuth,
+                                context: window.location.pathname.includes('register') ? 'signup' : 'signin'
+                            });
+                            
+                            const googleContainers = document.querySelectorAll('.google-auth-dynamic');
+                            googleContainers.forEach(container => {
+                                google.accounts.id.renderButton(container, {
+                                    type: 'standard',
+                                    shape: 'rectangular',
+                                    theme: 'outline',
+                                    text: 'continue_with',
+                                    size: 'large',
+                                    logo_alignment: 'left',
+                                    width: container.dataset.width || '100%'
+                                });
+                            });
+                            console.log('[Config] Google Identity Services successfully initialized.');
+                        } catch (e) {
+                            console.error('[Config] GIS Initialization failed:', e);
+                        }
+                    } else if (typeof google === 'undefined') {
+                        // Polling to wait for async/defer script
+                        setTimeout(initGoogleSafe, 100);
+                    }
+                };
+                initGoogleSafe();
             }
         } catch (e) {
             console.error('[Config] Failed to load remote configuration:', e);
