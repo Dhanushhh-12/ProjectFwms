@@ -33,11 +33,25 @@ app.use((req, res, next) => {
     next();
 });
 
-// Helper to read data
+// --- MEMORY CACHE FOR PERFORMANCE ---
+let serverCache = {
+    data: null,
+    volunteerData: null,
+    lastRead: 0,
+    TTL: 5000 // 5 seconds cache to reduce hits on Vercel Read-Only FS
+};
+
+// Helper to read data (with simple memory caching)
 const readData = () => {
+    const now = Date.now();
+    if (serverCache.data && (now - serverCache.lastRead < serverCache.TTL)) {
+        return serverCache.data;
+    }
     try {
         const data = fs.readFileSync(DATA_FILE, 'utf8');
-        return JSON.parse(data);
+        serverCache.data = JSON.parse(data);
+        serverCache.lastRead = now;
+        return serverCache.data;
     } catch (err) {
         return { users: [], donations: [] };
     }
@@ -46,21 +60,26 @@ const readData = () => {
 // Helper to write data
 const writeData = (data) => {
     try {
+        serverCache.data = data; // Update cache immediately
         if (fs.existsSync(DATA_FILE)) {
              fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 4), 'utf8');
         }
     } catch (err) {
         console.error('[writeData] Failed to write data.json (likely Vercel read-only FS):', err.message);
-        // Do not throw; allow the response to proceed as 200/201
     }
 };
 
-// --- API ROUTES FIRST ---
+// --- API ROUTES ---
 
-// GET /api/users - Get all users
+// GET /api/users - Get ALL users (SECURITY FIXED: PW Removed)
 app.get('/api/users', (req, res) => {
     const data = readData();
-    res.json(data.users || []);
+    // NEVER send passwords to the frontend
+    const safeUsers = (data.users || []).map(u => {
+       const { password, googleId, ...safeUser } = u;
+       return safeUser;
+    });
+    res.json(safeUsers);
 });
 
 // GET /api/config - Provide non-secret frontend configuration
@@ -70,7 +89,8 @@ app.get('/api/config', (req, res) => {
         emailjs_service: process.env.EMAILJS_SERVICE_ID,
         emailjs_contact: process.env.EMAILJS_TEMPLATE_ID_CONTACT,
         emailjs_donor: process.env.EMAILJS_TEMPLATE_ID_DONOR,
-        google_client_id: process.env.GOOGLE_CLIENT_ID
+        google_client_id: process.env.GOOGLE_CLIENT_ID,
+        app_version: "2.5.1-secured"
     });
 });
 
@@ -247,20 +267,25 @@ app.put('/api/donations/:id/claim', (req, res) => {
 // VOLUNTEER_DATA_FILE is declared at the top for clarity
 
 const readVolunteerData = () => {
+    const now = Date.now();
+    if (serverCache.volunteerData && (now - serverCache.lastRead < serverCache.TTL)) {
+        return serverCache.volunteerData;
+    }
     try {
         const data = fs.readFileSync(VOLUNTEER_DATA_FILE, 'utf8');
-        return JSON.parse(data);
+        serverCache.volunteerData = JSON.parse(data);
+        return serverCache.volunteerData;
     } catch (err) { return { users: [] }; }
 };
 
 const writeVolunteerData = (data) => {
     try {
+        serverCache.volunteerData = data; // Update cache immediately
         if (fs.existsSync(VOLUNTEER_DATA_FILE)) {
             fs.writeFileSync(VOLUNTEER_DATA_FILE, JSON.stringify(data, null, 4), 'utf8');
         }
     } catch (err) {
         console.error('[writeVolunteerData] Failed to write volunteer-data.json (likely Vercel read-only FS):', err.message);
-        // Do not throw; allow the response to proceed as 200/201
     }
 };
 

@@ -65,6 +65,8 @@ window.fetch = async (...args) => {
                             google.accounts.id.initialize({
                                 client_id: config.google_client_id,
                                 callback: window.handleGoogleAuth,
+                                auto_select: false, // Prevents accidental login without interaction
+                                itp_support: true,  // Better handling for privacy-focused browsers
                                 context: window.location.pathname.includes('register') ? 'signup' : 'signin'
                             });
                             
