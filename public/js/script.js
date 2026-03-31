@@ -57,6 +57,8 @@ window.fetch = async (...args) => {
                 }
 
                 // --- NEW: Initialize Google Auth dynamically (Wait for library load) ---
+                console.log(`[Config] Loaded configuration: Google Client ID present: ${!!config.google_client_id}`);
+                
                 const initGoogleSafe = () => {
                     if (typeof google !== 'undefined' && config.google_client_id) {
                         try {
@@ -67,6 +69,10 @@ window.fetch = async (...args) => {
                             });
                             
                             const googleContainers = document.querySelectorAll('.google-auth-dynamic');
+                            if (googleContainers.length === 0) {
+                                console.warn('[Config] No containers with class .google-auth-dynamic found in DOM.');
+                            }
+
                             googleContainers.forEach(container => {
                                 google.accounts.id.renderButton(container, {
                                     type: 'standard',
@@ -84,10 +90,19 @@ window.fetch = async (...args) => {
                         }
                     } else if (typeof google === 'undefined') {
                         // Polling to wait for async/defer script
+                        console.log('[Config] Waiting for Google GSI script to load...');
                         setTimeout(initGoogleSafe, 100);
+                    } else if (!config.google_client_id) {
+                        console.error('[Config] Google Client ID is missing in server response! Check Vercel environment variables.');
+                        const container = document.querySelector('.google-auth-dynamic');
+                        if (container) {
+                            container.innerHTML = '<p style="color: #c62828; font-size: 0.8rem; text-align: center; border: 1px dashed #c62828; padding: 8px; border-radius: 4px;">⚠️ Google Identity not configured on server.</p>';
+                        }
                     }
                 };
                 initGoogleSafe();
+            } else {
+                console.error('[Config] Server returned an error for /api/config:', res.status);
             }
         } catch (e) {
             console.error('[Config] Failed to load remote configuration:', e);

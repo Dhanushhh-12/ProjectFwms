@@ -11,6 +11,17 @@ const googleClient = new OAuth2Client(CLIENT_ID, CLIENT_SECRET);
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join(__dirname, 'data.json');
+const VOLUNTEER_DATA_FILE = path.join(__dirname, 'volunteer-data.json');
+
+// --- STARTUP CHECKS ---
+if (!process.env.GOOGLE_CLIENT_ID) {
+    console.warn('[WARNING] GOOGLE_CLIENT_ID NOT SET! Google Auth will NOT work. Go to Vercel Settings -> Environment Variables and add it.');
+} else {
+    console.log('[INFO] GOOGLE_CLIENT_ID is configured.');
+}
+if (!process.env.EMAILJS_PUBLIC_KEY) {
+    console.warn('[WARNING] EMAILJS_PUBLIC_KEY NOT SET! Email functionality will be limited.');
+}
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
@@ -233,7 +244,7 @@ app.put('/api/donations/:id/claim', (req, res) => {
 });
 
 // --- Volunteer API Endpoints ---
-const VOLUNTEER_DATA_FILE = path.join(__dirname, 'volunteer-data.json');
+// VOLUNTEER_DATA_FILE is declared at the top for clarity
 
 const readVolunteerData = () => {
     try {
