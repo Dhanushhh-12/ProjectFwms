@@ -826,76 +826,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Donor Form Submission
+    // Redundant donorForm handling removed from script.js because it is handled in donor.html with more advanced features (AI validation, wizard steps, etc.)
+    // If you need a simple version of the donor form on another page, please re-implement or share the logic.
+    /*
     const donorForm = document.getElementById('donorForm');
     if (donorForm) {
-        // Protect page directly if on donor.html
-        const user = getCurrentUser();
-        if (!user) {
-            alert('Please login to submit a donation.');
-            window.location.href = 'login.html';
-            return;
-        }
-
-        donorForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const submitBtn = donorForm.querySelector('button[type="submit"]');
-            const originalBtnText = submitBtn.innerText;
-            submitBtn.disabled = true;
-            submitBtn.innerText = 'Submitting...';
-
-            const formData = new FormData(donorForm);
-            const rawPhone = formData.get('phone');
-            const sanitizedPhone = sanitizePhoneInput(rawPhone);
-            if (sanitizedPhone === null) {
-                alert('Please enter a valid phone number (7–15 digits).');
-                submitBtn.disabled = false;
-                submitBtn.innerText = originalBtnText;
-                return;
-            }
-
-            const donation = {
-                id: Date.now(),
-                userId: user.email,
-                userName: user.name,
-                donorName: formData.get('donor_name'),
-                phone: sanitizedPhone,
-                location: formData.get('location'),
-                description: formData.get('description'),
-                foodPhoto: window.lastDonationPhoto,
-                status: 'pending',
-                timestamp: new Date().toISOString()
-            };
-
-            try {
-                // Save to Backend using robust helper
-                await apiFetch('/api/donations', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(donation)
-                });
-
-                // Send Email via EmailJS as well
-                if (typeof emailjs !== 'undefined') {
-                    emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID_DONOR, donorForm)
-                        .then(() => console.log("Email notification sent"))
-                        .catch(err => console.error("Email notification failed", err));
-                }
-
-                alert('Success! Your donation request has been submitted.');
-                donorForm.reset();
-                const preview = document.getElementById('imagePreview');
-                if (preview) preview.innerHTML = '';
-                window.lastDonationPhoto = null;
-            } catch (err) {
-                alert(`Submission Failed: ${err.message}`);
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerText = originalBtnText;
-            }
-        });
+        // ...
     }
+    */
 
     // Proactive Donor Link Protection
     const donorLinks = document.querySelectorAll('a[href="donor.html"]');
@@ -991,60 +929,147 @@ window.renderDonations = async function () {
     const donationsList = document.getElementById('donationsList');
     if (!donationsList) return;
 
+    // Category display mapping
+    const catMap = {
+        cooked:     { label: '🍛 Cooked Meals',   color: '#e65100' },
+        raw:        { label: '🥕 Raw Produce',     color: '#2e7d32' },
+        baked:      { label: '🍞 Baked Goods',     color: '#6d4c41' },
+        packaged:   { label: '📦 Packaged Food',   color: '#1565c0' },
+        dairy:      { label: '🥛 Dairy',           color: '#0277bd' },
+        beverages:  { label: '🧃 Beverages',       color: '#6a1b9a' }
+    };
+
+    // Get active filter from the volunteer page (set by filterDonations())
+    const activeFilter = (typeof window.currentFilter !== 'undefined') ? window.currentFilter : 'all';
+    const isNearbyOnly = window.isNearbyOnly || false;
+    const volLat = window.volunteerLat;
+    const volLng = window.volunteerLng;
+
+    // Helper: Haversine distance in KM
+    function getDistance(lat1, lon1, lat2, lon2) {
+        if (!lat1 || !lon1 || !lat2 || !lon2) return 999999;
+        const R = 6371; // Earth radius in km
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    }
+
     try {
-        const donations = await apiFetch('/api/donations');
-        const pendingDonations = donations.filter(d => d.status === 'pending');
+        let pendingDonations = [];
+        // Apply proximity filter by calling the new backend API
+        if (isNearbyOnly && volLat && volLng) {
+            const donors = await apiFetch(`/api/nearby-donors?lat=${volLat}&lng=${volLng}`);
+            // Map the API's .distance field to what the UI template expects (.distanceValue)
+            pendingDonations = donors.map(d => ({ ...d, distanceValue: d.distance }));
+        } else {
+            const donations = await apiFetch('/api/donations');
+            pendingDonations = donations.filter(d => d.status === 'pending');
+        }
+
+
+        // Apply category filter
+        if (activeFilter && activeFilter !== 'all') {
+            pendingDonations = pendingDonations.filter(d => {
+                const cat = (d.foodCategory || '').toLowerCase();
+                return cat === activeFilter;
+            });
+        }
 
         if (pendingDonations.length === 0) {
+            const filterParts = [];
+            if (activeFilter && activeFilter !== 'all') filterParts.push(`"${activeFilter}"`);
+            if (isNearbyOnly) filterParts.push('Nearby');
+            const filterMsg = filterParts.length > 0 ? ` for ${filterParts.join(' & ')}` : '';
             donationsList.innerHTML = `
                 <div class="empty-state">
                     <span>🍽️</span>
-                    <h3>No pending donations</h3>
+                    <h3>No pending donations${filterMsg}</h3>
                     <p>Check back later for new requests.</p>
                 </div>
             `;
             return;
         }
-
         donationsList.innerHTML = pendingDonations.map(donation => {
             const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(donation.location)}`;
+            const fCat = (donation.foodCategory || donation.foodType || '').toLowerCase();
+            const catInfo = catMap[fCat] || { label: '🍱 Food', color: '#555' };
+
+            // Expiry urgency
+            let expiryBadge = '';
+            if (donation.expiryTime || donation.createdAt) {
+                const checkTime = donation.expiryTime || new Date(new Date(donation.createdAt).getTime() + 24 * 3600000);
+                const diff = (new Date(checkTime) - Date.now()) / 3600000;
+                if (diff <= 0) {
+                    expiryBadge = `<span style="background:#c62828;color:#fff;font-size:0.72rem;padding:3px 8px;border-radius:12px;font-weight:600;">⚠️ EXPIRED</span>`;
+                } else if (diff <= 2) {
+                    expiryBadge = `<span style="background:#e65100;color:#fff;font-size:0.72rem;padding:3px 8px;border-radius:12px;font-weight:600;">🔴 Expires in ${Math.round(diff * 60)}m</span>`;
+                } else if (diff <= 6) {
+                    expiryBadge = `<span style="background:#f57f17;color:#fff;font-size:0.72rem;padding:3px 8px;border-radius:12px;font-weight:600;">🟡 Expires in ${Math.round(diff)}h</span>`;
+                } else {
+                    expiryBadge = `<span style="background:#2e7d32;color:#fff;font-size:0.72rem;padding:3px 8px;border-radius:12px;font-weight:600;">🟢 ${Math.round(diff)}h remaining</span>`;
+                }
+            }
+
+            const servingsVal = donation.servings || donation.quantity || '';
+            const servings = servingsVal ? `<span style="font-size:0.8rem;color:#555;">👥 ${servingsVal} servings</span>` : '';
+            const donorType = donation.donorType ? `<span style="font-size:0.75rem;background:#f3f3f3;padding:2px 8px;border-radius:8px;color:#666;text-transform:capitalize;">${donation.donorType}</span>` : '';
+            const timestamp = donation.timestamp || donation.createdAt;
+            const timeAgo = timestamp ? `<span style="font-size:0.75rem;color:#999;">${new Date(timestamp).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}</span>` : '';
+            const distance = (donation.distanceValue >= 0 && donation.distanceValue < 1000) ? `<span style="font-size:0.8rem;background:#e8f5e9;color:#2e7d32;padding:2px 8px;border-radius:10px;font-weight:600;">📍 ${donation.distanceValue.toFixed(1)} km away</span>` : '';
 
             return `
-                <div class="donation-card animate-fade-in" data-id="${donation.id}">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
-                        <div class="donation-badge badge-pending">Required Pickup</div>
-                        <span style="font-size: 0.75rem; color: #999;">${new Date(donation.timestamp).toLocaleDateString()}</span>
-                    </div>
-                    
-                    <h3 class="donation-title" style="color: #e65100; font-size: 1.5rem; margin-bottom: 5px;">${donation.donorName}</h3>
-                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px; display: flex; align-items: center; gap: 5px;">
-                        <span style="opacity: 0.7;">📧</span> ${donation.userId}
-                    </p>
-
-                    <div class="donation-meta" style="background: #f9f9f9; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
-                        <p style="margin-bottom: 10px;"><strong>📍 Location:</strong> ${donation.location}</p>
-                        <p style="margin-bottom: 10px;"><strong>📞 Phone:</strong> <a href="tel:${donation.phone}" style="color: #e65100; text-decoration: none;">${donation.phone}</a></p>
-                        <p style="margin-bottom: 0;"><strong>📝 Food Info:</strong> ${donation.description}</p>
-                    </div>
-
-                    ${donation.foodPhoto ? `
-                        <div style="margin-bottom: 20px; position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-                            <img src="${donation.foodPhoto}" alt="Food" style="width: 100%; height: 180px; object-fit: cover;">
-                            <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 10px; background: linear-gradient(transparent, rgba(0,0,0,0.6)); color: white; font-size: 0.75rem;">
-                                Live Evidence Photo
-                            </div>
+                <div class="donation-card animate-fade-in" data-id="${donation.id}" data-category="${fCat}">
+                    <!-- Card Header -->
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;gap:8px;flex-wrap:wrap;">
+                        <span style="background:${catInfo.color};color:#fff;font-size:0.75rem;padding:4px 10px;border-radius:12px;font-weight:700;letter-spacing:0.3px;">${catInfo.label}</span>
+                        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+                            ${distance}
+                            ${expiryBadge}
+                            <div class="donation-badge badge-pending" style="font-size:0.7rem;">Pickup Needed</div>
                         </div>
-                    ` : ''}
+                    </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                        <a href="${mapLink}" target="_blank" class="btn-claim" style="background: #333; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center;">🗺️ Open Map</a>
-                        <button onclick="claimDonation(${donation.id})" class="btn-claim pulse">✅ Claim Pickup</button>
+                    <!-- Donor Info -->
+                    <h3 class="donation-title" style="color:#1a1a1a;font-size:1.25rem;margin-bottom:4px;">${donation.donorName || donation.name || 'Anonymous Donor'}</h3>
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+                        ${donorType}
+                        ${servings}
+                        ${timeAgo}
+                    </div>
+                    <p style="font-size:0.82rem;color:#777;margin-bottom:14px;display:flex;align-items:center;gap:5px;">
+                        <span>📧</span> ${donation.userId || 'N/A'}
+                    </p>
+ 
+                    <!-- Meta Details -->
+                    <div class="donation-meta" style="background:#f8f9fa;border:1px solid #eee;padding:14px;border-radius:12px;margin-bottom:16px;">
+                        <p style="margin-bottom:9px;font-size:0.88rem;"><strong>📍 Location:</strong> ${donation.location || donation.pickupLocation || 'No location provided'}</p>
+                        <p style="margin-bottom:9px;font-size:0.88rem;"><strong>📞 Phone:</strong> <a href="tel:${donation.phone || donation.contactNumber || ''}" style="color:#e65100;font-weight:600;text-decoration:none;">${donation.phone || donation.contactNumber || 'N/A'}</a></p>
+                        <p style="margin-bottom:0;font-size:0.88rem;"><strong>📝 Food Info:</strong> ${donation.description || donation.notes || 'No description provided'}</p>
+                    </div>
+
+                    <!-- Food Photo -->
+                    ${donation.foodPhoto ? `
+                        <div style="margin-bottom:16px;position:relative;border-radius:12px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.12);">
+                            <img src="${donation.foodPhoto}" alt="Food" style="width:100%;height:180px;object-fit:cover;display:block;">
+                            <div style="position:absolute;bottom:0;left:0;right:0;padding:8px 12px;background:linear-gradient(transparent,rgba(0,0,0,0.65));color:#fff;font-size:0.73rem;letter-spacing:0.5px;">📷 AI-Verified Food Photo</div>
+                        </div>
+                    ` : `<div style="margin-bottom:16px;background:#fafafa;border:2px dashed #ddd;border-radius:12px;padding:18px;text-align:center;color:#bbb;font-size:0.85rem;">No photo uploaded</div>`}
+
+                    <!-- Action Buttons -->
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                        <a href="${mapLink}" target="_blank" class="btn-claim" style="background:#37474f;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;">🗺️ Open Map</a>
+                        <button onclick="claimDonation('${donation.id}')" class="btn-claim pulse" style="display:flex;align-items:center;justify-content:center;gap:5px;">✅ Claim Pickup</button>
                     </div>
                 </div>
             `;
         }).join('');
     } catch (err) {
         console.error('Error rendering donations:', err);
+        donationsList.innerHTML = `<div class="empty-state"><span>⚠️</span><h3>Failed to load donations</h3><p>${err.message}</p></div>`;
     }
 };
 

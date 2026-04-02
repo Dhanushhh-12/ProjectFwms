@@ -138,9 +138,15 @@
                             </svg>
                             All
                         </button>
+                        <button class="vol-filter-btn" id="nearbyFilterBtn" onclick="toggleNearbyFilter(this)">
+                            Nearby Only
+                        </button>
                         <button class="vol-filter-btn" onclick="filterDonations('cooked',this)">Cooked</button>
                         <button class="vol-filter-btn" onclick="filterDonations('raw',this)">Raw</button>
                         <button class="vol-filter-btn" onclick="filterDonations('baked',this)">Baked</button>
+                        <button class="vol-filter-btn" onclick="filterDonations('packaged',this)">Packaged</button>
+                        <button class="vol-filter-btn" onclick="filterDonations('dairy',this)">Dairy</button>
+                        <button class="vol-filter-btn" onclick="filterDonations('beverages',this)">Beverages</button>
                     </div>
                 </div>
                 <div id="donationsList" class="donations-grid">
@@ -221,7 +227,41 @@
             currentFilter = category;
             document.querySelectorAll('.vol-filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            // If any specific category is picked, disable nearby toggle if you want or keep it.
+            // For now, let's allow combining filters.
             renderDonations();
+        }
+
+        async function toggleNearbyFilter(btn) {
+            btn.classList.toggle('active');
+            window.isNearbyOnly = btn.classList.contains('active');
+            if (window.isNearbyOnly) {
+                if (!navigator.geolocation) {
+                    alert('Geolocation is not supported by your browser.');
+                    btn.classList.remove('active');
+                    window.isNearbyOnly = false;
+                    return;
+                }
+                // Fetch location
+                btn.textContent = 'Locating...';
+                navigator.geolocation.getCurrentPosition(
+                    pos => {
+                        window.volunteerLat = pos.coords.latitude;
+                        window.volunteerLng = pos.coords.longitude;
+                        btn.textContent = 'Nearby Only';
+                        renderDonations();
+                    },
+                    err => {
+                        alert('Could not get your location. Please check browser permissions.');
+                        btn.classList.remove('active');
+                        window.isNearbyOnly = false;
+                        btn.textContent = 'Nearby Only';
+                        renderDonations();
+                    }
+                );
+            } else {
+                renderDonations();
+            }
         }
 
         const _origRender = window.renderDonations;

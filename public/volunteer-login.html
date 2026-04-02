@@ -13,7 +13,7 @@
             min-height: 100vh;
         }
 
-        /* Override sidebar gradient for volunteer theme */
+
         .auth-sidebar {
             background: linear-gradient(145deg, #0f2044 0%, #1a3a72 55%, #24569a 100%) !important;
         }
@@ -112,14 +112,20 @@
             font-size: 0.85rem;
         }
 
-        .auth-divider::before, .auth-divider::after {
+        .auth-divider::before,
+        .auth-divider::after {
             content: '';
             flex: 1;
             border-bottom: 1px solid var(--neutral-200);
         }
 
-        .auth-divider:not(:empty)::before { margin-right: 1rem; }
-        .auth-divider:not(:empty)::after { margin-left: 1rem; }
+        .auth-divider:not(:empty)::before {
+            margin-right: 1rem;
+        }
+
+        .auth-divider:not(:empty)::after {
+            margin-left: 1rem;
+        }
     </style>
 </head>
 
